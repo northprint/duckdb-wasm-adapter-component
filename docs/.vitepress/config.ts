@@ -4,6 +4,7 @@ export default defineConfig({
   title: 'DuckDB WASM Adapter',
   description: 'A powerful adapter for using DuckDB WASM in React, Vue, and Svelte applications',
   base: '/duckdb-wasm-adapter-component/',
+  ignoreDeadLinks: true,
   
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/duckdb-wasm-adapter-component/favicon.svg' }],
