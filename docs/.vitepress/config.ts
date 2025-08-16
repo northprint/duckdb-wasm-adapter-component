@@ -129,7 +129,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/northprint/duckdb-wasm-adapter-component' },
-      { icon: 'npm', link: 'https://www.npmjs.com/package/@duckdb-wasm-adapter/core' }
+      { icon: 'npm', link: 'https://www.npmjs.com/package/@northprint/duckdb-wasm-adapter-core' }
     ],
 
     footer: {
