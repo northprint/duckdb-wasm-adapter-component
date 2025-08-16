@@ -7,14 +7,14 @@ Complete guide to using DuckDB WASM Adapter with React applications.
 ### Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 ```
 
 ### Basic Setup
 
 ```jsx
 // src/App.jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 import Dashboard from './components/Dashboard';
 
 function App() {
@@ -34,7 +34,7 @@ export default App;
 
 ```jsx
 // src/components/Dashboard.jsx
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function Dashboard() {
   const { data, loading, error } = useQuery('SELECT 42 as answer');
@@ -60,7 +60,7 @@ export default Dashboard;
 The `DuckDBProvider` manages the database connection and provides context to child components:
 
 ```jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -96,7 +96,7 @@ import {
   useMutation, 
   useImportCSV, 
   useDuckDB 
-} from '@duckdb-wasm-adapter/react';
+} from '@northprint/duckdb-wasm-adapter-react';
 
 function MyComponent() {
   // Connection status
@@ -534,7 +534,7 @@ function DataExporter() {
 
 ```jsx
 // hooks/useUsers.js
-import { useQuery, useMutation } from '@duckdb-wasm-adapter/react';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-react';
 
 export function useUsers(filters = {}) {
   const { data: users, loading, error, refetch } = useQuery(
@@ -640,8 +640,8 @@ function App() {
 ### Query Builder Integration
 
 ```jsx
-import { useQueryBuilder } from '@duckdb-wasm-adapter/react';
-import { select } from '@duckdb-wasm-adapter/core';
+import { useQueryBuilder } from '@northprint/duckdb-wasm-adapter-react';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 function AdvancedUserSearch() {
   const [filters, setFilters] = useState({
@@ -831,7 +831,7 @@ function PaginatedUsers() {
 ```jsx
 // __tests__/UserList.test.jsx
 import { render, screen, waitFor } from '@testing-library/react';
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 import UserList from '../components/UserList';
 
 function renderWithProvider(component) {
@@ -858,7 +858,7 @@ test('renders user list', async () => {
 ```jsx
 // __tests__/useUsers.test.jsx
 import { renderHook, waitFor } from '@testing-library/react';
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 import { useUsers } from '../hooks/useUsers';
 
 const wrapper = ({ children }) => (

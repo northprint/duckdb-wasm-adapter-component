@@ -7,7 +7,7 @@ The Query Builder provides a fluent, type-safe API for constructing SQL queries 
 The Query Builder is included in the core package:
 
 ```bash
-npm install @duckdb-wasm-adapter/core
+npm install @northprint/duckdb-wasm-adapter-core
 ```
 
 ## Factory Functions
@@ -21,7 +21,7 @@ function select(...columns: string[]): SelectQueryBuilder
 ```
 
 ```typescript
-import { select } from '@duckdb-wasm-adapter/core';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = select('id', 'name', 'email')
   .from('users')
@@ -39,7 +39,7 @@ function insertInto(table: string): InsertQueryBuilder
 ```
 
 ```typescript
-import { insertInto } from '@duckdb-wasm-adapter/core';
+import { insertInto } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = insertInto('users')
   .values({ name: 'Alice', email: 'alice@example.com' })
@@ -56,7 +56,7 @@ function update(table: string): UpdateQueryBuilder
 ```
 
 ```typescript
-import { update } from '@duckdb-wasm-adapter/core';
+import { update } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = update('users')
   .set({ active: false })
@@ -74,7 +74,7 @@ function deleteFrom(table: string): DeleteQueryBuilder
 ```
 
 ```typescript
-import { deleteFrom } from '@duckdb-wasm-adapter/core';
+import { deleteFrom } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = deleteFrom('users')
   .where('status', '=', 'deleted')
@@ -653,7 +653,7 @@ function raw(sql: string, bindings?: any[]): RawExpression
 ```
 
 ```typescript
-import { raw } from '@duckdb-wasm-adapter/core';
+import { raw } from '@northprint/duckdb-wasm-adapter-core';
 
 select('name', raw('COUNT(*) as total'))
   .from('users')

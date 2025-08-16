@@ -14,7 +14,7 @@ import {
   useQuery, 
   useMutation,
   useConnection 
-} from '@duckdb-wasm-adapter/react';
+} from '@northprint/duckdb-wasm-adapter-react';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend
@@ -473,7 +473,7 @@ function ExportButton({ query, filename }) {
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useConnection } from '@duckdb-wasm-adapter/vue';
+import { useConnection } from '@northprint/duckdb-wasm-adapter-vue';
 
 // Schema Explorer Component
 const SchemaExplorer = {
@@ -800,7 +800,7 @@ onMounted(() => {
 // Svelte - Real-time monitoring dashboard
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   

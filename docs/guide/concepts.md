@@ -200,7 +200,7 @@ const config = {
 Type-safe query construction with fluent API:
 
 ```javascript
-import { select } from '@duckdb-wasm-adapter/core';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = select('name', 'email')
   .from('users')

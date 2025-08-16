@@ -1,15 +1,15 @@
-# @duckdb-wasm-adapter/core
+# @northprint/duckdb-wasm-adapter-core
 
 Core library for DuckDB WASM with TypeScript support. This package provides the foundation for all framework-specific adapters.
 
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/core
+npm install @northprint/duckdb-wasm-adapter-core
 # or
-pnpm add @duckdb-wasm-adapter/core
+pnpm add @northprint/duckdb-wasm-adapter-core
 # or
-yarn add @duckdb-wasm-adapter/core
+yarn add @northprint/duckdb-wasm-adapter-core
 ```
 
 ## Features
@@ -24,7 +24,7 @@ yarn add @duckdb-wasm-adapter/core
 ## Quick Start
 
 ```typescript
-import { createConnection } from '@duckdb-wasm-adapter/core';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 
 // Create a connection
 const connection = await createConnection();
@@ -197,7 +197,7 @@ for (const row of result) {
 The library provides custom error types with error codes:
 
 ```typescript
-import { DuckDBError, ErrorCode } from '@duckdb-wasm-adapter/core';
+import { DuckDBError, ErrorCode } from '@northprint/duckdb-wasm-adapter-core';
 
 try {
   await connection.execute('INVALID SQL');
@@ -282,7 +282,7 @@ import type {
   ImportOptions,
   ExportOptions,
   DuckDBType
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';
 ```
 
 ## Browser Compatibility

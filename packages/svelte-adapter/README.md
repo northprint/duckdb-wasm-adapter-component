@@ -1,13 +1,13 @@
-# @duckdb-wasm-adapter/svelte
+# @northprint/duckdb-wasm-adapter-svelte
 
 Svelte stores and utilities for DuckDB WASM. Provides reactive stores and hooks for seamless integration with Svelte applications.
 
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/svelte @duckdb-wasm-adapter/core
+npm install @northprint/duckdb-wasm-adapter-svelte @northprint/duckdb-wasm-adapter-core
 # or
-pnpm add @duckdb-wasm-adapter/svelte @duckdb-wasm-adapter/core
+pnpm add @northprint/duckdb-wasm-adapter-svelte @northprint/duckdb-wasm-adapter-core
 ```
 
 ## Features
@@ -22,7 +22,7 @@ pnpm add @duckdb-wasm-adapter/svelte @duckdb-wasm-adapter/core
 
 ```svelte
 <script>
-  import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
   
   // Create a reactive DuckDB store
   const db = createDuckDB({ autoConnect: true });
@@ -59,7 +59,7 @@ Creates a reactive DuckDB store with Svelte integration.
 - `config` (optional):
   - `autoConnect`: boolean - Automatically connect on creation
   - `events`: ConnectionEvents - Event handlers
-  - All options from `@duckdb-wasm-adapter/core` ConnectionConfig
+  - All options from `@northprint/duckdb-wasm-adapter-core` ConnectionConfig
 
 #### Returns
 
@@ -80,7 +80,7 @@ Creates a reactive DuckDB store with Svelte integration.
 #### Example
 
 ```javascript
-import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
+import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const db = createDuckDB({
   autoConnect: true,
@@ -126,7 +126,7 @@ queryStore.cancel();
 Convenience hook for queries with additional options.
 
 ```javascript
-import { useQuery } from '@duckdb-wasm-adapter/svelte';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const query = useQuery(db, 'SELECT * FROM users', undefined, {
   enabled: true,
@@ -139,7 +139,7 @@ const query = useQuery(db, 'SELECT * FROM users', undefined, {
 Hook for data mutations with callbacks.
 
 ```javascript
-import { useMutation } from '@duckdb-wasm-adapter/svelte';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const mutation = useMutation(db, {
   onSuccess: (data) => console.log('Success:', data),
@@ -155,7 +155,7 @@ await mutation.execute('INSERT INTO users VALUES (?, ?)', [1, 'Alice']);
 Execute multiple operations in a transaction.
 
 ```javascript
-import { useBatch } from '@duckdb-wasm-adapter/svelte';
+import { useBatch } from '@northprint/duckdb-wasm-adapter-svelte';
 
 await useBatch(db, [
   { sql: 'INSERT INTO users VALUES (?, ?)', params: [1, 'Alice'] },
@@ -168,7 +168,7 @@ await useBatch(db, [
 Execute operations in a transaction with automatic rollback.
 
 ```javascript
-import { useTransaction } from '@duckdb-wasm-adapter/svelte';
+import { useTransaction } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const result = await useTransaction(db, async (execute) => {
   await execute('INSERT INTO users VALUES (?, ?)', [1, 'Alice']);
@@ -184,7 +184,7 @@ const result = await useTransaction(db, async (execute) => {
 Format bytes to human-readable string.
 
 ```javascript
-import { formatBytes } from '@duckdb-wasm-adapter/svelte';
+import { formatBytes } from '@northprint/duckdb-wasm-adapter-svelte';
 
 formatBytes(1024) // "1 KB"
 formatBytes(1048576) // "1 MB"
@@ -195,7 +195,7 @@ formatBytes(1048576) // "1 MB"
 Format milliseconds to human-readable duration.
 
 ```javascript
-import { formatDuration } from '@duckdb-wasm-adapter/svelte';
+import { formatDuration } from '@northprint/duckdb-wasm-adapter-svelte';
 
 formatDuration(1500) // "1.50s"
 formatDuration(65000) // "1.08m"
@@ -206,7 +206,7 @@ formatDuration(65000) // "1.08m"
 Format number with thousands separator.
 
 ```javascript
-import { formatNumber } from '@duckdb-wasm-adapter/svelte';
+import { formatNumber } from '@northprint/duckdb-wasm-adapter-svelte';
 
 formatNumber(1000000) // "1,000,000"
 ```
@@ -216,7 +216,7 @@ formatNumber(1000000) // "1,000,000"
 Convert query results to CSV string.
 
 ```javascript
-import { resultToCSV } from '@duckdb-wasm-adapter/svelte';
+import { resultToCSV } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const csv = resultToCSV($queryStore.data);
 // "id,name,email\n1,Alice,alice@example.com\n2,Bob,bob@example.com"
@@ -227,7 +227,7 @@ const csv = resultToCSV($queryStore.data);
 Download data as a file.
 
 ```javascript
-import { downloadFile, resultToCSV } from '@duckdb-wasm-adapter/svelte';
+import { downloadFile, resultToCSV } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const csv = resultToCSV($queryStore.data);
 downloadFile(csv, 'users.csv', 'text/csv');
@@ -238,7 +238,7 @@ downloadFile(csv, 'users.csv', 'text/csv');
 Debounce function calls.
 
 ```javascript
-import { debounce } from '@duckdb-wasm-adapter/svelte';
+import { debounce } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const debouncedSearch = debounce((query) => {
   searchStore = db.query(`SELECT * FROM users WHERE name LIKE ?`, [`%${query}%`]);
@@ -250,7 +250,7 @@ const debouncedSearch = debounce((query) => {
 Determine SQL query type.
 
 ```javascript
-import { getQueryType } from '@duckdb-wasm-adapter/svelte';
+import { getQueryType } from '@northprint/duckdb-wasm-adapter-svelte';
 
 getQueryType('SELECT * FROM users') // 'SELECT'
 getQueryType('INSERT INTO users...') // 'INSERT'
@@ -261,7 +261,7 @@ getQueryType('INSERT INTO users...') // 'INSERT'
 Check if query is read-only.
 
 ```javascript
-import { isReadOnlyQuery } from '@duckdb-wasm-adapter/svelte';
+import { isReadOnlyQuery } from '@northprint/duckdb-wasm-adapter-svelte';
 
 isReadOnlyQuery('SELECT * FROM users') // true
 isReadOnlyQuery('INSERT INTO users...') // false
@@ -272,7 +272,7 @@ isReadOnlyQuery('INSERT INTO users...') // false
 Create a store that auto-refreshes.
 
 ```javascript
-import { createAutoRefreshStore } from '@duckdb-wasm-adapter/svelte';
+import { createAutoRefreshStore } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const stats = createAutoRefreshStore(
   async () => {
@@ -297,7 +297,7 @@ stats.stop();
 
 ```svelte
 <script>
-  import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = createDuckDB({ autoConnect: true });
   const users = db.query('SELECT * FROM users ORDER BY name');
@@ -329,7 +329,7 @@ stats.stop();
 
 ```svelte
 <script>
-  import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = createDuckDB({ autoConnect: true });
   let searchTerm = '';
@@ -351,7 +351,7 @@ stats.stop();
 
 ```svelte
 <script>
-  import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = createDuckDB({ autoConnect: true });
   let importing = false;
@@ -392,7 +392,7 @@ stats.stop();
 
 ```svelte
 <script>
-  import { createDuckDB, downloadFile, resultToCSV } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB, downloadFile, resultToCSV } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = createDuckDB({ autoConnect: true });
   const query = db.query('SELECT * FROM users');
@@ -419,8 +419,8 @@ stats.stop();
 Full TypeScript support with type inference:
 
 ```typescript
-import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
-import type { DuckDBStore, QueryStore } from '@duckdb-wasm-adapter/svelte';
+import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
+import type { DuckDBStore, QueryStore } from '@northprint/duckdb-wasm-adapter-svelte';
 
 interface User {
   id: number;

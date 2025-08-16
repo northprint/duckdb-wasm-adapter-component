@@ -7,7 +7,7 @@ Complete guide to using DuckDB WASM Adapter with Svelte applications.
 ### Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ### Basic Setup
@@ -15,7 +15,7 @@ npm install @duckdb-wasm-adapter/svelte
 ```javascript
 // src/App.svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ 
     autoConnect: true,
@@ -36,7 +36,7 @@ npm install @duckdb-wasm-adapter/svelte
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const result = db.query('SELECT 42 as answer');
@@ -75,7 +75,7 @@ Queries automatically update when dependencies change:
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -122,7 +122,7 @@ Queries automatically update when dependencies change:
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const users = db.query(`
@@ -183,7 +183,7 @@ Queries automatically update when dependencies change:
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -234,7 +234,7 @@ Queries automatically update when dependencies change:
 
 ```svelte
 <script>
-  import { duckdb, mutation } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb, mutation } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -352,7 +352,7 @@ Queries automatically update when dependencies change:
 
 ```svelte
 <script>
-  import { mutation } from '@duckdb-wasm-adapter/svelte';
+  import { mutation } from '@northprint/duckdb-wasm-adapter-svelte';
   
   export let user;
   
@@ -414,7 +414,7 @@ Queries automatically update when dependencies change:
 
 ```svelte
 <script>
-  import { importCSV } from '@duckdb-wasm-adapter/svelte';
+  import { importCSV } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const csvImporter = importCSV({
     onSuccess: (result) => {
@@ -532,7 +532,7 @@ Queries automatically update when dependencies change:
 ```javascript
 // stores/userStore.js
 import { writable, derived } from 'svelte/store';
-import { duckdb } from '@duckdb-wasm-adapter/svelte';
+import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
 
 // Initialize database
 const db = duckdb({ autoConnect: true });
@@ -599,7 +599,7 @@ export function duckdbAction(node, options = {}) {
   let db;
   
   async function initialize() {
-    const { duckdb } = await import('@duckdb-wasm-adapter/svelte');
+    const { duckdb } = await import('@northprint/duckdb-wasm-adapter-svelte');
     db = duckdb(options);
     
     // Add database reference to the node
@@ -735,7 +735,7 @@ Usage:
 ```svelte
 <script>
   import { onMount } from 'svelte';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -809,7 +809,7 @@ Usage:
 ```svelte
 <script>
   import { onMount, tick } from 'svelte';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const users = db.query('SELECT * FROM users ORDER BY name');
@@ -956,7 +956,7 @@ export interface User {
 // Component with TypeScript
 <script lang="ts">
   import type { User } from './types.js';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const users = db.query<User>('SELECT * FROM users');

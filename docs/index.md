@@ -51,35 +51,35 @@ Install the adapter for your framework:
 
 ```bash [npm]
 # React
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 
 # Vue
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 
 # Svelte
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ```bash [pnpm]
 # React
-pnpm add @duckdb-wasm-adapter/react
+pnpm add @northprint/duckdb-wasm-adapter-react
 
 # Vue
-pnpm add @duckdb-wasm-adapter/vue
+pnpm add @northprint/duckdb-wasm-adapter-vue
 
 # Svelte
-pnpm add @duckdb-wasm-adapter/svelte
+pnpm add @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ```bash [yarn]
 # React
-yarn add @duckdb-wasm-adapter/react
+yarn add @northprint/duckdb-wasm-adapter-react
 
 # Vue
-yarn add @duckdb-wasm-adapter/vue
+yarn add @northprint/duckdb-wasm-adapter-vue
 
 # Svelte
-yarn add @duckdb-wasm-adapter/svelte
+yarn add @northprint/duckdb-wasm-adapter-svelte
 ```
 
 :::
@@ -89,7 +89,7 @@ yarn add @duckdb-wasm-adapter/svelte
 ::: code-group
 
 ```jsx [React]
-import { DuckDBProvider, useQuery } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider, useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -129,7 +129,7 @@ function DataTable() {
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading } = useQuery('SELECT * FROM users');
 </script>
@@ -137,7 +137,7 @@ const { data, loading } = useQuery('SELECT * FROM users');
 
 ```svelte [Svelte]
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const { query } = duckdb();
   const result = query('SELECT * FROM users');
@@ -248,7 +248,7 @@ Join our growing community of developers building data-intensive web application
 - 📖 [Documentation](/guide/getting-started)
 - 💬 [GitHub Discussions](https://github.com/northprint/duckdb-wasm-adapter-component/discussions)
 - 🐛 [Issue Tracker](https://github.com/northprint/duckdb-wasm-adapter-component/issues)
-- 📦 [NPM Package](https://www.npmjs.com/package/@duckdb-wasm-adapter/core)
+- 📦 [NPM Package](https://www.npmjs.com/package/@northprint/duckdb-wasm-adapter-core)
 
 ## License
 

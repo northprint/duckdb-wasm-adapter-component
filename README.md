@@ -17,34 +17,34 @@ DuckDB WASMを簡単に使用できるようにするアダプターコンポー
 
 | Package | Description | Status |
 |---------|-------------|--------|
-| [@duckdb-wasm-adapter/core](./packages/core) | Core library with TypeScript support | ✅ Stable |
-| [@duckdb-wasm-adapter/svelte](./packages/svelte-adapter) | Svelte stores and utilities | ✅ Stable |
-| [@duckdb-wasm-adapter/react](./packages/react-adapter) | React hooks and context | ✅ Stable |
-| [@duckdb-wasm-adapter/vue](./packages/vue-adapter) | Vue composables | ✅ Stable |
+| [@northprint/duckdb-wasm-adapter-core](./packages/core) | Core library with TypeScript support | ✅ v0.1.0 |
+| [@northprint/duckdb-wasm-adapter-svelte](./packages/svelte-adapter) | Svelte stores and utilities | ✅ v0.1.0 |
+| [@northprint/duckdb-wasm-adapter-react](./packages/react-adapter) | React hooks and context | ✅ v0.1.0 |
+| [@northprint/duckdb-wasm-adapter-vue](./packages/vue-adapter) | Vue composables | ✅ v0.1.0 |
 
 ## Installation
 
 ### Core Library
 
 ```bash
-npm install @duckdb-wasm-adapter/core
+npm install @northprint/duckdb-wasm-adapter-core
 # or
-pnpm add @duckdb-wasm-adapter/core
+pnpm add @northprint/duckdb-wasm-adapter-core
 # or
-yarn add @duckdb-wasm-adapter/core
+yarn add @northprint/duckdb-wasm-adapter-core
 ```
 
 ### Framework Adapters
 
 ```bash
 # Svelte
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 
 # React
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 
 # Vue
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 ```
 
 ## Quick Start
@@ -52,7 +52,7 @@ npm install @duckdb-wasm-adapter/vue
 ### Core Library
 
 ```typescript
-import { createConnection } from '@duckdb-wasm-adapter/core';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 
 // Create connection
 const connection = await createConnection();
@@ -72,7 +72,7 @@ const json = await connection.exportJSON('SELECT * FROM users');
 
 ```svelte
 <script>
-  import { createDuckDB } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = createDuckDB({ autoConnect: true });
   const queryStore = db.query('SELECT * FROM users');
@@ -94,7 +94,7 @@ const json = await connection.exportJSON('SELECT * FROM users');
 ### React
 
 ```tsx
-import { DuckDBProvider, useQuery } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider, useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -136,7 +136,7 @@ function UserList() {
 </template>
 
 <script setup>
-import { useDuckDB, useQuery } from '@duckdb-wasm-adapter/vue';
+import { useDuckDB, useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const db = useDuckDB({ autoConnect: true });
 const { data, loading, error } = useQuery('SELECT * FROM users');
@@ -243,7 +243,7 @@ await connection.importCSV(file, 'users', {
 pnpm test
 
 # Run tests for specific package
-pnpm --filter @duckdb-wasm-adapter/core test
+pnpm --filter @northprint/duckdb-wasm-adapter-core test
 
 # Run tests in watch mode
 pnpm test:watch

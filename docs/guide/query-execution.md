@@ -11,7 +11,7 @@ DuckDB WASM Adapter provides multiple ways to execute SQL queries, from simple q
 ### React
 
 ```jsx
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function UserList() {
   const { data, loading, error } = useQuery(`
@@ -50,7 +50,7 @@ function UserList() {
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading, error } = useQuery(`
   SELECT id, name, email 
@@ -65,7 +65,7 @@ const { data, loading, error } = useQuery(`
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const users = db.query(`
@@ -269,7 +269,7 @@ Execute multiple queries as a single atomic transaction:
 
 ```javascript
 // React
-import { useTransaction } from '@duckdb-wasm-adapter/react';
+import { useTransaction } from '@northprint/duckdb-wasm-adapter-react';
 
 function TransferFunds() {
   const { execute: transfer } = useTransaction();

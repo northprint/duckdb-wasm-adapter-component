@@ -11,7 +11,7 @@ A complete user management system with Create, Read, Update, Delete operations.
 
 ```jsx
 // src/App.jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 import UserManagement from './components/UserManagement';
 
 function App() {
@@ -31,7 +31,7 @@ export default App;
 ```jsx
 // src/components/UserManagement.jsx
 import { useState } from 'react';
-import { useQuery, useMutation } from '@duckdb-wasm-adapter/react';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-react';
 
 function UserManagement() {
   const [formData, setFormData] = useState({
@@ -133,7 +133,7 @@ Real-time analytics dashboard with charts and metrics.
 
 ```jsx
 // src/components/AnalyticsDashboard.jsx
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 import { useMemo } from 'react';
 
 function AnalyticsDashboard() {
@@ -341,7 +341,7 @@ Upload and analyze CSV files interactively.
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useImportCSV, useQuery } from '@duckdb-wasm-adapter/vue';
+import { useImportCSV, useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const fileInput = ref(null);
 const tableName = ref('');
@@ -520,7 +520,7 @@ Live updating dashboard with WebSocket integration.
 <!-- src/components/DataMonitor.svelte -->
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { duckdb, mutation } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb, mutation } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -968,7 +968,7 @@ function SalesComponent() {
 ```javascript
 // Testing React components
 import { render, waitFor } from '@testing-library/react';
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 import UserList from './UserList';
 
 const TestWrapper = ({ children }) => (

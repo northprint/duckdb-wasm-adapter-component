@@ -5,7 +5,7 @@ The React adapter provides a comprehensive set of hooks for database operations.
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 ```
 
 ## Query Hooks
@@ -25,7 +25,7 @@ function useQuery<T = Record<string, unknown>>(
 #### Basic Usage
 
 ```jsx
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function UserList() {
   const { data, loading, error, refetch } = useQuery(
@@ -140,7 +140,7 @@ function useMutation<T = Record<string, unknown>>(
 #### Basic Usage
 
 ```jsx
-import { useMutation } from '@duckdb-wasm-adapter/react';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-react';
 
 function CreateUser() {
   const [name, setName] = useState('');
@@ -209,7 +209,7 @@ interface MutationResult<T> {
 Execute multiple operations in a transaction.
 
 ```jsx
-import { useBatch } from '@duckdb-wasm-adapter/react';
+import { useBatch } from '@northprint/duckdb-wasm-adapter-react';
 
 function BulkOperations() {
   const batch = useBatch();
@@ -240,7 +240,7 @@ function BulkOperations() {
 Execute operations within a transaction with rollback support.
 
 ```jsx
-import { useTransaction } from '@duckdb-wasm-adapter/react';
+import { useTransaction } from '@northprint/duckdb-wasm-adapter-react';
 
 function TransferFunds() {
   const transaction = useTransaction();
@@ -288,7 +288,7 @@ function TransferFunds() {
 Import CSV files into DuckDB.
 
 ```jsx
-import { useImportCSV } from '@duckdb-wasm-adapter/react';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-react';
 
 function CSVImporter() {
   const { importCSV, loading, error } = useImportCSV();
@@ -329,7 +329,7 @@ function CSVImporter() {
 Import JSON data into DuckDB.
 
 ```jsx
-import { useImportJSON } from '@duckdb-wasm-adapter/react';
+import { useImportJSON } from '@northprint/duckdb-wasm-adapter-react';
 
 function JSONImporter() {
   const { importJSON, loading, error } = useImportJSON();
@@ -361,7 +361,7 @@ function JSONImporter() {
 Export query results.
 
 ```jsx
-import { useExportCSV, useExportJSON } from '@duckdb-wasm-adapter/react';
+import { useExportCSV, useExportJSON } from '@northprint/duckdb-wasm-adapter-react';
 
 function DataExporter() {
   const exportCSV = useExportCSV();
@@ -411,8 +411,8 @@ function DataExporter() {
 Build queries programmatically with the Query Builder.
 
 ```jsx
-import { useQueryBuilder } from '@duckdb-wasm-adapter/react';
-import { select } from '@duckdb-wasm-adapter/core';
+import { useQueryBuilder } from '@northprint/duckdb-wasm-adapter-react';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 function QueryBuilderExample() {
   const { execute } = useQueryBuilder();
@@ -470,7 +470,7 @@ function QueryBuilderExample() {
 Manage query result cache.
 
 ```jsx
-import { useCache } from '@duckdb-wasm-adapter/react';
+import { useCache } from '@northprint/duckdb-wasm-adapter-react';
 
 function CacheManager() {
   const { clearCache, getCacheStats, invalidateCache } = useCache();

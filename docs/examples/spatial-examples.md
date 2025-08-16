@@ -8,7 +8,7 @@ Examples of working with spatial data and GIS functionality in DuckDB WASM.
 
 ```javascript
 // React - Initialize with spatial extension
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   const spatialConfig = {
@@ -115,7 +115,7 @@ const geometryExamples = {
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useConnection } from '@duckdb-wasm-adapter/vue';
+import { useConnection } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { connection } = useConnection();
 const geometryProps = ref([]);
@@ -283,7 +283,7 @@ const spatialRelationships = {
 ```javascript
 // Svelte - Import GeoJSON data
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   let geojsonFile = null;
@@ -567,7 +567,7 @@ const hexBinning = `
 // React - Map visualization with Leaflet
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function SpatialMap({ query }) {
   const mapRef = useRef(null);

@@ -5,7 +5,7 @@ The core package provides the foundation for all framework adapters.
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/core
+npm install @northprint/duckdb-wasm-adapter-core
 ```
 
 ## Connection Management
@@ -15,7 +15,7 @@ npm install @duckdb-wasm-adapter/core
 Creates a new DuckDB connection.
 
 ```typescript
-import { createConnection } from '@duckdb-wasm-adapter/core';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 
 const connection = await createConnection({
   worker: true,

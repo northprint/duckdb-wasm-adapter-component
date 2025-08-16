@@ -5,13 +5,13 @@ The DuckDBProvider component manages the DuckDB connection and provides context 
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 ```
 
 ## Basic Usage
 
 ```jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -83,7 +83,7 @@ function App() {
 The provider creates a React Context that can be accessed using the `useDuckDB` hook:
 
 ```jsx
-import { useDuckDB } from '@duckdb-wasm-adapter/react';
+import { useDuckDB } from '@northprint/duckdb-wasm-adapter-react';
 
 function DatabaseStatus() {
   const { connection, status, error, connect, disconnect } = useDuckDB();
@@ -246,7 +246,7 @@ For testing components that use the DuckDB context:
 
 ```jsx
 import { render } from '@testing-library/react';
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function renderWithProvider(component, options = {}) {
   return render(

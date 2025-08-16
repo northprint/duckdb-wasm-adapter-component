@@ -621,7 +621,7 @@ await connection.execute(
 );
 
 // ✅ SAFE: Query builder with sanitization
-import { select } from '@duckdb-wasm-adapter/core';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = select('*')
   .from('users')

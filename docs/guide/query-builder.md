@@ -11,7 +11,7 @@ The Query Builder provides a fluent, type-safe API for constructing SQL queries.
 ### SELECT Queries
 
 ```javascript
-import { select } from '@duckdb-wasm-adapter/core';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 // Simple select
 const query = select('id', 'name', 'email')
@@ -43,7 +43,7 @@ const query = select('name', 'salary')
 ### INSERT Queries
 
 ```javascript
-import { insert } from '@duckdb-wasm-adapter/core';
+import { insert } from '@northprint/duckdb-wasm-adapter-core';
 
 // Single insert
 const query = insert('users')
@@ -77,7 +77,7 @@ const query = insert('users')
 ### UPDATE Queries
 
 ```javascript
-import { update } from '@duckdb-wasm-adapter/core';
+import { update } from '@northprint/duckdb-wasm-adapter-core';
 
 // Simple update
 const query = update('users')
@@ -107,7 +107,7 @@ const query = update('employees')
 ### DELETE Queries
 
 ```javascript
-import { deleteFrom } from '@duckdb-wasm-adapter/core';
+import { deleteFrom } from '@northprint/duckdb-wasm-adapter-core';
 
 // Simple delete
 const query = deleteFrom('users')
@@ -312,8 +312,8 @@ const orderQuery = select<OrderTable>('*')
 ### With React
 
 ```jsx
-import { useQueryBuilder } from '@duckdb-wasm-adapter/react';
-import { select } from '@duckdb-wasm-adapter/core';
+import { useQueryBuilder } from '@northprint/duckdb-wasm-adapter-react';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 function UserList() {
   const queryBuilder = useQueryBuilder();
@@ -356,8 +356,8 @@ function UserList() {
 </template>
 
 <script setup>
-import { useQueryBuilder } from '@duckdb-wasm-adapter/vue';
-import { select } from '@duckdb-wasm-adapter/core';
+import { useQueryBuilder } from '@northprint/duckdb-wasm-adapter-vue';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 const queryBuilder = useQueryBuilder();
 
@@ -376,7 +376,7 @@ const { data: users } = queryBuilder.execute(query);
 Sometimes you need to use raw SQL expressions:
 
 ```javascript
-import { raw } from '@duckdb-wasm-adapter/core';
+import { raw } from '@northprint/duckdb-wasm-adapter-core';
 
 // Raw expressions in select
 const query = select('name')

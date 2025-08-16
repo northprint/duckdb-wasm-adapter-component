@@ -13,7 +13,7 @@ The main context for managing DuckDB connections and state.
 ### Provider Setup
 
 ```jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
 ### Context Hook
 
 ```jsx
-import { useDuckDBContext } from '@duckdb-wasm-adapter/react';
+import { useDuckDBContext } from '@northprint/duckdb-wasm-adapter-react';
 
 function Component() {
   const {
@@ -76,7 +76,7 @@ Context for managing query cache and state.
 ### Provider Configuration
 
 ```jsx
-import { QueryClientProvider, QueryClient } from '@duckdb-wasm-adapter/react';
+import { QueryClientProvider, QueryClient } from '@northprint/duckdb-wasm-adapter-react';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -109,7 +109,7 @@ function App() {
 ### Using QueryClient
 
 ```jsx
-import { useQueryClient } from '@duckdb-wasm-adapter/react';
+import { useQueryClient } from '@northprint/duckdb-wasm-adapter-react';
 
 function DataManager() {
   const queryClient = useQueryClient();
@@ -154,7 +154,7 @@ function DataManager() {
 
 ```jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useDuckDBContext } from '@duckdb-wasm-adapter/react';
+import { useDuckDBContext } from '@northprint/duckdb-wasm-adapter-react';
 
 // Create context for app-specific database state
 const DatabaseStateContext = createContext();
@@ -277,7 +277,7 @@ import {
   QueryClientProvider,
   CacheProvider,
   ThemeProvider 
-} from '@duckdb-wasm-adapter/react';
+} from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -395,7 +395,7 @@ export function useGlobalState() {
 
 ```jsx
 import { createContext, useContext, useEffect } from 'react';
-import { useDuckDBContext, useQueryClient } from '@duckdb-wasm-adapter/react';
+import { useDuckDBContext, useQueryClient } from '@northprint/duckdb-wasm-adapter-react';
 
 const SyncContext = createContext();
 

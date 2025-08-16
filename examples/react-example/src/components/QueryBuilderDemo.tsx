@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { useQueryBuilder, useQueryBuilderQuery } from '@duckdb-wasm-adapter/react';
-import type { QueryBuilder } from '@duckdb-wasm-adapter/core';
+import { useQueryBuilder, useQueryBuilderQuery } from '@northprint/duckdb-wasm-adapter-react';
+import type { QueryBuilder } from '@northprint/duckdb-wasm-adapter-core';
 
 interface Employee {
   id: number;

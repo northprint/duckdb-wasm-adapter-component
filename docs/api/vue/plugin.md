@@ -5,7 +5,7 @@ The Vue plugin provides global DuckDB functionality and dependency injection for
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 ```
 
 ## Basic Setup
@@ -13,7 +13,7 @@ npm install @duckdb-wasm-adapter/vue
 ```javascript
 // main.js
 import { createApp } from 'vue';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 import App from './App.vue';
 
 const app = createApp(App);
@@ -42,7 +42,7 @@ interface DuckDBPluginOptions {
 ```javascript
 // main.js
 import { createApp } from 'vue';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 import App from './App.vue';
 
 const app = createApp(App);
@@ -191,7 +191,7 @@ export default defineNuxtConfig({
 
 ```javascript
 // plugins/duckdb.client.js
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(DuckDBPlugin, {
@@ -221,7 +221,7 @@ Add type declarations for the global property:
 
 ```typescript
 // types/vue.d.ts
-import { DuckDBGlobalAPI } from '@duckdb-wasm-adapter/vue';
+import { DuckDBGlobalAPI } from '@northprint/duckdb-wasm-adapter-vue';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -236,7 +236,7 @@ Create a custom plugin wrapper for your specific needs:
 
 ```javascript
 // plugins/database.js
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 
 export const DatabasePlugin = {
   install(app, options = {}) {
@@ -291,7 +291,7 @@ For testing components that use the plugin:
 ```javascript
 // test-utils.js
 import { mount } from '@vue/test-utils';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 
 export function mountWithDuckDB(component, options = {}) {
   const app = createApp(component);

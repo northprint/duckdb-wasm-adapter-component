@@ -784,21 +784,21 @@ Extend types for custom use cases:
 
 ```typescript
 // Custom error codes
-declare module '@duckdb-wasm-adapter/core' {
+declare module '@northprint/duckdb-wasm-adapter-core' {
   interface ErrorCode {
     CUSTOM_ERROR: 'CUSTOM_ERROR';
   }
 }
 
 // Custom connection config
-declare module '@duckdb-wasm-adapter/core' {
+declare module '@northprint/duckdb-wasm-adapter-core' {
   interface ConnectionConfig {
     customOption?: boolean;
   }
 }
 
 // Custom cache options
-declare module '@duckdb-wasm-adapter/core' {
+declare module '@northprint/duckdb-wasm-adapter-core' {
   interface CacheConfig {
     customStrategy?: 'custom';
   }

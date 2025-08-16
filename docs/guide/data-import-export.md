@@ -19,7 +19,7 @@ DuckDB WASM Adapter supports importing and exporting data in various formats inc
 
 ```javascript
 // React
-import { useImportCSV } from '@duckdb-wasm-adapter/react';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-react';
 
 function CSVImporter() {
   const { importCSV, loading, error } = useImportCSV({
@@ -118,7 +118,7 @@ await importCSVFromURL(
 
 ```javascript
 // React
-import { useImportJSON } from '@duckdb-wasm-adapter/react';
+import { useImportJSON } from '@northprint/duckdb-wasm-adapter-react';
 
 function JSONImporter() {
   const { importJSON, loading, error } = useImportJSON();
@@ -194,7 +194,7 @@ async function importLargeJSON(file, tableName, batchSize = 1000) {
 
 ```javascript
 // React
-import { useImportParquet } from '@duckdb-wasm-adapter/react';
+import { useImportParquet } from '@northprint/duckdb-wasm-adapter-react';
 
 function ParquetImporter() {
   const { importParquet, loading, error } = useImportParquet();
@@ -241,7 +241,7 @@ await connection.execute(`
 
 ```javascript
 // React
-import { useExportCSV } from '@duckdb-wasm-adapter/react';
+import { useExportCSV } from '@northprint/duckdb-wasm-adapter-react';
 
 function CSVExporter() {
   const { exportCSV } = useExportCSV();
@@ -292,7 +292,7 @@ const csv = await exportCSV(
 
 ```javascript
 // React
-import { useExportJSON } from '@duckdb-wasm-adapter/react';
+import { useExportJSON } from '@northprint/duckdb-wasm-adapter-react';
 
 function JSONExporter() {
   const { exportJSON } = useExportJSON();

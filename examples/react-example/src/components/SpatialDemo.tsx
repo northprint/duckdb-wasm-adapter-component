@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDuckDB, useMutation, useQuery } from '@duckdb-wasm-adapter/react';
+import { useDuckDB, useMutation, useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 interface Location {
   id: number;

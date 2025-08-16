@@ -42,22 +42,22 @@ Choose the adapter for your framework:
 ::: code-group
 
 ```bash [React]
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 ```
 
 ```bash [Vue]
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 ```
 
 ```bash [Svelte]
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
 :::
 
 The adapter will automatically install all required dependencies, including:
 - `@duckdb/duckdb-wasm` - The core DuckDB WASM library
-- `@duckdb-wasm-adapter/core` - Shared utilities and types
+- `@northprint/duckdb-wasm-adapter-core` - Shared utilities and types
 
 ## Basic Setup
 
@@ -65,7 +65,7 @@ The adapter will automatically install all required dependencies, including:
 
 ```jsx
 // App.jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -81,7 +81,7 @@ function App() {
 ```javascript
 // main.js
 import { createApp } from 'vue';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 import App from './App.vue';
 
 const app = createApp(App);
@@ -94,7 +94,7 @@ app.mount('#app');
 ```javascript
 // App.svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
 </script>
@@ -107,7 +107,7 @@ Once set up, you can start querying data immediately:
 ::: code-group
 
 ```jsx [React]
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function UserList() {
   const { data, loading, error } = useQuery(`
@@ -141,7 +141,7 @@ function UserList() {
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading, error } = useQuery(`
   SELECT 'Alice' as name, 25 as age
@@ -153,7 +153,7 @@ const { data, loading, error } = useQuery(`
 
 ```svelte [Svelte]
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const { query } = duckdb();
   const result = query(`
@@ -204,7 +204,7 @@ INSERT INTO users VALUES
 ::: code-group
 
 ```jsx [React]
-import { useImportCSV } from '@duckdb-wasm-adapter/react';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-react';
 
 function DataImporter() {
   const { importCSV, loading } = useImportCSV();
@@ -236,7 +236,7 @@ function DataImporter() {
 </template>
 
 <script setup>
-import { useImportCSV } from '@duckdb-wasm-adapter/vue';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { importCSV, loading } = useImportCSV();
 

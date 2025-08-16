@@ -90,7 +90,7 @@ await connection.importCSV(file, 'employees', {
 ##### React
 
 ```jsx
-import { useImportCSV } from '@duckdb-wasm-adapter/react';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-react';
 
 function CSVImporter() {
   const { importCSV, loading, error, progress } = useImportCSV({
@@ -151,7 +151,7 @@ function CSVImporter() {
 </template>
 
 <script setup>
-import { useImportCSV } from '@duckdb-wasm-adapter/vue';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { importCSV, loading, error, progress } = useImportCSV({
   onSuccess: (result) => {
@@ -172,7 +172,7 @@ const handleFileChange = async (event) => {
 
 ```svelte
 <script>
-  import { importCSV } from '@duckdb-wasm-adapter/svelte';
+  import { importCSV } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const csvImporter = importCSV({
     onSuccess: (result) => {
@@ -393,7 +393,7 @@ downloadCSV(csv, 'users.csv');
 ##### React
 
 ```jsx
-import { useExportCSV } from '@duckdb-wasm-adapter/react';
+import { useExportCSV } from '@northprint/duckdb-wasm-adapter-react';
 
 function DataExporter() {
   const { exportCSV, loading, error } = useExportCSV();

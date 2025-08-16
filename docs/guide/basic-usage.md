@@ -42,7 +42,7 @@ await importCSV(file, 'table_name');
 #### Simple Data Fetching
 
 ```jsx
-import { DuckDBProvider, useQuery } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider, useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
@@ -78,7 +78,7 @@ function UserList() {
 #### Data Mutations
 
 ```jsx
-import { useMutation } from '@duckdb-wasm-adapter/react';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-react';
 
 function CreateUser() {
   const [name, setName] = useState('');
@@ -142,7 +142,7 @@ function CreateUser() {
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading, error } = useQuery(`
   SELECT id, name, email 
@@ -177,7 +177,7 @@ const { data, loading, error } = useQuery(`
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const searchTerm = ref('');
 const department = ref('');
@@ -210,7 +210,7 @@ const { data, loading, error } = useQuery(sql, params);
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const users = db.query(`
@@ -238,7 +238,7 @@ const { data, loading, error } = useQuery(sql, params);
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -371,7 +371,7 @@ const handleFileUpload = async (event) => {
 };
 
 // Svelte
-import { importCSV } from '@duckdb-wasm-adapter/svelte';
+import { importCSV } from '@northprint/duckdb-wasm-adapter-svelte';
 
 const csvImporter = importCSV();
 
@@ -524,7 +524,7 @@ LIMIT 100;
 ### 4. Use Query Builder for Complex Queries
 
 ```javascript
-import { select } from '@duckdb-wasm-adapter/core';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 const query = select('name', 'email', 'department')
   .from('users')

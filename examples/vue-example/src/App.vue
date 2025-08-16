@@ -108,7 +108,7 @@ import {
   useExportJSON,
   downloadFile,
   resultToCSV
-} from '@northprint/duckdb-wasm-adapter/vue';
+} from '@northprint/duckdb-wasm-adapter-vue';
 
 // Initialize DuckDB without autoConnect to control timing
 const db = useDuckDB();

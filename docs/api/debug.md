@@ -11,7 +11,7 @@ The Debug API provides comprehensive tools for monitoring, profiling, and troubl
 ### Basic Debug Configuration
 
 ```javascript
-import { createConnection } from '@duckdb-wasm-adapter/core';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 
 const connection = await createConnection({
   debug: {
@@ -114,7 +114,7 @@ interface LogEntry {
 ### Using the Debug Logger
 
 ```javascript
-import { useDebugLogger } from '@duckdb-wasm-adapter/react';
+import { useDebugLogger } from '@northprint/duckdb-wasm-adapter-react';
 
 function MyComponent() {
   const logger = useDebugLogger();
@@ -158,7 +158,7 @@ function MyComponent() {
 ### EXPLAIN ANALYZE
 
 ```javascript
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function ProfiledQuery() {
   // Get query execution plan
@@ -186,7 +186,7 @@ function ProfiledQuery() {
 ### Query Timing
 
 ```javascript
-import { useProfiler } from '@duckdb-wasm-adapter/core';
+import { useProfiler } from '@northprint/duckdb-wasm-adapter-core';
 
 function TimedQuery() {
   const profiler = useProfiler();

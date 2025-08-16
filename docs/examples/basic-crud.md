@@ -13,7 +13,7 @@ This example demonstrates how to build a full CRUD (Create, Read, Update, Delete
 ```jsx
 // src/App.jsx
 import React from 'react';
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 import EmployeeManager from './components/EmployeeManager';
 import './App.css';
 
@@ -36,7 +36,7 @@ export default App;
 ```jsx
 // src/components/EmployeeManager.jsx
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@duckdb-wasm-adapter/react';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-react';
 import EmployeeForm from './EmployeeForm';
 import EmployeeList from './EmployeeList';
 
@@ -858,7 +858,7 @@ export default EmployeeList;
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useQuery, useMutation } from '@duckdb-wasm-adapter/vue';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-vue';
 import EmployeeForm from './EmployeeForm.vue';
 import EmployeeList from './EmployeeList.vue';
 
@@ -971,7 +971,7 @@ const handleCancel = () => {
 <!-- src/components/EmployeeManager.svelte -->
 <script>
   import { onMount } from 'svelte';
-  import { duckdb, mutation } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb, mutation } from '@northprint/duckdb-wasm-adapter-svelte';
   import EmployeeForm from './EmployeeForm.svelte';
   import EmployeeList from './EmployeeList.svelte';
   

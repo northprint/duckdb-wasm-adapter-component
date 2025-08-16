@@ -22,7 +22,7 @@ This example demonstrates how to build a powerful analytics dashboard that proce
 ```jsx
 // src/components/AnalyticsDashboard.jsx
 import React, { useState, useMemo } from 'react';
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 import MetricsGrid from './MetricsGrid';
 import SalesChart from './SalesChart';
 import RegionBreakdown from './RegionBreakdown';
@@ -576,7 +576,7 @@ export default TopProducts;
 ```jsx
 // src/components/FilterPanel.jsx
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function FilterPanel({ filters, onFilterChange }) {
   const [localFilters, setLocalFilters] = useState(filters);
@@ -706,7 +706,7 @@ export default FilterPanel;
 ```jsx
 // src/components/ExportPanel.jsx
 import React, { useState } from 'react';
-import { useExportCSV, useExportJSON } from '@duckdb-wasm-adapter/react';
+import { useExportCSV, useExportJSON } from '@northprint/duckdb-wasm-adapter-react';
 
 function ExportPanel({ filters, whereClause }) {
   const [exporting, setExporting] = useState(false);

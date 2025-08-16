@@ -21,25 +21,25 @@ Choose the appropriate package for your framework:
 ### React
 
 ```bash
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 ```
 
 ### Vue
 
 ```bash
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 ```
 
 ### Svelte
 
 ```bash
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ### Core (Framework Agnostic)
 
 ```bash
-npm install @duckdb-wasm-adapter/core
+npm install @northprint/duckdb-wasm-adapter-core
 ```
 
 ## Package Managers
@@ -48,39 +48,39 @@ npm install @duckdb-wasm-adapter/core
 
 ```bash
 # React
-npm install @duckdb-wasm-adapter/react
+npm install @northprint/duckdb-wasm-adapter-react
 
 # Vue
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 
 # Svelte
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ### yarn
 
 ```bash
 # React
-yarn add @duckdb-wasm-adapter/react
+yarn add @northprint/duckdb-wasm-adapter-react
 
 # Vue
-yarn add @duckdb-wasm-adapter/vue
+yarn add @northprint/duckdb-wasm-adapter-vue
 
 # Svelte
-yarn add @duckdb-wasm-adapter/svelte
+yarn add @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ### pnpm
 
 ```bash
 # React
-pnpm add @duckdb-wasm-adapter/react
+pnpm add @northprint/duckdb-wasm-adapter-react
 
 # Vue
-pnpm add @duckdb-wasm-adapter/vue
+pnpm add @northprint/duckdb-wasm-adapter-vue
 
 # Svelte
-pnpm add @duckdb-wasm-adapter/svelte
+pnpm add @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ## Dependencies
@@ -88,7 +88,7 @@ pnpm add @duckdb-wasm-adapter/svelte
 The adapter packages automatically install these dependencies:
 
 - `@duckdb/duckdb-wasm` - Core DuckDB WASM library
-- `@duckdb-wasm-adapter/core` - Shared utilities (automatically included)
+- `@northprint/duckdb-wasm-adapter-core` - Shared utilities (automatically included)
 
 ## Project Setup
 
@@ -96,13 +96,13 @@ The adapter packages automatically install these dependencies:
 
 1. **Install the package:**
    ```bash
-   npm install @duckdb-wasm-adapter/react
+   npm install @northprint/duckdb-wasm-adapter-react
    ```
 
 2. **Add the provider to your app:**
    ```jsx
    // src/App.jsx
-   import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+   import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
    function App() {
      return (
@@ -121,14 +121,14 @@ The adapter packages automatically install these dependencies:
 
 1. **Install the package:**
    ```bash
-   npm install @duckdb-wasm-adapter/vue
+   npm install @northprint/duckdb-wasm-adapter-vue
    ```
 
 2. **Register the plugin:**
    ```javascript
    // src/main.js
    import { createApp } from 'vue';
-   import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+   import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
    import App from './App.vue';
 
    const app = createApp(App);
@@ -140,14 +140,14 @@ The adapter packages automatically install these dependencies:
 
 1. **Install the package:**
    ```bash
-   npm install @duckdb-wasm-adapter/svelte
+   npm install @northprint/duckdb-wasm-adapter-svelte
    ```
 
 2. **Initialize in your app:**
    ```javascript
    // src/App.svelte
    <script>
-     import { duckdb } from '@duckdb-wasm-adapter/svelte';
+     import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
      
      const db = duckdb({ autoConnect: true });
    </script>
@@ -234,7 +234,7 @@ For Nuxt 3 projects:
 // nuxt.config.ts
 export default defineNuxtConfig({
   build: {
-    transpile: ['@duckdb-wasm-adapter/vue']
+    transpile: ['@northprint/duckdb-wasm-adapter-vue']
   },
   nitro: {
     experimental: {
@@ -286,7 +286,7 @@ For quick prototyping, you can use CDN links:
 
 ```html
 <script type="module">
-  import { createConnection } from 'https://unpkg.com/@duckdb-wasm-adapter/core@latest/dist/index.js';
+  import { createConnection } from 'https://unpkg.com/@northprint/duckdb-wasm-adapter-core@latest/dist/index.js';
   
   const connection = await createConnection();
   // Use the connection...
@@ -296,7 +296,7 @@ For quick prototyping, you can use CDN links:
 ### UMD
 
 ```html
-<script src="https://unpkg.com/@duckdb-wasm-adapter/core@latest/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@northprint/duckdb-wasm-adapter-core@latest/dist/index.umd.js"></script>
 <script>
   const { createConnection } = DuckDBWasmAdapter;
   
@@ -314,7 +314,7 @@ Create a simple test to verify the installation:
 
 ```jsx
 // src/components/TestConnection.jsx
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function TestConnection() {
   const { data, loading, error } = useQuery('SELECT 42 as answer');
@@ -346,7 +346,7 @@ export default TestConnection;
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading, error } = useQuery('SELECT 42 as answer');
 </script>
@@ -356,7 +356,7 @@ const { data, loading, error } = useQuery('SELECT 42 as answer');
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const testQuery = db.query('SELECT 42 as answer');
@@ -408,7 +408,7 @@ cp node_modules/@duckdb/duckdb-wasm/dist/*.wasm public/
 
 #### Import Errors
 
-**Problem**: `Cannot resolve module '@duckdb-wasm-adapter/react'`
+**Problem**: `Cannot resolve module '@northprint/duckdb-wasm-adapter-react'`
 
 **Solution**: Clear cache and reinstall:
 
@@ -473,10 +473,10 @@ if (typeof Worker === 'undefined') {
 3. **Optimize bundle size** by importing only what you need:
    ```javascript
    // ✅ Good: Import specific functions
-   import { useQuery, useMutation } from '@duckdb-wasm-adapter/react';
+   import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-react';
    
    // ❌ Avoid: Import everything
-   import * as DuckDB from '@duckdb-wasm-adapter/react';
+   import * as DuckDB from '@northprint/duckdb-wasm-adapter-react';
    ```
 
 ## Next Steps

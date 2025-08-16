@@ -5,7 +5,7 @@ Vue composables provide reactive DuckDB functionality using the Composition API.
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 ```
 
 ## Connection Composables
@@ -51,7 +51,7 @@ function useDuckDB(): {
 </template>
 
 <script setup>
-import { useDuckDB } from '@duckdb-wasm-adapter/vue';
+import { useDuckDB } from '@northprint/duckdb-wasm-adapter-vue';
 
 const {
   status,
@@ -115,7 +115,7 @@ function useQuery<T = Record<string, unknown>>(
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading, error, refresh, metadata } = useQuery(
   'SELECT * FROM users ORDER BY created_at DESC'
@@ -156,7 +156,7 @@ const { data, loading, error, refresh, metadata } = useQuery(
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const department = ref('');
 const minSalary = ref(0);
@@ -198,7 +198,7 @@ interface UseQueryOptions {
 ```vue
 <script setup>
 import { ref } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const enabled = ref(false);
 const lastUpdate = ref(null);
@@ -293,7 +293,7 @@ function useMutation<T = Record<string, unknown>>(
 
 <script setup>
 import { reactive } from 'vue';
-import { useMutation } from '@duckdb-wasm-adapter/vue';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-vue';
 
 const form = reactive({
   name: '',
@@ -355,7 +355,7 @@ Import CSV files reactively.
 
 <script setup>
 import { ref } from 'vue';
-import { useImportCSV } from '@duckdb-wasm-adapter/vue';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-vue';
 
 const success = ref(false);
 
@@ -399,7 +399,7 @@ Export data reactively.
 </template>
 
 <script setup>
-import { useExportCSV, useExportJSON } from '@duckdb-wasm-adapter/vue';
+import { useExportCSV, useExportJSON } from '@northprint/duckdb-wasm-adapter-vue';
 
 const exportCSVComposable = useExportCSV();
 const exportJSONComposable = useExportJSON();
@@ -509,8 +509,8 @@ Use Query Builder with reactive parameters.
 
 <script setup>
 import { reactive, ref, computed } from 'vue';
-import { useQueryBuilder } from '@duckdb-wasm-adapter/vue';
-import { select } from '@duckdb-wasm-adapter/core';
+import { useQueryBuilder } from '@northprint/duckdb-wasm-adapter-vue';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 const filters = reactive({
   name: '',
@@ -574,7 +574,7 @@ Manage query result cache.
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useCache } from '@duckdb-wasm-adapter/vue';
+import { useCache } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { clearCache, getCacheStats, invalidateCache } = useCache();
 const stats = ref(getCacheStats());
@@ -621,7 +621,7 @@ Create reusable domain-specific composables:
 ```javascript
 // composables/useUsers.js
 import { computed } from 'vue';
-import { useQuery, useMutation } from '@duckdb-wasm-adapter/vue';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-vue';
 
 export function useUsers(filters = {}) {
   const sql = computed(() => {

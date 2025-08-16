@@ -8,7 +8,7 @@ Learn fundamental SQL query patterns with DuckDB WASM Adapter.
 
 ```javascript
 // React
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function AllUsers() {
   const { data, loading, error } = useQuery('SELECT * FROM users');
@@ -42,7 +42,7 @@ function AllUsers() {
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data } = useQuery('SELECT id, name, email FROM users');
 </script>
@@ -53,7 +53,7 @@ const { data } = useQuery('SELECT id, name, email FROM users');
 ```javascript
 // Svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const topUsers = db.query('SELECT * FROM users LIMIT 10');

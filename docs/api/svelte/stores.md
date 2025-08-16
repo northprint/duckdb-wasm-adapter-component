@@ -5,7 +5,7 @@ The Svelte adapter provides reactive stores for DuckDB operations using Svelte's
 ## Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
 ## Basic Usage
@@ -13,7 +13,7 @@ npm install @duckdb-wasm-adapter/svelte
 ```javascript
 // App.svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
 </script>
@@ -74,7 +74,7 @@ interface DuckDBStore {
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({
     autoConnect: true,
@@ -136,7 +136,7 @@ interface QueryState<T> {
 
 ```svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const users = db.query('SELECT * FROM users ORDER BY created_at DESC');
@@ -176,7 +176,7 @@ interface QueryState<T> {
 ```svelte
 <script>
   import { writable } from 'svelte/store';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -255,7 +255,7 @@ interface MutationState<T> {
 
 ```svelte
 <script>
-  import { duckdb, mutation } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb, mutation } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const createUser = mutation({
@@ -323,7 +323,7 @@ Stores for data import operations.
 
 ```svelte
 <script>
-  import { duckdb, importCSV } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb, importCSV } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const csvImporter = importCSV({
@@ -395,7 +395,7 @@ Create derived stores for computed queries:
 ```svelte
 <script>
   import { derived } from 'svelte/store';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   
@@ -441,7 +441,7 @@ Create reusable store factories:
 ```javascript
 // stores/useUsers.js
 import { writable, derived } from 'svelte/store';
-import { duckdb, mutation } from '@duckdb-wasm-adapter/svelte';
+import { duckdb, mutation } from '@northprint/duckdb-wasm-adapter-svelte';
 
 export function createUserStore() {
   const db = duckdb({ autoConnect: true });
@@ -574,7 +574,7 @@ Manage cache state reactively:
 ```svelte
 <script>
   import { writable } from 'svelte/store';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const cacheStats = writable(db.getCacheStats());

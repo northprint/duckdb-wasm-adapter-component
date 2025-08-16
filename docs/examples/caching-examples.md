@@ -8,7 +8,7 @@ Practical examples of implementing caching strategies with DuckDB WASM Adapter.
 
 ```javascript
 // React - Basic query caching
-import { useQuery } from '@duckdb-wasm-adapter/react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function CachedDataView() {
   // Query with default caching
@@ -58,7 +58,7 @@ function CachedDataView() {
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const selectedDepartment = ref('Engineering');
 const cachedData = ref({});
@@ -293,7 +293,7 @@ function createTTLCache() {
 
 // Usage in Svelte component
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const cache = createTTLCache();
@@ -504,7 +504,7 @@ class LFUStrategy {
 ```javascript
 // React - Smart query caching based on query patterns
 import { useState, useEffect, useRef } from 'react';
-import { useConnection } from '@duckdb-wasm-adapter/react';
+import { useConnection } from '@northprint/duckdb-wasm-adapter-react';
 
 function SmartQueryCache() {
   const { connection } = useConnection();

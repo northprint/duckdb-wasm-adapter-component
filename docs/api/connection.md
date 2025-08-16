@@ -18,7 +18,7 @@ function createConnection(
 #### Basic Usage
 
 ```typescript
-import { createConnection } from '@duckdb-wasm-adapter/core';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 
 // Simple connection
 const connection = await createConnection();
@@ -393,7 +393,7 @@ class ConnectionManager {
 #### Usage
 
 ```typescript
-import { ConnectionManager } from '@duckdb-wasm-adapter/core';
+import { ConnectionManager } from '@northprint/duckdb-wasm-adapter-core';
 
 const manager = ConnectionManager.getInstance();
 

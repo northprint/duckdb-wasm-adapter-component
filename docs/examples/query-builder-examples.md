@@ -7,7 +7,7 @@ Advanced examples using the Query Builder API for programmatic SQL construction.
 ### Simple SELECT Query
 
 ```javascript
-import { select } from '@duckdb-wasm-adapter/core';
+import { select } from '@northprint/duckdb-wasm-adapter-core';
 
 // Basic select
 const query = select('id', 'name', 'email')
@@ -361,7 +361,7 @@ const timeSeries = select('month', 'revenue')
 ### Basic INSERT
 
 ```javascript
-import { insert } from '@duckdb-wasm-adapter/core';
+import { insert } from '@northprint/duckdb-wasm-adapter-core';
 
 // Single row insert
 const singleInsert = insert('users')
@@ -424,7 +424,7 @@ const upsert = insert('user_settings')
 ### Basic UPDATE
 
 ```javascript
-import { update } from '@duckdb-wasm-adapter/core';
+import { update } from '@northprint/duckdb-wasm-adapter-core';
 
 // Simple update
 const simpleUpdate = update('users')
@@ -488,7 +488,7 @@ const subqueryUpdate = update('products')
 ### Basic DELETE
 
 ```javascript
-import { deleteFrom } from '@duckdb-wasm-adapter/core';
+import { deleteFrom } from '@northprint/duckdb-wasm-adapter-core';
 
 // Simple delete
 const simpleDelete = deleteFrom('users')
@@ -513,7 +513,7 @@ const deleteReturning = deleteFrom('sessions')
 ### Single CTE
 
 ```javascript
-import { withCTE, select } from '@duckdb-wasm-adapter/core';
+import { withCTE, select } from '@northprint/duckdb-wasm-adapter-core';
 
 const cteQuery = withCTE('active_users', 
     select('*')

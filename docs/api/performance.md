@@ -31,7 +31,7 @@ interface QueryOptimizer {
 ### Using the Query Optimizer
 
 ```javascript
-import { useQueryOptimizer } from '@duckdb-wasm-adapter/react';
+import { useQueryOptimizer } from '@northprint/duckdb-wasm-adapter-react';
 
 function OptimizedQuery() {
   const optimizer = useQueryOptimizer();

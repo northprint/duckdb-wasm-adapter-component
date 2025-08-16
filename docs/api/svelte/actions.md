@@ -14,7 +14,7 @@ Bind SQL queries directly to elements.
 
 ```svelte
 <script>
-  import { query } from '@duckdb-wasm-adapter/svelte';
+  import { query } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let sql = 'SELECT * FROM users LIMIT 10';
   let queryResult = {};
@@ -39,7 +39,7 @@ Bind SQL queries directly to elements.
 
 ```svelte
 <script>
-  import { query } from '@duckdb-wasm-adapter/svelte';
+  import { query } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let searchTerm = '';
   let queryResult = {};
@@ -78,7 +78,7 @@ Create interactive data tables with sorting, filtering, and pagination.
 
 ```svelte
 <script>
-  import { table } from '@duckdb-wasm-adapter/svelte';
+  import { table } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let tableConfig = {
     sql: 'SELECT * FROM employees',
@@ -106,7 +106,7 @@ Create interactive data tables with sorting, filtering, and pagination.
 
 ```svelte
 <script>
-  import { table } from '@duckdb-wasm-adapter/svelte';
+  import { table } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let tableState = {};
   
@@ -186,7 +186,7 @@ Bind query results to charts.
 
 ```svelte
 <script>
-  import { chart } from '@duckdb-wasm-adapter/svelte';
+  import { chart } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let chartConfig = {
     sql: `
@@ -209,7 +209,7 @@ Bind query results to charts.
 
 ```svelte
 <script>
-  import { chart } from '@duckdb-wasm-adapter/svelte';
+  import { chart } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let timeRange = '30d';
   
@@ -297,7 +297,7 @@ Handle form submissions with database operations.
 
 ```svelte
 <script>
-  import { form } from '@duckdb-wasm-adapter/svelte';
+  import { form } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let formConfig = {
     table: 'users',
@@ -323,7 +323,7 @@ Handle form submissions with database operations.
 
 ```svelte
 <script>
-  import { form } from '@duckdb-wasm-adapter/svelte';
+  import { form } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let userId = null;
   let formState = {};
@@ -447,7 +447,7 @@ Add database-driven autocomplete to inputs.
 
 ```svelte
 <script>
-  import { autocomplete } from '@duckdb-wasm-adapter/svelte';
+  import { autocomplete } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let selectedUser = null;
   
@@ -492,7 +492,7 @@ Export query results in various formats.
 
 ```svelte
 <script>
-  import { export as exportAction } from '@duckdb-wasm-adapter/svelte';
+  import { export as exportAction } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let exportConfig = {
     sql: 'SELECT * FROM orders WHERE created_at > NOW() - INTERVAL \'30 days\'',
@@ -528,7 +528,7 @@ Load data progressively as user scrolls.
 
 ```svelte
 <script>
-  import { infiniteScroll } from '@duckdb-wasm-adapter/svelte';
+  import { infiniteScroll } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let items = [];
   
@@ -577,7 +577,7 @@ Subscribe to query changes.
 
 ```svelte
 <script>
-  import { realtime } from '@duckdb-wasm-adapter/svelte';
+  import { realtime } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let realtimeData = [];
   
@@ -615,7 +615,7 @@ Handle file drops for data import.
 
 ```svelte
 <script>
-  import { dropzone } from '@duckdb-wasm-adapter/svelte';
+  import { dropzone } from '@northprint/duckdb-wasm-adapter-svelte';
   
   let dropzoneConfig = {
     accept: ['.csv', '.json', '.parquet'],

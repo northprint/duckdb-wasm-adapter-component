@@ -9,7 +9,7 @@ Practical examples for importing data from various sources into DuckDB.
 ```javascript
 // React Component
 import React, { useState } from 'react';
-import { useImportCSV, useQuery } from '@duckdb-wasm-adapter/react';
+import { useImportCSV, useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function CSVImporter() {
   const { importCSV, loading, error } = useImportCSV();
@@ -243,7 +243,7 @@ function StreamingCSVImport() {
 
 <script setup>
 import { ref } from 'vue';
-import { useConnection } from '@duckdb-wasm-adapter/vue';
+import { useConnection } from '@northprint/duckdb-wasm-adapter-vue';
 
 const jsonInput = ref('');
 const loading = ref(false);
@@ -409,7 +409,7 @@ async function importJSONLines(file) {
 ```javascript
 // Svelte Component
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   let files = [];

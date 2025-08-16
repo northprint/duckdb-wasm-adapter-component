@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useCache } from '@duckdb-wasm-adapter/react';
+import { useQuery, useCache } from '@northprint/duckdb-wasm-adapter-react';
 
 export default function CacheDemo() {
   const { clearCache, getCacheStats, invalidateCache } = useCache();

@@ -40,7 +40,7 @@ type EvictionStrategy = 'lru' | 'lfu' | 'fifo' | 'ttl';
 ### Enable Caching
 
 ```typescript
-import { createConnection } from '@duckdb-wasm-adapter/core';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 
 const connection = await createConnection({
   cache: {
@@ -57,7 +57,7 @@ const connection = await createConnection({
 #### React
 
 ```jsx
-import { DuckDBProvider } from '@duckdb-wasm-adapter/react';
+import { DuckDBProvider } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   const cacheConfig = {
@@ -82,7 +82,7 @@ function App() {
 
 ```javascript
 // main.js
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 
 app.use(DuckDBPlugin, {
   autoConnect: true,
@@ -102,7 +102,7 @@ app.use(DuckDBPlugin, {
 ```javascript
 // App.svelte
 <script>
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({
     autoConnect: true,
@@ -177,7 +177,7 @@ connection.invalidateCache(/^SELECT.*FROM (users|profiles)/);
 ### React - useCache
 
 ```jsx
-import { useCache } from '@duckdb-wasm-adapter/react';
+import { useCache } from '@northprint/duckdb-wasm-adapter-react';
 
 function CacheManager() {
   const { clearCache, getCacheStats, invalidateCache } = useCache();
@@ -226,7 +226,7 @@ function CacheManager() {
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useCache } from '@duckdb-wasm-adapter/vue';
+import { useCache } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { clearCache, getCacheStats, invalidateCache } = useCache();
 const stats = ref(getCacheStats());
@@ -256,7 +256,7 @@ onUnmounted(() => {
 ```svelte
 <script>
   import { writable } from 'svelte/store';
-  import { duckdb } from '@duckdb-wasm-adapter/svelte';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
   
   const db = duckdb({ autoConnect: true });
   const stats = writable(db.getCacheStats());

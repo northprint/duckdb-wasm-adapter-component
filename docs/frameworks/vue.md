@@ -7,7 +7,7 @@ Complete guide to using DuckDB WASM Adapter with Vue.js applications.
 ### Installation
 
 ```bash
-npm install @duckdb-wasm-adapter/vue
+npm install @northprint/duckdb-wasm-adapter-vue
 ```
 
 ### Basic Setup
@@ -15,7 +15,7 @@ npm install @duckdb-wasm-adapter/vue
 ```javascript
 // src/main.js
 import { createApp } from 'vue';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 import App from './App.vue';
 
 const app = createApp(App);
@@ -47,7 +47,7 @@ app.mount('#app');
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data, loading, error } = useQuery('SELECT 42 as answer');
 </script>
@@ -90,7 +90,7 @@ import {
   useMutation, 
   useImportCSV, 
   useDuckDB 
-} from '@duckdb-wasm-adapter/vue';
+} from '@northprint/duckdb-wasm-adapter-vue';
 import { ref, computed } from 'vue';
 
 // Connection status
@@ -170,7 +170,7 @@ export default {
 </template>
 
 <script setup>
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { data: users, loading, error } = useQuery(`
   SELECT id, name, email, department 
@@ -240,7 +240,7 @@ const { data: users, loading, error } = useQuery(`
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 import UserGrid from './UserGrid.vue';
 
 const department = ref('');
@@ -322,7 +322,7 @@ const { data: users, loading, error } = useQuery(sql, params);
 
 <script setup>
 import { ref } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const selectedUserId = ref(null);
 
@@ -408,7 +408,7 @@ const {
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { useMutation } from '@duckdb-wasm-adapter/vue';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-vue';
 
 const emit = defineEmits(['userCreated']);
 
@@ -487,7 +487,7 @@ const handleSubmit = async () => {
 
 <script setup>
 import { reactive, watchEffect } from 'vue';
-import { useMutation } from '@duckdb-wasm-adapter/vue';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-vue';
 
 const props = defineProps({
   user: {
@@ -560,7 +560,7 @@ const handleSubmit = async () => {
 
 <script setup>
 import { ref } from 'vue';
-import { useBatch } from '@duckdb-wasm-adapter/vue';
+import { useBatch } from '@northprint/duckdb-wasm-adapter-vue';
 
 const props = defineProps({
   selectedUsers: {
@@ -665,7 +665,7 @@ const bulkDeactivate = async () => {
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { useImportCSV } from '@duckdb-wasm-adapter/vue';
+import { useImportCSV } from '@northprint/duckdb-wasm-adapter-vue';
 
 const emit = defineEmits(['imported']);
 
@@ -787,7 +787,7 @@ const handleFileSelect = async (event) => {
 
 <script setup>
 import { ref } from 'vue';
-import { useExportCSV, useExportJSON } from '@duckdb-wasm-adapter/vue';
+import { useExportCSV, useExportJSON } from '@northprint/duckdb-wasm-adapter-vue';
 
 const exportFormat = ref('csv');
 const includeHeaders = ref(true);
@@ -872,7 +872,7 @@ const exportFilteredUsers = async () => {
 ```javascript
 // composables/useUsers.js
 import { ref, computed } from 'vue';
-import { useQuery, useMutation } from '@duckdb-wasm-adapter/vue';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-vue';
 
 export function useUsers(initialFilters = {}) {
   const filters = ref(initialFilters);
@@ -989,7 +989,7 @@ export function useUsers(initialFilters = {}) {
 ```javascript
 // stores/database.js
 import { ref, computed } from 'vue';
-import { useDuckDB } from '@duckdb-wasm-adapter/vue';
+import { useDuckDB } from '@northprint/duckdb-wasm-adapter-vue';
 
 // Global database state
 const globalState = ref({
@@ -1134,7 +1134,7 @@ const handleReset = () => {
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 const PAGE_SIZE = 20;
 const currentPage = ref(1);
@@ -1205,7 +1205,7 @@ onUnmounted(() => {
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useQuery, useCache } from '@duckdb-wasm-adapter/vue';
+import { useQuery, useCache } from '@northprint/duckdb-wasm-adapter-vue';
 
 const { clearCache, getCacheStats } = useCache();
 const cacheStats = ref(getCacheStats());
@@ -1255,7 +1255,7 @@ onMounted(() => {
 ```javascript
 // tests/components/UserList.test.js
 import { mount } from '@vue/test-utils';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 import UserList from '@/components/UserList.vue';
 
 const createWrapper = (options = {}) => {
@@ -1294,7 +1294,7 @@ describe('UserList', () => {
 ```javascript
 // tests/composables/useUsers.test.js
 import { mount } from '@vue/test-utils';
-import { DuckDBPlugin } from '@duckdb-wasm-adapter/vue';
+import { DuckDBPlugin } from '@northprint/duckdb-wasm-adapter-vue';
 import { useUsers } from '@/composables/useUsers';
 
 const TestComponent = {
@@ -1341,7 +1341,7 @@ describe('useUsers', () => {
 ```vue
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 interface User {
   id: number;
@@ -1399,7 +1399,7 @@ import DashboardComponent from '@/components/Dashboard.vue';
 ```vue
 <script setup>
 import { shallowRef, watchEffect } from 'vue';
-import { useQuery } from '@duckdb-wasm-adapter/vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
 // Use shallowRef for large datasets
 const users = shallowRef([]);
