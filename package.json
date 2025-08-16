@@ -1,0 +1,49 @@
+{
+  "name": "duckdb-wasm-adapter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Easy-to-use adapter components for DuckDB WASM across multiple frontend frameworks",
+  "author": "Northprint",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/northprint/duckdb-wasm-adapter-component.git"
+  },
+  "bugs": {
+    "url": "https://github.com/northprint/duckdb-wasm-adapter-component/issues"
+  },
+  "homepage": "https://github.com/northprint/duckdb-wasm-adapter-component#readme",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "test": "pnpm -r test",
+    "test:coverage": "pnpm -r test:coverage",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.svelte,.vue",
+    "format": "prettier --write .",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "^2.35.0",
+    "eslint-plugin-vue": "^9.20.0",
+    "prettier": "^3.2.0",
+    "prettier-plugin-svelte": "^3.1.0",
+    "typescript": "^5.3.0",
+    "vitepress": "^1.6.4"
+  }
+}

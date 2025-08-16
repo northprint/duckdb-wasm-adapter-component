@@ -1,0 +1,45 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="#fff" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- Duck Body -->
+  <ellipse cx="100" cy="120" rx="45" ry="35" fill="#FDB813" stroke="#E5A50A" stroke-width="2"/>
+  
+  <!-- Duck Head -->
+  <circle cx="100" cy="75" r="30" fill="#FDB813" stroke="#E5A50A" stroke-width="2"/>
+  
+  <!-- Duck Bill -->
+  <path d="M 70 75 Q 55 75 50 80 Q 55 85 70 85 Z" fill="#FF6B35" stroke="#E55100" stroke-width="1.5"/>
+  
+  <!-- Duck Eye -->
+  <circle cx="88" cy="70" r="8" fill="#fff"/>
+  <circle cx="90" cy="72" r="5" fill="#000"/>
+  <circle cx="91" cy="70" r="2" fill="#fff"/>
+  
+  <!-- WASM Hexagon Badge -->
+  <g transform="translate(130, 35)">
+    <!-- Hexagon Background -->
+    <path d="M 0 -20 L 17.3 -10 L 17.3 10 L 0 20 L -17.3 10 L -17.3 -10 Z" 
+          fill="#654FF0" stroke="#5844D6" stroke-width="2"/>
+    <!-- W Letter -->
+    <text x="0" y="5" font-family="Arial, sans-serif" font-size="18" font-weight="bold" 
+          fill="#fff" text-anchor="middle">W</text>
+  </g>
+  
+  <!-- Wave Pattern (representing data/water) -->
+  <path d="M 30 150 Q 50 140 70 150 T 110 150 T 150 150 T 190 150" 
+        stroke="#4A90E2" stroke-width="3" fill="none" opacity="0.6"/>
+  <path d="M 20 160 Q 40 150 60 160 T 100 160 T 140 160 T 180 160" 
+        stroke="#4A90E2" stroke-width="3" fill="none" opacity="0.4"/>
+  
+  <!-- Binary Code Decoration -->
+  <text x="35" y="185" font-family="monospace" font-size="10" fill="#999">01101</text>
+  <text x="140" y="185" font-family="monospace" font-size="10" fill="#999">10110</text>
+  
+  <!-- Database Symbol -->
+  <g transform="translate(100, 140)">
+    <ellipse cx="0" cy="0" rx="12" ry="4" fill="#666" opacity="0.3"/>
+    <rect x="-12" y="0" width="24" height="8" fill="#666" opacity="0.3"/>
+    <ellipse cx="0" cy="8" rx="12" ry="4" fill="#666" opacity="0.3"/>
+  </g>
+</svg>

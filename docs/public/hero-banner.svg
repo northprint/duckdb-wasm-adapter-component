@@ -1,0 +1,117 @@
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for background -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667EEA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764BA2;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Pattern for circuit board effect -->
+    <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="2" fill="#fff" opacity="0.1"/>
+      <line x1="10" y1="10" x2="50" y2="10" stroke="#fff" stroke-width="1" opacity="0.1"/>
+      <circle cx="50" cy="10" r="2" fill="#fff" opacity="0.1"/>
+      <line x1="50" y1="10" x2="50" y2="50" stroke="#fff" stroke-width="1" opacity="0.1"/>
+      <circle cx="50" cy="50" r="2" fill="#fff" opacity="0.1"/>
+      <line x1="50" y1="50" x2="90" y2="50" stroke="#fff" stroke-width="1" opacity="0.1"/>
+      <circle cx="90" cy="50" r="2" fill="#fff" opacity="0.1"/>
+      <line x1="10" y1="90" x2="50" y2="90" stroke="#fff" stroke-width="1" opacity="0.1"/>
+      <circle cx="10" cy="90" r="2" fill="#fff" opacity="0.1"/>
+      <circle cx="50" cy="90" r="2" fill="#fff" opacity="0.1"/>
+    </pattern>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bgGradient)"/>
+  <rect width="800" height="400" fill="url(#circuit)"/>
+  
+  <!-- Central Duck Logo -->
+  <g transform="translate(400, 200)">
+    <!-- Outer circle with glow -->
+    <circle cx="0" cy="0" r="90" fill="rgba(255,255,255,0.1)" filter="url(#glow)"/>
+    <circle cx="0" cy="0" r="85" fill="rgba(255,255,255,0.95)"/>
+    
+    <!-- Duck Body -->
+    <ellipse cx="0" cy="20" rx="40" ry="30" fill="#FDB813" stroke="#E5A50A" stroke-width="2"/>
+    
+    <!-- Duck Head -->
+    <circle cx="0" cy="-20" r="25" fill="#FDB813" stroke="#E5A50A" stroke-width="2"/>
+    
+    <!-- Duck Bill -->
+    <path d="M -25 -20 Q -35 -20 -40 -15 Q -35 -10 -25 -10 Z" fill="#FF6B35" stroke="#E55100" stroke-width="1.5"/>
+    
+    <!-- Duck Eye -->
+    <circle cx="-10" cy="-25" r="7" fill="#fff"/>
+    <circle cx="-8" cy="-23" r="4" fill="#000"/>
+    <circle cx="-7" cy="-25" r="1.5" fill="#fff"/>
+    
+    <!-- WASM Badge -->
+    <g transform="translate(30, -45)">
+      <path d="M 0 -18 L 15.6 -9 L 15.6 9 L 0 18 L -15.6 9 L -15.6 -9 Z" 
+            fill="#654FF0" stroke="#5844D6" stroke-width="2"/>
+      <text x="0" y="4" font-family="Arial, sans-serif" font-size="16" font-weight="bold" 
+            fill="#fff" text-anchor="middle">W</text>
+    </g>
+  </g>
+  
+  <!-- Title Text -->
+  <text x="400" y="330" font-family="Arial, sans-serif" font-size="36" font-weight="bold" 
+        fill="#fff" text-anchor="middle">DuckDB WASM Adapter</text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="360" font-family="Arial, sans-serif" font-size="18" 
+        fill="rgba(255,255,255,0.9)" text-anchor="middle">In-browser analytics for React, Vue & Svelte</text>
+  
+  <!-- Framework Icons -->
+  <g transform="translate(250, 50)">
+    <!-- React Icon -->
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#61DAFB" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="35" ry="12" fill="none" stroke="#61DAFB" stroke-width="2" transform="rotate(45)"/>
+    <ellipse cx="0" cy="0" rx="35" ry="12" fill="none" stroke="#61DAFB" stroke-width="2" transform="rotate(-45)"/>
+    <circle cx="0" cy="0" r="5" fill="#61DAFB"/>
+  </g>
+  
+  <g transform="translate(400, 50)">
+    <!-- Vue Icon -->
+    <path d="M -20 -15 L 0 20 L 20 -15 L 12 -15 L 0 5 L -12 -15 Z" fill="#4FC08D"/>
+    <path d="M -12 -15 L 0 5 L 12 -15 L 6 -15 L 0 -5 L -6 -15 Z" fill="#35495E"/>
+  </g>
+  
+  <g transform="translate(550, 50)">
+    <!-- Svelte Icon -->
+    <path d="M -15 -20 Q -20 -15 -20 -10 Q -20 0 -10 5 L 10 15 Q 20 20 25 15 Q 25 5 15 0 L -5 -10 Q -10 -15 -15 -20" 
+          fill="none" stroke="#FF3E00" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Data visualization elements -->
+  <g transform="translate(100, 200)" opacity="0.6">
+    <rect x="0" y="0" width="15" height="40" fill="#fff"/>
+    <rect x="20" y="-20" width="15" height="60" fill="#fff"/>
+    <rect x="40" y="-10" width="15" height="50" fill="#fff"/>
+    <rect x="60" y="-30" width="15" height="70" fill="#fff"/>
+  </g>
+  
+  <g transform="translate(625, 200)" opacity="0.6">
+    <rect x="0" y="0" width="15" height="40" fill="#fff"/>
+    <rect x="20" y="-20" width="15" height="60" fill="#fff"/>
+    <rect x="40" y="-10" width="15" height="50" fill="#fff"/>
+    <rect x="60" y="-30" width="15" height="70" fill="#fff"/>
+  </g>
+  
+  <!-- Binary decoration -->
+  <text x="50" y="350" font-family="monospace" font-size="12" fill="rgba(255,255,255,0.3)">01101001</text>
+  <text x="700" y="350" font-family="monospace" font-size="12" fill="rgba(255,255,255,0.3)">10010110</text>
+  
+  <!-- SQL decoration -->
+  <text x="100" y="100" font-family="monospace" font-size="14" fill="rgba(255,255,255,0.4)">SELECT *</text>
+  <text x="650" y="100" font-family="monospace" font-size="14" fill="rgba(255,255,255,0.4)">FROM data</text>
+</svg>

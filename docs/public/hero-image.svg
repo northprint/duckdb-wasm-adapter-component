@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <!-- DuckDB + WASM fusion hero -->
+  
+  <defs>
+    <!-- Gradient for overlap area -->
+    <linearGradient id="overlap" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FDB022;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#B87A56;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654FF0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- DuckDB yellow circle -->
+  <circle cx="95" cy="120" r="45" fill="#FDB022" opacity="0.85"/>
+  
+  <!-- WASM purple circle with overlap -->
+  <circle cx="145" cy="120" r="45" fill="#654FF0" opacity="0.85"/>
+  
+  <!-- Text below circles -->
+  <text x="120" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#654FF0" text-anchor="middle">DuckDB WASM</text>
+  <text x="120" y="205" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#8B7FD6" text-anchor="middle">Adapter Component</text>
+</svg>

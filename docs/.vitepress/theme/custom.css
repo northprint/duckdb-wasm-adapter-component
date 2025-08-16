@@ -1,0 +1,181 @@
+/* Custom styles for DuckDB WASM Adapter documentation */
+
+:root {
+  --vp-c-brand: #654FF0;
+  --vp-c-brand-light: #7B67F3;
+  --vp-c-brand-lighter: #9180F6;
+  --vp-c-brand-dark: #5844D6;
+  --vp-c-brand-darker: #4A38B8;
+  
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(90deg, #654FF0, #5844D6);
+  
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
+}
+
+/* Logo styling */
+.VPNavBarTitle .logo {
+  height: 28px;
+  width: 28px;
+  margin-right: 8px;
+}
+
+/* Hero section */
+.VPHero .image-bg {
+  opacity: 0.8;
+  filter: blur(68px);
+  background-image: linear-gradient(120deg, #667EEA 30%, #764BA2);
+}
+
+.VPHero .image-container {
+  max-width: 320px;
+}
+
+/* Feature cards */
+.VPFeature {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.VPFeature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Metrics grid for home page */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.metric-card {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-border);
+  transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+}
+
+.metric-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--vp-c-brand);
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {
+  color: var(--vp-c-text-2);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Code blocks */
+.vp-code-group .tabs {
+  border-radius: 8px 8px 0 0;
+}
+
+.vp-code-group .blocks {
+  border-radius: 0 0 8px 8px;
+}
+
+/* Warning boxes for WASM considerations */
+.warning.custom-block {
+  border-color: #ff9800;
+  background-color: rgba(255, 152, 0, 0.05);
+}
+
+.warning.custom-block .custom-block-title {
+  color: #ff9800;
+  font-weight: 600;
+}
+
+/* Dark mode adjustments */
+.dark {
+  --vp-home-hero-image-background-image: linear-gradient(120deg, #4A38B8 50%, #5C3977);
+}
+
+.dark .metric-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .VPHero .image-bg {
+  opacity: 0.6;
+}
+
+/* Navigation logo animation */
+.VPNavBarTitle .logo {
+  transition: transform 0.3s ease;
+}
+
+.VPNavBarTitle:hover .logo {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Feature icon animation */
+.VPFeature .icon {
+  font-size: 48px;
+  transition: transform 0.3s ease;
+}
+
+.VPFeature:hover .icon {
+  transform: scale(1.2);
+}
+
+/* Button styles */
+.VPButton.brand {
+  background: linear-gradient(120deg, #654FF0, #7B67F3);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.VPButton.brand:hover {
+  background: linear-gradient(120deg, #5844D6, #654FF0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(101, 79, 240, 0.3);
+}
+
+/* Table styles */
+table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table thead {
+  background: var(--vp-c-bg-soft);
+}
+
+table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vp-c-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-brand);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-brand-dark);
+}

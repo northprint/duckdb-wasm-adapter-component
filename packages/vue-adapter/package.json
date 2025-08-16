@@ -1,0 +1,50 @@
+{
+  "name": "@duckdb-wasm-adapter/vue",
+  "version": "1.0.0",
+  "description": "Vue composables for DuckDB WASM adapter",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@duckdb-wasm-adapter/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/vue": "^8.1.0",
+    "@types/node": "^20.19.11",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.1.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^1.6.1",
+    "vue": "^3.5.18"
+  },
+  "keywords": [
+    "duckdb",
+    "wasm",
+    "vue",
+    "composables",
+    "database",
+    "analytics"
+  ],
+  "author": "",
+  "license": "MIT"
+}

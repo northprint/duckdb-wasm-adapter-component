@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DuckDB WASM Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f2f2f2;
+        }
+        #results {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🦆 DuckDB WASM Adapter Test</h1>
+    
+    <div id="status" class="status">Status: Not connected</div>
+    
+    <div>
+        <button onclick="connect()">Connect</button>
+        <button onclick="disconnect()">Disconnect</button>
+        <button onclick="setupData()">Setup Sample Data</button>
+    </div>
+    
+    <div>
+        <h2>Query Editor</h2>
+        <textarea id="query" placeholder="Enter SQL query...">SELECT * FROM employees</textarea>
+        <button onclick="executeQuery()">Execute Query</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script type="module">
+        // Import the core library
+        import { createConnection } from './packages/core/dist/index.js';
+        
+        let connection = null;
+        
+        window.connect = async function() {
+            try {
+                connection = await createConnection();
+                document.getElementById('status').className = 'status connected';
+                document.getElementById('status').textContent = 'Status: Connected';
+                console.log('Connected to DuckDB');
+            } catch (error) {
+                document.getElementById('status').className = 'status error';
+                document.getElementById('status').textContent = 'Status: Error - ' + error.message;
+                console.error('Connection failed:', error);
+            }
+        }
+        
+        window.disconnect = async function() {
+            if (connection) {
+                await connection.close();
+                connection = null;
+                document.getElementById('status').className = 'status';
+                document.getElementById('status').textContent = 'Status: Disconnected';
+            }
+        }
+        
+        window.setupData = async function() {
+            if (!connection) {
+                alert('Please connect first');
+                return;
+            }
+            
+            try {
+                const setupQuery = `
+                    CREATE TABLE IF NOT EXISTS employees (
+                        id INTEGER,
+                        name VARCHAR,
+                        department VARCHAR,
+                        salary DECIMAL(10,2),
+                        hire_date DATE
+                    );
+                    
+                    INSERT INTO employees VALUES 
+                        (1, 'Alice Johnson', 'Engineering', 95000.00, '2020-03-15'),
+                        (2, 'Bob Smith', 'Sales', 75000.00, '2019-07-22'),
+                        (3, 'Carol White', 'Marketing', 82000.00, '2021-01-10'),
+                        (4, 'David Brown', 'Engineering', 105000.00, '2018-11-05'),
+                        (5, 'Eve Davis', 'HR', 68000.00, '2022-02-28');
+                `;
+                
+                await connection.execute(setupQuery);
+                alert('Sample data created successfully!');
+            } catch (error) {
+                alert('Setup failed: ' + error.message);
+            }
+        }
+        
+        window.executeQuery = async function() {
+            if (!connection) {
+                alert('Please connect first');
+                return;
+            }
+            
+            const query = document.getElementById('query').value;
+            
+            try {
+                const result = await connection.execute(query);
+                const data = result.toArray();
+                
+                if (data.length === 0) {
+                    document.getElementById('results').innerHTML = '<p>No results</p>';
+                    return;
+                }
+                
+                // Build HTML table
+                let html = '<h2>Results (' + data.length + ' rows)</h2>';
+                html += '<table><thead><tr>';
+                
+                // Headers
+                for (const key in data[0]) {
+                    html += '<th>' + key + '</th>';
+                }
+                html += '</tr></thead><tbody>';
+                
+                // Rows
+                for (const row of data) {
+                    html += '<tr>';
+                    for (const key in row) {
+                        html += '<td>' + (row[key] ?? 'NULL') + '</td>';
+                    }
+                    html += '</tr>';
+                }
+                
+                html += '</tbody></table>';
+                document.getElementById('results').innerHTML = html;
+            } catch (error) {
+                document.getElementById('results').innerHTML = 
+                    '<div class="status error">Query failed: ' + error.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

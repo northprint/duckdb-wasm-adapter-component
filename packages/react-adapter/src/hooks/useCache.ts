@@ -1,0 +1,40 @@
+import { useCallback } from 'react';
+import { useDuckDB } from '../context.js';
+import type { CacheStats } from '@duckdb-wasm-adapter/core';
+
+export function useCache() {
+  const { connection } = useDuckDB();
+
+  const clearCache = useCallback(() => {
+    if (connection?.clearCache) {
+      connection.clearCache();
+    }
+  }, [connection]);
+
+  const getCacheStats = useCallback((): CacheStats => {
+    if (connection?.getCacheStats) {
+      return connection.getCacheStats();
+    }
+    return {
+      hits: 0,
+      misses: 0,
+      evictions: 0,
+      entries: 0,
+      totalSize: 0,
+      hitRate: 0,
+    };
+  }, [connection]);
+
+  const invalidateCache = useCallback((pattern: string | RegExp): number => {
+    if (connection?.invalidateCache) {
+      return connection.invalidateCache(pattern);
+    }
+    return 0;
+  }, [connection]);
+
+  return {
+    clearCache,
+    getCacheStats,
+    invalidateCache,
+  };
+}

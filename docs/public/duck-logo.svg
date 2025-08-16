@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <!-- DuckDB + WASM fusion logo -->
+  
+  <defs>
+    <!-- Blend mode for color mixing -->
+    <filter id="blend">
+      <feBlend mode="multiply"/>
+    </filter>
+  </defs>
+  
+  <!-- DuckDB yellow circle -->
+  <circle cx="16" cy="20" r="9" fill="#FDB022" opacity="0.9"/>
+  
+  <!-- WASM purple circle with overlap -->
+  <circle cx="24" cy="20" r="9" fill="#654FF0" opacity="0.9"/>
+</svg>
