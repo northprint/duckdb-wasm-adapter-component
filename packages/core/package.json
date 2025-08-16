@@ -1,6 +1,6 @@
 {
   "name": "@duckdb-wasm-adapter/core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Core library for DuckDB WASM adapter",
   "type": "module",
   "main": "./dist/index.js",
@@ -48,5 +48,18 @@
     "sql",
     "adapter"
   ],
-  "license": "MIT"
+  "author": "Northprint",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/northprint/duckdb-wasm-adapter-component.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/northprint/duckdb-wasm-adapter-component/issues"
+  },
+  "homepage": "https://github.com/northprint/duckdb-wasm-adapter-component#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }
