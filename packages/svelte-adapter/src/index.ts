@@ -38,7 +38,7 @@ export type {
   ExportOptions,
   ErrorCode,
   DuckDBType,
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';
 
 // Re-export core error class
-export { DuckDBError } from '@duckdb-wasm-adapter/core';
+export { DuckDBError } from '@northprint/duckdb-wasm-adapter-core';

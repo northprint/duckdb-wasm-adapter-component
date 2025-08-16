@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@duckdb-wasm-adapter/core": "workspace:*",
-    "@duckdb-wasm-adapter/react": "workspace:*",
+    "@northprint/duckdb-wasm-adapter-core": "workspace:*",
+    "@northprint/duckdb-wasm-adapter-react": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

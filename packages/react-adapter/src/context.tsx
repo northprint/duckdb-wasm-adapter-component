@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { createConnection, createQueryBuilder, type Connection, type QueryBuilderFactory } from '@duckdb-wasm-adapter/core';
+import { createConnection, createQueryBuilder, type Connection, type QueryBuilderFactory } from '@northprint/duckdb-wasm-adapter-core';
 import type { DuckDBContextValue, DuckDBProviderProps, ConnectionStatus } from './types.js';
 
 const DuckDBContext = createContext<DuckDBContextValue | null>(null);

@@ -14,7 +14,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@duckdb-wasm-adapter/core": "workspace:*",
-    "@duckdb-wasm-adapter/svelte": "workspace:*"
+    "@northprint/duckdb-wasm-adapter-core": "workspace:*",
+    "@northprint/duckdb-wasm-adapter-svelte": "workspace:*"
   }
 }

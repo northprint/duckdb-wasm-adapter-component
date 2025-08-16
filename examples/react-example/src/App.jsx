@@ -10,7 +10,7 @@ import {
   useExportJSON,
   downloadFile,
   resultToCSV 
-} from '@duckdb-wasm-adapter/react';
+} from '@northprint/duckdb-wasm-adapter/react';
 import QueryBuilderDemo from './components/QueryBuilderDemo';
 import CacheDemo from './components/CacheDemo';
 import SpatialDemo from './components/SpatialDemo';

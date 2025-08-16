@@ -44,10 +44,10 @@ importers:
 
   examples/react-example:
     dependencies:
-      '@duckdb-wasm-adapter/core':
+      '@northprint/duckdb-wasm-adapter-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@duckdb-wasm-adapter/react':
+      '@northprint/duckdb-wasm-adapter-react':
         specifier: workspace:*
         version: link:../../packages/react-adapter
       react:
@@ -72,10 +72,10 @@ importers:
 
   examples/svelte-example:
     dependencies:
-      '@duckdb-wasm-adapter/core':
+      '@northprint/duckdb-wasm-adapter-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@duckdb-wasm-adapter/svelte':
+      '@northprint/duckdb-wasm-adapter-svelte':
         specifier: workspace:*
         version: link:../../packages/svelte-adapter
     devDependencies:
@@ -91,10 +91,10 @@ importers:
 
   examples/vue-example:
     dependencies:
-      '@duckdb-wasm-adapter/core':
+      '@northprint/duckdb-wasm-adapter-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@duckdb-wasm-adapter/vue':
+      '@northprint/duckdb-wasm-adapter-vue':
         specifier: workspace:*
         version: link:../../packages/vue-adapter
       vue:
@@ -141,9 +141,9 @@ importers:
 
   packages/react-adapter:
     dependencies:
-      '@duckdb-wasm-adapter/core':
-        specifier: workspace:*
-        version: link:../core
+      '@northprint/duckdb-wasm-adapter-core':
+        specifier: ^0.1.0
+        version: 0.1.0(@duckdb/duckdb-wasm@1.29.0)
     devDependencies:
       '@testing-library/react':
         specifier: ^14.3.1
@@ -181,9 +181,9 @@ importers:
 
   packages/svelte-adapter:
     dependencies:
-      '@duckdb-wasm-adapter/core':
-        specifier: workspace:*
-        version: link:../core
+      '@northprint/duckdb-wasm-adapter-core':
+        specifier: ^0.1.0
+        version: 0.1.0(@duckdb/duckdb-wasm@1.29.0)
     devDependencies:
       '@testing-library/svelte':
         specifier: ^4.1.0
@@ -209,9 +209,9 @@ importers:
 
   packages/vue-adapter:
     dependencies:
-      '@duckdb-wasm-adapter/core':
-        specifier: workspace:*
-        version: link:../core
+      '@northprint/duckdb-wasm-adapter-core':
+        specifier: ^0.1.0
+        version: 0.1.0(@duckdb/duckdb-wasm@1.29.0)
     devDependencies:
       '@testing-library/vue':
         specifier: ^8.1.0
@@ -898,6 +898,11 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@northprint/duckdb-wasm-adapter-core@0.1.0':
+    resolution: {integrity: sha512-N80ZXviDmDuaOh1mOU717dZM0lAmm15TVqWMqk8JieHZqZ9zYgYUdd3wT/ctU+rG7+NBAIdbLtwB+VauYp6Wug==}
+    peerDependencies:
+      '@duckdb/duckdb-wasm': ^1.28.0
 
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
@@ -4039,6 +4044,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@northprint/duckdb-wasm-adapter-core@0.1.0(@duckdb/duckdb-wasm@1.29.0)':
+    dependencies:
+      '@duckdb/duckdb-wasm': 1.29.0
 
   '@one-ini/wasm@0.1.1': {}
 

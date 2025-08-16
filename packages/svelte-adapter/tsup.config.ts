@@ -9,7 +9,7 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   minify: false,
-  external: ['svelte', '@duckdb-wasm-adapter/core', '@duckdb/duckdb-wasm'],
+  external: ['svelte', '@northprint/duckdb-wasm-adapter-core', '@duckdb/duckdb-wasm'],
   esbuildOptions(options) {
     options.platform = 'browser';
   },

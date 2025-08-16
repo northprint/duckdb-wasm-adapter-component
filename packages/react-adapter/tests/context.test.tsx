@@ -38,7 +38,7 @@ describe('DuckDBProvider', () => {
   });
 
   it('should handle connection errors', async () => {
-    const { createConnection } = await import('@duckdb-wasm-adapter/core');
+    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
     const mockCreateConnection = vi.mocked(createConnection);
     mockCreateConnection.mockRejectedValueOnce(new Error('Connection failed'));
 

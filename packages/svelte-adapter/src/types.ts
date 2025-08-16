@@ -5,7 +5,7 @@ import type {
   ConnectionEvents,
   ImportOptions,
   ExportOptions,
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';
 
 export interface DuckDBStore {
   connection: Readable<Connection | null>;

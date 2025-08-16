@@ -5,7 +5,7 @@ import {
   type ConnectionEvents,
   type ImportOptions,
   type ExportOptions,
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';
 import type {
   DuckDBStore,
   DuckDBStoreConfig,

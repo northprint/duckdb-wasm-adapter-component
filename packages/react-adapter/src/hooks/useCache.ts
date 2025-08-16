@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDuckDB } from '../context.js';
-import type { CacheStats } from '@duckdb-wasm-adapter/core';
+import type { CacheStats } from '@northprint/duckdb-wasm-adapter-core';
 
 export function useCache() {
   const { connection } = useDuckDB();

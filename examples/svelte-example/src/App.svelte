@@ -1,5 +1,5 @@
 <script>
-  import { createDuckDB, downloadFile, resultToCSV } from '@duckdb-wasm-adapter/svelte';
+  import { createDuckDB, downloadFile, resultToCSV } from '@northprint/duckdb-wasm-adapter/svelte';
   import { onMount } from 'svelte';
 
   // Create DuckDB instance

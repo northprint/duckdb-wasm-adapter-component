@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
-// Mock @duckdb-wasm-adapter/core
-vi.mock('@duckdb-wasm-adapter/core', () => ({
+// Mock @northprint/duckdb-wasm-adapter-core
+vi.mock('@northprint/duckdb-wasm-adapter-core', () => ({
   createConnection: vi.fn().mockResolvedValue({
     id: 'test-connection',
     status: 'connected',

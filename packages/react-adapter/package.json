@@ -1,5 +1,5 @@
 {
-  "name": "@duckdb-wasm-adapter/react",
+  "name": "@northprint/duckdb-wasm-adapter-react",
   "version": "0.1.0",
   "description": "React hooks for DuckDB WASM adapter",
   "type": "module",
@@ -22,7 +22,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@duckdb-wasm-adapter/core": "workspace:*"
+    "@northprint/duckdb-wasm-adapter-core": "^0.1.0"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

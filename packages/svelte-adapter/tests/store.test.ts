@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { get } from 'svelte/store';
 import { createDuckDB } from '../src/store.js';
-import type { Connection } from '@duckdb-wasm-adapter/core';
+import type { Connection } from '@northprint/duckdb-wasm-adapter-core';
 
 // Mock connection module
-vi.mock('@duckdb-wasm-adapter/core', () => ({
+vi.mock('@northprint/duckdb-wasm-adapter-core', () => ({
   createConnection: vi.fn(),
   DuckDBError: class DuckDBError extends Error {
     constructor(message: string, public code: string) {
@@ -19,7 +19,7 @@ describe('createDuckDB', () => {
     vi.clearAllMocks();
     
     // Setup default mock implementation
-    const { createConnection } = await import('@duckdb-wasm-adapter/core');
+    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
     const mockCreateConnection = vi.mocked(createConnection);
     
     mockCreateConnection.mockResolvedValue({
@@ -58,12 +58,12 @@ describe('createDuckDB', () => {
     expect(get(db.connection)).toBeTruthy();
     expect(get(db.error)).toBeNull();
     
-    const { createConnection } = await import('@duckdb-wasm-adapter/core');
+    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
     expect(createConnection).toHaveBeenCalled();
   });
 
   it('should handle connection errors', async () => {
-    const { createConnection } = await import('@duckdb-wasm-adapter/core');
+    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
     const mockCreateConnection = vi.mocked(createConnection);
     mockCreateConnection.mockRejectedValueOnce(new Error('Connection failed'));
     
@@ -234,7 +234,7 @@ describe('createDuckDB', () => {
     const onQuery = vi.fn();
     
     // Mock createConnection to call the onConnect event
-    const { createConnection } = await import('@duckdb-wasm-adapter/core');
+    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
     const mockCreateConnection = vi.mocked(createConnection);
     
     mockCreateConnection.mockImplementation(async (config, events) => {

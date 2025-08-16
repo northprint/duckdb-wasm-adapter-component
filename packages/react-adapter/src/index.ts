@@ -55,7 +55,7 @@ export type {
   QueryBuilderFactory,
   CacheStats,
   CacheOptions,
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';
 
 // Re-export core error class and utilities
 export { 
@@ -64,4 +64,4 @@ export {
   select,
   from,
   createQueryBuilder,
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';

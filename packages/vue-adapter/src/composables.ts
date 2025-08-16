@@ -1,5 +1,5 @@
 import { ref, shallowRef, computed, watch, onUnmounted, unref, type Ref } from 'vue';
-import { createConnection, type Connection } from '@duckdb-wasm-adapter/core';
+import { createConnection, type Connection } from '@northprint/duckdb-wasm-adapter-core';
 import type {
   DuckDBInstance,
   DuckDBConfig,

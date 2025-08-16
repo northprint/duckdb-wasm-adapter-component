@@ -186,7 +186,7 @@ describe('useBatch', () => {
     });
 
     // Verify transaction was used
-    const { createConnection } = await import('@duckdb-wasm-adapter/core');
+    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
     const mockConnection = (await createConnection()) as any;
     
     expect(mockConnection.execute).toHaveBeenCalledWith('BEGIN TRANSACTION');

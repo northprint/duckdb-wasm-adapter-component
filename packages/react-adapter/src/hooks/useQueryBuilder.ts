@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDuckDB } from '../context.js';
-import type { QueryBuilder } from '@duckdb-wasm-adapter/core';
+import type { QueryBuilder } from '@northprint/duckdb-wasm-adapter-core';
 
 export function useQueryBuilder() {
   const { queryBuilder, isConnected } = useDuckDB();

@@ -6,7 +6,7 @@ import type {
   ExportOptions,
   DebugConfig,
   QueryBuilderFactory,
-} from '@duckdb-wasm-adapter/core';
+} from '@northprint/duckdb-wasm-adapter-core';
 
 export interface DuckDBContextValue {
   connection: Connection | null;
