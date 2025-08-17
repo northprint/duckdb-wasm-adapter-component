@@ -14,7 +14,7 @@ export {
   createQueryRune,
   createMutationRune,
   createTableRune,
-} from './runes.svelte.js';
+} from './runes.js';
 
 // Svelte 5 Props types
 export type {
@@ -38,7 +38,7 @@ export type {
   ConnectionStatusProps,
   DuckDBQueryProps,
   BindableModelProps,
-} from './props.svelte.js';
+} from './props.js';
 
 // Utility functions
 export {

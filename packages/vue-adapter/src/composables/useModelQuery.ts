@@ -19,6 +19,7 @@ export function useModelQuery<T = Record<string, unknown>>(
   loading: Ref<boolean>;
   error: Ref<Error | null>;
   sync: () => Promise<void>;
+  setId: (id: unknown) => void;
 } {
   const currentId = ref<unknown>();
   const localValue = ref<T>();

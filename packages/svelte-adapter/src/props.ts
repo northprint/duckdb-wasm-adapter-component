@@ -1,5 +1,5 @@
 /**
- * Svelte 5 component props with $props and $bindable runes
+ * Svelte 5 component props types
  * These types and utilities help create type-safe component props
  */
 
@@ -27,7 +27,7 @@ export interface FormProps<T = Record<string, unknown>> {
 }
 
 /**
- * Props for table components with $bindable
+ * Props for table components
  */
 export interface TableProps<T extends Record<string, any>> {
   data: T[];
@@ -45,8 +45,7 @@ export interface TableProps<T extends Record<string, any>> {
 }
 
 /**
- * Create reactive props with $props rune
- * This is a type helper for component props
+ * Create reactive props type helper
  */
 export type DuckDBQueryProps<T = Record<string, unknown>> = {
   sql: string;
@@ -173,7 +172,6 @@ export interface PaginationProps {
 
 /**
  * Helper function to create typed props in components
- * Usage in component: const props = $props<QueryComponentProps>();
  */
 export type QueryComponentProps<T = Record<string, unknown>> = QueryProps<T> & {
   class?: string;

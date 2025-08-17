@@ -90,7 +90,7 @@ export function useTypedQuery<T extends Record<string, any>>(
   const count = computed(() => queryResult.data.value?.length || 0);
   
   const updateOptions = (newOptions: TypedQueryOptions<T>) => {
-    queryOptions.value = { ...queryOptions.value, ...newOptions };
+    queryOptions.value = { ...queryOptions.value, ...newOptions } as any;
   };
   
   return {

@@ -1,3 +1,4 @@
+/// <reference path="../types/react-19.d.ts" />
 import { use, useMemo } from 'react';
 import { useDuckDB } from '../context.js';
 
@@ -45,7 +46,7 @@ export function createQueryResource<T = Record<string, unknown>>(
   let error: Error | undefined;
 
   const suspender = connectionPromise
-    .then(connection => connection.execute<T>(sql, params))
+    .then(connection => connection.execute(sql, params) as Promise<any>)
     .then(queryResult => {
       status = 'success';
       result = {
@@ -99,8 +100,8 @@ export function useStreamingQuery<T = Record<string, unknown>>(
 
     const stream = {
       async *[Symbol.asyncIterator]() {
-        const result = await connection.execute<T>(sql, params);
-        const data = result.toArray();
+        const result = await connection.execute(sql, params) as any;
+        const data = result.toArray() as T[];
         
         for (let i = 0; i < data.length; i += batchSize) {
           if (cancelled) break;

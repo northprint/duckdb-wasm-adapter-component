@@ -21,7 +21,7 @@ export function useDuckDBScope() {
     options?: any
   ): QueryResult<T> => {
     return runInScope(() => {
-      const result = useQuery<T>(sql, params, options);
+      const result = useQuery<T>(sql as any, params as any, options);
       queries.set(key, result);
       return result;
     });
@@ -76,13 +76,13 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
     onUpdate?: (data: T[]) => void;
   }
 ) {
-  const queryResult = useQuery<T>(sql, params);
+  const queryResult = useQuery<T>(sql as any, params as any);
 
   // Watch for updates after DOM flush
   if (options?.onPostUpdate) {
     watchPostEffect(() => {
       if (queryResult.data.value) {
-        options.onPostUpdate(queryResult.data.value);
+        options.onPostUpdate!(queryResult.data.value);
       }
     });
   }
@@ -91,7 +91,7 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
   if (options?.onSyncUpdate) {
     watchSyncEffect(() => {
       if (queryResult.data.value) {
-        options.onSyncUpdate(queryResult.data.value);
+        options.onSyncUpdate!(queryResult.data.value);
       }
     });
   }
@@ -100,7 +100,7 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
   if (options?.onUpdate) {
     watchEffect(() => {
       if (queryResult.data.value) {
-        options.onUpdate(queryResult.data.value);
+        options.onUpdate!(queryResult.data.value);
       }
     });
   }
@@ -126,7 +126,7 @@ export function useDashboardScope(config: {
 
   scope.run(() => {
     Object.entries(config.queries).forEach(([key, queryConfig]) => {
-      const result = useQuery(queryConfig.sql, queryConfig.params, queryConfig.options);
+      const result = useQuery(queryConfig.sql as any, queryConfig.params as any, queryConfig.options);
       results.set(key, result);
       
       // Track loading states
