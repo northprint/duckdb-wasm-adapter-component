@@ -180,7 +180,7 @@ export class QueryCacheManager<T = unknown> implements CacheManager<T> {
     return entry.data;
   }
 
-  set(key: CacheKey, data: T[], metadata?: any): void {
+  set(key: CacheKey, data: T[], metadata?: Record<string, unknown>): void {
     const cacheKey = this.generateKey(key);
     const size = this.estimateSize(data);
     
@@ -327,7 +327,10 @@ export class QueryCacheManager<T = unknown> implements CacheManager<T> {
    */
   import(data: string): void {
     try {
-      const parsed = JSON.parse(data);
+      const parsed = JSON.parse(data) as {
+        entries: [string, CacheEntry<T>][];
+        stats?: { hits: number; misses: number };
+      };
       const now = Date.now();
       
       this.clear();

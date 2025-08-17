@@ -1,4 +1,5 @@
 import type { DebugConfig, QueryProfile } from './types.js';
+import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 
 export class DebugLogger {
   private config: DebugConfig;
@@ -109,7 +110,7 @@ export class DebugLogger {
     console.log(`📤 Exported ${rowCount} rows as ${type}`);
   }
 
-  log(message: string, ...args: any[]): void {
+  log(message: string, ...args: unknown[]): void {
     if (!this.isEnabled()) return;
     console.log(`[DuckDB]`, message, ...args);
   }
@@ -121,7 +122,7 @@ export class DebugLogger {
     return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
   }
 
-  async profileQuery(connection: any, query: string): Promise<QueryProfile | undefined> {
+  async profileQuery(connection: AsyncDuckDBConnection, query: string): Promise<QueryProfile | undefined> {
     if (!this.isEnabled() || !this.config.profileQueries) {
       return undefined;
     }

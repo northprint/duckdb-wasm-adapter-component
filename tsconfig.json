@@ -28,6 +28,7 @@
     "composite": true,
     "incremental": true
   },
+  "include": [],
   "references": [
     { "path": "./packages/core" },
     { "path": "./packages/svelte-adapter" },
@@ -36,10 +37,14 @@
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "build",
-    ".svelte-kit",
-    ".next",
-    ".nuxt"
+    "**/dist/**",
+    "**/build/**",
+    "**/.svelte-kit/**",
+    "**/.next/**",
+    "**/.nuxt/**",
+    "**/tests/**",
+    "**/test/**",
+    "**/*.test.ts",
+    "**/*.spec.ts"
   ]
 }

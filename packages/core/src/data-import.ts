@@ -3,7 +3,7 @@ import type { ImportOptions } from './types.js';
 import { DuckDBError } from './errors.js';
 
 export class DataImporter {
-  private connection: any;
+  private connection: AsyncDuckDBConnection;
   
   constructor(connection: AsyncDuckDBConnection) {
     this.connection = connection;
@@ -27,7 +27,7 @@ export class DataImporter {
       if (csvContent.length > 1024 * 1024) {
         // For large files, register as a file buffer
         const fileName = `${tableName}_import.csv`;
-        await this.connection.registerFileText(fileName, csvContent);
+        await (this.connection as any).registerFileText(fileName, csvContent);
         
         const query = `
           CREATE OR REPLACE TABLE ${tableName} AS 
@@ -38,7 +38,7 @@ export class DataImporter {
           await this.connection.query(query);
         } finally {
           // Clean up registered file
-          await this.connection.dropFile(fileName);
+          await (this.connection as any).dropFile(fileName);
         }
       } else {
         // For small files, use inline data
@@ -67,7 +67,7 @@ export class DataImporter {
       // For large JSON, use file registration
       if (jsonString.length > 1024 * 1024) {
         const fileName = `${tableName}_import.json`;
-        await this.connection.registerFileText(fileName, jsonString);
+        await (this.connection as any).registerFileText(fileName, jsonString);
         
         const query = `
           CREATE OR REPLACE TABLE ${tableName} AS 
@@ -77,7 +77,7 @@ export class DataImporter {
         try {
           await this.connection.query(query);
         } finally {
-          await this.connection.dropFile(fileName);
+          await (this.connection as any).dropFile(fileName);
         }
       } else {
         // For small JSON, use inline
@@ -111,7 +111,7 @@ export class DataImporter {
       const fileName = `${tableName}_import.parquet`;
       
       // Register the parquet file
-      await this.connection.registerFileBuffer(
+      await (this.connection as any).registerFileBuffer(
         fileName,
         new Uint8Array(buffer)
       );
@@ -125,7 +125,7 @@ export class DataImporter {
         await this.connection.query(query);
       } finally {
         // Clean up registered file
-        await this.connection.dropFile(fileName);
+        await (this.connection as any).dropFile(fileName);
       }
     } catch (error) {
       throw DuckDBError.importFailed(

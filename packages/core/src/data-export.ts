@@ -3,7 +3,7 @@ import type { ExportOptions } from './types.js';
 import { DuckDBError } from './errors.js';
 
 export class DataExporter {
-  private connection: any;
+  private connection: AsyncDuckDBConnection;
   
   constructor(connection: AsyncDuckDBConnection) {
     this.connection = connection;
@@ -84,10 +84,10 @@ export class DataExporter {
         );
 
         // Read the file buffer
-        const buffer = await this.connection.copyFileToBuffer(fileName);
+        const buffer = await (this.connection as any).copyFileToBuffer(fileName);
         
         // Clean up the file
-        await this.connection.dropFile(fileName);
+        await (this.connection as any).dropFile(fileName);
         
         return buffer;
       } finally {
@@ -110,7 +110,7 @@ export class DataExporter {
     const table = result.toArray();
     if (!table || table.length === 0) {
       return includeHeader && result.schema ? 
-        result.schema.fields.map((f: any) => f.name).join(delimiter) : '';
+        result.schema.fields.map((f: { name: string }) => f.name).join(delimiter) : '';
     }
 
     const rows: string[] = [];
@@ -136,8 +136,8 @@ export class DataExporter {
     const table = result.toArray();
     
     // Process dates and other special types
-    return table.map((row: any) => {
-      const processedRow: any = {};
+    return table.map((row: Record<string, unknown>) => {
+      const processedRow: Record<string, unknown> = {};
       
       for (const [key, value] of Object.entries(row)) {
         processedRow[key] = this.processJSONValue(value);
@@ -165,7 +165,7 @@ export class DataExporter {
     
     if (ArrayBuffer.isView(value)) {
       // Handle other typed arrays
-      return Array.from(value as any);
+      return Array.from(value as Uint8Array | Uint16Array | Uint32Array | Int8Array | Int16Array | Int32Array | Float32Array | Float64Array);
     }
     
     return value;

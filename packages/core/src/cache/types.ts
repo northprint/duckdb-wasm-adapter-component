@@ -6,7 +6,7 @@ export interface CacheKey {
 export interface CacheEntry<T = unknown> {
   key: CacheKey;
   data: T[];
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   timestamp: number;
   accessCount: number;
   size: number;
@@ -55,7 +55,7 @@ export interface CacheStats {
 
 export interface CacheManager<T = unknown> {
   get(key: CacheKey): T[] | null;
-  set(key: CacheKey, data: T[], metadata?: any): void;
+  set(key: CacheKey, data: T[], metadata?: Record<string, unknown>): void;
   has(key: CacheKey): boolean;
   delete(key: CacheKey): boolean;
   clear(): void;

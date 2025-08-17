@@ -128,7 +128,7 @@ export class ConnectionImpl implements Connection {
       // Cache the result for SELECT queries
       if (this.cacheManager && this.isReadOnlyQuery(query)) {
         const cacheKey = { query, params };
-        this.cacheManager.set(cacheKey, resultArray, result.getMetadata());
+        this.cacheManager.set(cacheKey, resultArray, { metadata: result.getMetadata() });
         this.debugLogger.log('Cached query result:', query);
       }
       
@@ -283,7 +283,10 @@ export class ConnectionManager {
       await this.initializeDuckDB(config);
     }
 
-    const connection = new ConnectionImpl(this.duckdbInstance!, config, events);
+    if (!this.duckdbInstance) {
+      throw new Error('DuckDB instance not initialized');
+    }
+    const connection = new ConnectionImpl(this.duckdbInstance, config, events);
     await connection.initialize();
     this.connections.set(connection.id, connection);
 

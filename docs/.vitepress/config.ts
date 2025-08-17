@@ -213,7 +213,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024 DuckDB WASM Adapter'
+      copyright: 'Copyright © 2025 DuckDB WASM Adapter'
     },
 
     search: {

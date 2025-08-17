@@ -42,7 +42,10 @@ export class ResultSetImpl<T = Record<string, unknown>> implements ResultSet<T> 
     return {
       next(): IteratorResult<T> {
         if (index < rows.length) {
-          return { value: rows[index++]!, done: false };
+          const value = rows[index++];
+          if (value !== undefined) {
+            return { value, done: false };
+          }
         }
         return { done: true, value: undefined };
       },

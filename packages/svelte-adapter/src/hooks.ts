@@ -35,7 +35,7 @@ export function useQuery<T = Record<string, unknown>>(
   // Set up refetch interval if specified
   if (refetchInterval && refetchInterval > 0) {
     const interval = setInterval(() => {
-      queryStore.refetch();
+      void queryStore.refetch();
     }, refetchInterval);
     
     // Clean up interval on unsubscribe
