@@ -1,266 +1,242 @@
 # DuckDB WASM Adapter Component
 
-DuckDB WASMを簡単に使用できるようにするアダプターコンポーネントライブラリです。複雑なデータやり取りをラップし、Svelte、React、Vueでの使用を簡単にします。
+[![CI](https://github.com/northprint/duckdb-wasm-adapter-component/actions/workflows/ci.yml/badge.svg)](https://github.com/northprint/duckdb-wasm-adapter-component/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/@northprint%2Fduckdb-wasm-adapter-core.svg)](https://www.npmjs.com/package/@northprint/duckdb-wasm-adapter-core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A powerful adapter for using DuckDB WASM in modern web frameworks. Execute SQL queries directly in your browser with full TypeScript support.
+
+[📚 Documentation](https://northprint.github.io/duckdb-wasm-adapter-component/) | [🌏 日本語](./README.ja.md)
 
 ## Features
 
-- 🚀 **Easy to use** - シンプルなAPIでDuckDB WASMを操作
-- 🎯 **Type-safe** - 完全なTypeScriptサポート
-- 🔌 **Framework adapters** - Svelte、React、Vue用のアダプター
-- 📦 **Data import/export** - CSV、JSON、Parquetファイルの入出力サポート
-- ⚡ **Reactive** - フレームワーク固有のリアクティブパターンをサポート
-- 🛡️ **Error handling** - 包括的なエラーハンドリング
-
-## Packages
-
-このモノレポには以下のパッケージが含まれています：
-
-| Package | Description | Status |
-|---------|-------------|--------|
-| [@northprint/duckdb-wasm-adapter-core](./packages/core) | Core library with TypeScript support | ✅ v0.1.0 |
-| [@northprint/duckdb-wasm-adapter-svelte](./packages/svelte-adapter) | Svelte stores and utilities | ✅ v0.1.0 |
-| [@northprint/duckdb-wasm-adapter-react](./packages/react-adapter) | React hooks and context | ✅ v0.1.0 |
-| [@northprint/duckdb-wasm-adapter-vue](./packages/vue-adapter) | Vue composables | ✅ v0.1.0 |
-
-## Installation
-
-### Core Library
-
-```bash
-npm install @northprint/duckdb-wasm-adapter-core
-# or
-pnpm add @northprint/duckdb-wasm-adapter-core
-# or
-yarn add @northprint/duckdb-wasm-adapter-core
-```
-
-### Framework Adapters
-
-```bash
-# Svelte
-npm install @northprint/duckdb-wasm-adapter-svelte
-
-# React
-npm install @northprint/duckdb-wasm-adapter-react
-
-# Vue
-npm install @northprint/duckdb-wasm-adapter-vue
-```
+- 🚀 **Zero Configuration** - Works out of the box with automatic WASM loading
+- 🔧 **Framework Support** - Native integrations for React, Vue, and Svelte
+- 📊 **In-Browser Analytics** - Process data without server round trips
+- 🔒 **Type Safe** - Full TypeScript support with comprehensive type definitions
+- ⚡ **High Performance** - Optimized for large datasets with query caching
+- 📦 **Import/Export** - Support for CSV, JSON, and Parquet formats
 
 ## Quick Start
 
-### Core Library
-
-```typescript
-import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
-
-// Create connection
-const connection = await createConnection();
-
-// Execute query
-const result = await connection.execute('SELECT * FROM users');
-const data = result.toArray();
-
-// Import CSV
-await connection.importCSV(file, 'users');
-
-// Export as JSON
-const json = await connection.exportJSON('SELECT * FROM users');
-```
-
-### Svelte
-
-```svelte
-<script>
-  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
-  
-  const db = createDuckDB({ autoConnect: true });
-  const queryStore = db.query('SELECT * FROM users');
-</script>
-
-{#if $queryStore.loading}
-  <p>Loading...</p>
-{:else if $queryStore.error}
-  <p>Error: {$queryStore.error.message}</p>
-{:else if $queryStore.data}
-  <ul>
-    {#each $queryStore.data as row}
-      <li>{row.name}</li>
-    {/each}
-  </ul>
-{/if}
-```
-
 ### React
 
-```tsx
+```bash
+npm install @northprint/duckdb-wasm-adapter-react
+```
+
+```jsx
 import { DuckDBProvider, useQuery } from '@northprint/duckdb-wasm-adapter-react';
 
 function App() {
   return (
     <DuckDBProvider autoConnect>
-      <UserList />
+      <DataTable />
     </DuckDBProvider>
   );
 }
 
-function UserList() {
+function DataTable() {
   const { data, loading, error } = useQuery('SELECT * FROM users');
   
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
   
   return (
-    <ul>
+    <table>
       {data?.map(row => (
-        <li key={row.id}>{row.name}</li>
+        <tr key={row.id}>
+          <td>{row.name}</td>
+          <td>{row.email}</td>
+        </tr>
       ))}
-    </ul>
+    </table>
   );
 }
 ```
 
 ### Vue
 
+```bash
+npm install @northprint/duckdb-wasm-adapter-vue
+```
+
 ```vue
 <template>
   <div>
-    <p v-if="loading">Loading...</p>
-    <p v-else-if="error">Error: {{ error.message }}</p>
-    <ul v-else-if="data">
-      <li v-for="row in data" :key="row.id">
-        {{ row.name }}
-      </li>
-    </ul>
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="error">Error: {{ error.message }}</div>
+    <table v-else>
+      <tr v-for="row in data" :key="row.id">
+        <td>{{ row.name }}</td>
+        <td>{{ row.email }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script setup>
-import { useDuckDB, useQuery } from '@northprint/duckdb-wasm-adapter-vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
 
-const db = useDuckDB({ autoConnect: true });
 const { data, loading, error } = useQuery('SELECT * FROM users');
 </script>
 ```
 
-## Development
-
-このプロジェクトはpnpmワークスペースを使用したモノレポとして構成されています。
-
-### Prerequisites
-
-- Node.js >= 18
-- pnpm >= 8
-
-### Setup
+### Svelte
 
 ```bash
-# Clone repository
-git clone https://github.com/northprint/duckdb-wasm-adapter-component.git
-cd duckdb-wasm-adapter-component
+npm install @northprint/duckdb-wasm-adapter-svelte
+```
 
+```svelte
+<script>
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  const db = createDuckDB({ autoConnect: true });
+  $: users = db.query('SELECT * FROM users');
+</script>
+
+{#if $users.loading}
+  <p>Loading...</p>
+{:else if $users.error}
+  <p>Error: {$users.error.message}</p>
+{:else}
+  <table>
+    {#each $users.data as user}
+      <tr>
+        <td>{user.name}</td>
+        <td>{user.email}</td>
+      </tr>
+    {/each}
+  </table>
+{/if}
+```
+
+## Installation
+
+### Core Package
+
+```bash
+npm install @northprint/duckdb-wasm-adapter-core
+```
+
+### Framework-Specific Packages
+
+```bash
+# React
+npm install @northprint/duckdb-wasm-adapter-react
+
+# Vue
+npm install @northprint/duckdb-wasm-adapter-vue
+
+# Svelte
+npm install @northprint/duckdb-wasm-adapter-svelte
+```
+
+## Key Features
+
+### Query Execution
+
+Execute SQL queries with parameter binding for security:
+
+```javascript
+const result = await connection.execute(
+  'SELECT * FROM users WHERE age > ? AND city = ?',
+  [18, 'Tokyo']
+);
+```
+
+### Data Import/Export
+
+Import and export data in various formats:
+
+```javascript
+// Import CSV
+await connection.importCSV(file, 'users', {
+  header: true,
+  delimiter: ','
+});
+
+// Export to JSON
+const json = await connection.exportJSON('SELECT * FROM users');
+```
+
+### Query Builder
+
+Build queries programmatically with type safety:
+
+```javascript
+const query = builder
+  .select(['name', 'email', 'age'])
+  .from('users')
+  .where('age', '>', 18)
+  .orderBy('name', 'ASC')
+  .limit(10);
+
+const result = await query.execute();
+```
+
+### Caching
+
+Automatic query result caching for improved performance:
+
+```javascript
+const { data } = useQuery('SELECT * FROM large_table', {
+  cacheTime: 5 * 60 * 1000, // 5 minutes
+  staleTime: 2 * 60 * 1000  // 2 minutes
+});
+```
+
+## WASM Considerations
+
+When using DuckDB WASM, keep in mind:
+
+- **Memory Limits**: Browser tabs typically have 1-4GB memory limits
+- **File System**: No direct file system access; use File API instead
+- **CORS**: Remote resources must have proper CORS headers
+- **SharedArrayBuffer**: Required for optimal performance (needs specific HTTP headers)
+
+## Development
+
+```bash
 # Install dependencies
 pnpm install
 
 # Build all packages
-pnpm build
+pnpm run build
 
 # Run tests
-pnpm test
+pnpm run test
 
-# Run tests in watch mode
-pnpm test:watch
+# Start development server
+pnpm run dev
+
+# Build documentation
+pnpm run docs:build
 ```
 
-### Project Structure
+## Examples
 
-```
-duckdb-wasm-adapter-component/
-├── packages/
-│   ├── core/               # Core library
-│   ├── svelte-adapter/     # Svelte adapter
-│   ├── react-adapter/      # React adapter
-│   └── vue-adapter/        # Vue adapter
-├── examples/               # Example applications
-├── docs/                   # Documentation
-└── package.json           # Root package.json
-```
+Check out our [example applications](./examples):
 
-## API Documentation
+- [React Example](./examples/react-example) - Dashboard with query builder and caching
+- [Vue Example](./examples/vue-example) - Data exploration with import/export
+- [Svelte Example](./examples/svelte-example) - Real-time data processing
 
-### Core Library
+## Documentation
 
-#### createConnection(config?, events?)
-
-データベース接続を作成します。
-
-```typescript
-const connection = await createConnection({
-  worker: true,
-  logLevel: 'warning',
-}, {
-  onConnect: () => console.log('Connected'),
-  onError: (error) => console.error('Error:', error),
-});
-```
-
-#### connection.execute(query, params?)
-
-SQLクエリを実行します。
-
-```typescript
-const result = await connection.execute(
-  'SELECT * FROM users WHERE age > ?',
-  [18]
-);
-```
-
-#### connection.importCSV(file, tableName, options?)
-
-CSVファイルをインポートします。
-
-```typescript
-await connection.importCSV(file, 'users', {
-  header: true,
-  delimiter: ',',
-});
-```
-
-### Framework-specific APIs
-
-各フレームワークアダプターの詳細なAPIドキュメントは、それぞれのパッケージディレクトリを参照してください：
-
-- [Svelte API Documentation](./packages/svelte-adapter/README.md)
-- [React API Documentation](./packages/react-adapter/README.md)
-- [Vue API Documentation](./packages/vue-adapter/README.md)
-
-## Testing
-
-各パッケージには包括的なテストスイートが含まれています。
-
-```bash
-# Run all tests
-pnpm test
-
-# Run tests for specific package
-pnpm --filter @northprint/duckdb-wasm-adapter-core test
-
-# Run tests in watch mode
-pnpm test:watch
-```
-
-## Contributing
-
-コントリビューションは歓迎します！Pull Requestを送る前に、以下を確認してください：
-
-1. テストが全て通ること
-2. TypeScriptの型チェックが通ること
-3. コーディングスタイルが既存のコードと一致していること
+Full documentation is available at: https://northprint.github.io/duckdb-wasm-adapter-component/
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) file for details
 
-## Credits
+## Contributing
 
-このプロジェクトは[DuckDB WASM](https://github.com/duckdb/duckdb-wasm)をベースにしています。
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## Support
+
+- [GitHub Issues](https://github.com/northprint/duckdb-wasm-adapter-component/issues)
+- [Documentation](https://northprint.github.io/duckdb-wasm-adapter-component/)
+- [NPM Package](https://www.npmjs.com/package/@northprint/duckdb-wasm-adapter-core)

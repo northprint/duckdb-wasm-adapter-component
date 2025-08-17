@@ -6,6 +6,19 @@ export default defineConfig({
   base: '/duckdb-wasm-adapter-component/',
   ignoreDeadLinks: true,
   
+  locales: {
+    root: {
+      label: 'English',
+      lang: 'en'
+    },
+    ja: {
+      label: '日本語',
+      lang: 'ja',
+      title: 'DuckDB WASM アダプター',
+      description: 'React、Vue、SvelteアプリケーションでDuckDB WASMを使用するための強力なアダプター'
+    }
+  },
+  
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/duckdb-wasm-adapter-component/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#654FF0' }],
@@ -17,6 +30,10 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/duck-logo.svg',
+    
+    // 言語切り替え
+    i18nRouting: true,
+    
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'API', link: '/api/core' },
