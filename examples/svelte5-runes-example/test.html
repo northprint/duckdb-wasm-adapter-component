@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Svelte 5 App</title>
+    <script>
+        // Log all console messages
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.log = function(...args) {
+            document.getElementById('logs').innerHTML += '<div style="color:black">[LOG] ' + args.join(' ') + '</div>';
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            document.getElementById('logs').innerHTML += '<div style="color:red">[ERROR] ' + args.join(' ') + '</div>';
+            originalError.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+            document.getElementById('logs').innerHTML += '<div style="color:orange">[WARN] ' + args.join(' ') + '</div>';
+            originalWarn.apply(console, args);
+        };
+        
+        window.onerror = function(msg, url, line, col, error) {
+            document.getElementById('logs').innerHTML += '<div style="color:red">[WINDOW ERROR] ' + msg + ' at ' + url + ':' + line + '</div>';
+            return false;
+        };
+    </script>
+</head>
+<body>
+    <h1>Svelte 5 Test Page</h1>
+    <div id="logs" style="border: 1px solid #ccc; padding: 10px; margin: 10px; min-height: 200px; font-family: monospace; background: #f5f5f5;"></div>
+    <iframe src="http://localhost:5174" width="100%" height="600" style="border: 2px solid blue;"></iframe>
+</body>
+</html>

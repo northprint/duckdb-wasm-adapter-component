@@ -18,10 +18,7 @@
   let activeTab = $state('query');
   
   // Sample data setup
-  const setupMutation = createMutationRune(db, {
-    onSuccess: () => console.log('Sample data created'),
-    onError: (err) => console.error('Setup failed:', err)
-  });
+  const setupMutation = createMutationRune(db);
   
   // Create reactive query with runes
   const queryRune = createQueryRune(
@@ -42,10 +39,18 @@
     columnCount: queryRune.metadata?.length || 0
   });
   
-  const canExport = $derived(queryRune.hasData && !queryRune.loading);
+  // Local reactive state
+  let dbConnected = $state(false);
+  let queryResults = $state([]);
+  let queryMetadata = $state([]);
+  let isLoading = $state(false);
+  let paginatedRows = $state([]);
+  
+  
+  const canExport = $derived(queryResults.length > 0 && !isLoading);
   
   // Setup initial data when connected
-  $effect(() => {
+  async function setupInitialData() {
     if (db.isConnected && !queryRune.data) {
       const setupQuery = `
         CREATE TABLE IF NOT EXISTS employees (
@@ -79,11 +84,44 @@
           (4, 'HR', 150000.00);
       `;
       
-      setupMutation.mutate(setupQuery).then(() => {
-        queryRune.execute();
-      });
+      try {
+        await setupMutation.mutate(setupQuery);
+        await queryRune.execute();
+      } catch (error) {
+        console.error('Setup failed:', error);
+      }
+    }
+  }
+  
+  // Wait for connection then setup data
+  setTimeout(() => {
+    setupInitialData();
+  }, 2000);
+  
+  // Sync state from queryRune to local reactive state
+  function syncState() {
+    dbConnected = db.isConnected;
+    // Always create new arrays to trigger reactivity
+    queryResults = [...(queryRune.data || [])];
+    queryMetadata = [...(queryRune.metadata || [])];
+    isLoading = queryRune.loading;
+    // Ensure paginatedRows is also a new array
+    paginatedRows = [...(tableRune.paginatedRows || [])];
+  }
+  // Watch for state changes
+  $effect(() => {
+    // Poll for changes every 100ms
+    const interval = setInterval(syncState, 100);
+    return () => clearInterval(interval);
+  });
+  
+  // Also trigger on reactive state change
+  $effect(() => {
+    if (dbConnected && queryResults.length === 0) {
+      setupInitialData();
     }
   });
+  
   
   // Example queries
   const exampleQueries = [
@@ -152,13 +190,13 @@
   <section class="status">
     <h2>Connection Status</h2>
     <div class="status-info">
-      <span class="status-badge {db.status}">{db.status}</span>
+      <span class="status-badge {dbConnected ? 'connected' : 'disconnected'}">{dbConnected ? 'connected' : 'disconnected'}</span>
       {#if db.error}
         <span class="error-message">{db.error.message}</span>
       {/if}
     </div>
     
-    {#if !db.isConnected}
+    {#if !dbConnected}
       <button onclick={() => db.connect()}>Connect to Database</button>
     {:else}
       <button onclick={() => db.disconnect()}>Disconnect</button>
@@ -196,14 +234,23 @@
         bind:value={customQuery}
         placeholder="Enter SQL query..."
         rows="6"
-      />
+      ></textarea>
       
       <div class="query-controls">
-        <button onclick={() => queryRune.execute()}>
+        <button onclick={async () => {
+          try {
+            // Execute query through queryRune
+            await queryRune.execute();
+            // Immediately sync state
+            syncState();
+          } catch (error) {
+            console.error('Query execution failed:', error);
+          }
+        }}>
           Execute Query
         </button>
         
-        {#if queryRune.loading}
+        {#if isLoading}
           <span class="loading">Executing...</span>
         {/if}
       </div>
@@ -215,9 +262,16 @@
           {#each exampleQueries as example}
             <button 
               class="example-btn"
-              onclick={() => {
+              onclick={async () => {
                 customQuery = example.sql;
-                queryRune.execute();
+                try {
+                  // Execute query through queryRune
+                  await queryRune.execute();
+                  // Immediately sync state
+                  syncState();
+                } catch (error) {
+                  console.error('Example query failed:', error);
+                }
               }}
             >
               {example.label}
@@ -241,7 +295,7 @@
     <section class="advanced-table">
       <h2>Advanced Table View</h2>
       
-      {#if queryRune.hasData}
+      {#if queryResults.length > 0}
         <div class="table-controls">
           <input 
             type="text"
@@ -274,7 +328,7 @@
                       onchange={() => tableRune.selectAll()}
                     />
                   </th>
-                  {#each queryRune.metadata as column}
+                  {#each queryMetadata as column}
                     <th 
                       class="sortable"
                       onclick={() => handleSort(column.name)}
@@ -291,7 +345,7 @@
               </tr>
             </thead>
             <tbody>
-              {#each tableRune.paginatedRows as row, index}
+              {#each paginatedRows as row, index}
                 <tr class:selected={tableRune.selectedRows.has(index)}>
                   <td>
                     <input 
@@ -375,22 +429,22 @@
     </section>
   {/if}
   
-  {#if queryRune.hasData && activeTab === 'query'}
+  {#if queryResults.length > 0 && activeTab === 'query'}
     <section class="results">
       <h2>Query Results</h2>
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
-              {#if queryRune.metadata}
-                {#each queryRune.metadata as column}
+              {#if queryMetadata}
+                {#each queryMetadata as column}
                   <th>{column.name}</th>
                 {/each}
               {/if}
             </tr>
           </thead>
           <tbody>
-            {#each queryRune.data as row}
+            {#each queryResults as row}
               <tr>
                 {#each Object.values(row) as value}
                   <td>{value ?? 'NULL'}</td>
@@ -489,22 +543,12 @@
     font-size: 0.875rem;
   }
   
-  .status-badge.idle {
-    background: #e0e0e0;
-    color: #666;
-  }
-  
-  .status-badge.connecting {
-    background: #fff3cd;
-    color: #856404;
-  }
-  
   .status-badge.connected {
     background: #d4edda;
     color: #155724;
   }
   
-  .status-badge.error {
+  .status-badge.disconnected {
     background: #f8d7da;
     color: #721c24;
   }

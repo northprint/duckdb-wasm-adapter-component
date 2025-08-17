@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+.svelte-kit
+
+# Public directory (DuckDB WASM files are copied here)
+public/*.wasm
+public/*.worker.js
+public/*.worker.js.map
+
+# IDE
+.vscode
+.idea
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db

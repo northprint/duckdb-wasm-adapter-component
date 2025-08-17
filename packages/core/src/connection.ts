@@ -306,19 +306,24 @@ export class ConnectionManager {
 
   private async doInitialize(config?: ConnectionConfig): Promise<void> {
     try {
-      // Configure DuckDB WASM bundles
+      // Configure DuckDB WASM bundles with CDN disabled
       const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
         mvp: {
-          mainModule: '/@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm',
-          mainWorker: '/@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js',
+          mainModule: '/duckdb-mvp.wasm',
+          mainWorker: '/duckdb-browser-mvp.worker.js',
         },
         eh: {
-          mainModule: '/@duckdb/duckdb-wasm/dist/duckdb-eh.wasm',
-          mainWorker: '/@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js',
+          mainModule: '/duckdb-eh.wasm',
+          mainWorker: '/duckdb-browser-eh.worker.js',
+        },
+        coi: {
+          mainModule: '/duckdb-coi.wasm',
+          mainWorker: '/duckdb-browser-coi.worker.js',
+          pthreadWorker: '/duckdb-browser-coi.pthread.worker.js',
         },
       };
 
-      // Select appropriate bundle
+      // Select appropriate bundle (CDN will not be used since we provide all bundles)
       const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
       
       // Configure logger
