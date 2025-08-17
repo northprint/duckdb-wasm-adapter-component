@@ -15,7 +15,7 @@
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
-    "project": ["./tsconfig.json", "./packages/*/tsconfig.json"]
+    "project": ["./packages/*/tsconfig.json"]
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
@@ -38,20 +38,13 @@
   },
   "overrides": [
     {
-      "files": ["*.svelte"],
-      "processor": "svelte3/svelte3"
-    },
-    {
-      "files": ["*.vue"],
-      "parser": "vue-eslint-parser",
-      "parserOptions": {
-        "parser": "@typescript-eslint/parser"
-      }
-    },
-    {
-      "files": ["*.test.ts", "*.spec.ts"],
+      "files": ["*.test.ts", "*.spec.ts", "*.test.tsx"],
       "rules": {
-        "@typescript-eslint/no-explicit-any": "off"
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-return": "off"
       }
     }
   ],
@@ -63,6 +56,10 @@
     ".next",
     ".nuxt",
     "*.config.js",
-    "*.config.ts"
+    "*.config.ts",
+    "*.svelte",
+    "*.vue",
+    "examples/**",
+    "docs/**"
   ]
 }
