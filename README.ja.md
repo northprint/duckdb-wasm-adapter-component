@@ -1,5 +1,9 @@
 # DuckDB WASM Adapter Component
 
+[![CI](https://github.com/northprint/duckdb-wasm-adapter-component/actions/workflows/ci.yml/badge.svg)](https://github.com/northprint/duckdb-wasm-adapter-component/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/@northprint%2Fduckdb-wasm-adapter-core.svg)](https://www.npmjs.com/package/@northprint/duckdb-wasm-adapter-core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 DuckDB WASMを簡単に使用できるようにするアダプターコンポーネントライブラリです。複雑なデータやり取りをラップし、Svelte、React、Vueでの使用を簡単にします。
 
 ## Features
