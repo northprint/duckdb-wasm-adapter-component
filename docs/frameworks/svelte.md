@@ -1,6 +1,6 @@
 # Svelte Framework Guide
 
-Complete guide to using DuckDB WASM Adapter with Svelte applications.
+Complete guide to using DuckDB WASM Adapter with Svelte applications, including Svelte 5's new runes API.
 
 ## Quick Start
 
@@ -10,14 +10,45 @@ Complete guide to using DuckDB WASM Adapter with Svelte applications.
 npm install @northprint/duckdb-wasm-adapter-svelte
 ```
 
-### Basic Setup
+### Basic Setup (Svelte 5 with Runes)
 
 ```javascript
 // src/App.svelte
 <script>
-  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  import { createDuckDBRunes } from '@northprint/duckdb-wasm-adapter-svelte';
   
-  const db = duckdb({ 
+  // Create DuckDB instance with Svelte 5 runes
+  const db = createDuckDBRunes({ 
+    autoConnect: true,
+    config: {
+      worker: true,
+      cache: { enabled: true }
+    }
+  });
+  
+  // Reactive state with $state and $derived
+  const stats = $derived({
+    connected: db.isConnected,
+    loading: db.isLoading,
+    status: db.status
+  });
+</script>
+
+<main>
+  <h1>My DuckDB App</h1>
+  <p>Status: {db.status}</p>
+  <!-- Your components -->
+</main>
+```
+
+### Basic Setup (Traditional Stores)
+
+```javascript
+// src/App.svelte
+<script>
+  import { createDuckDB } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  const db = createDuckDB({ 
     autoConnect: true,
     config: {
       worker: true,
@@ -28,28 +59,29 @@ npm install @northprint/duckdb-wasm-adapter-svelte
 
 <main>
   <h1>My DuckDB App</h1>
+  <p>Status: {$db.status}</p>
   <!-- Your components -->
 </main>
 ```
 
-### First Query
+### First Query (Svelte 5 Runes)
 
 ```svelte
 <script>
-  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  import { createDuckDBRunes, createQueryRune } from '@northprint/duckdb-wasm-adapter-svelte';
   
-  const db = duckdb({ autoConnect: true });
-  const result = db.query('SELECT 42 as answer');
+  const db = createDuckDBRunes({ autoConnect: true });
+  const queryRune = createQueryRune(db, 'SELECT 42 as answer');
 </script>
 
 <h1>Dashboard</h1>
 
-{#if $result.loading}
+{#if queryRune.loading}
   <div>Loading...</div>
-{:else if $result.error}
-  <div>Error: {$result.error.message}</div>
-{:else if $result.data}
-  <p>The answer is: {$result.data[0].answer}</p>
+{:else if queryRune.error}
+  <div>Error: {queryRune.error.message}</div>
+{:else if queryRune.hasData}
+  <p>The answer is: {queryRune.data[0].answer}</p>
 {/if}
 ```
 
@@ -878,6 +910,335 @@ Usage:
     font-size: 0.9rem;
   }
 </style>
+```
+
+## Svelte 5 Runes
+
+### State Management with $state
+
+Svelte 5 introduces runes for reactive state management:
+
+```svelte
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  // Using $state for reactive variables
+  let searchTerm = $state('');
+  let department = $state('');
+  let pageSize = $state(20);
+  
+  const db = duckdb({ autoConnect: true });
+  
+  // Query automatically reruns when state changes
+  const users = db.query(
+    `SELECT * FROM users 
+     WHERE name ILIKE '%' || ? || '%'
+     AND (? = '' OR department = ?)
+     LIMIT ?`,
+    () => [searchTerm, department, department, pageSize]
+  );
+</script>
+
+<input bind:value={searchTerm} placeholder="Search users..." />
+<select bind:value={department}>
+  <option value="">All Departments</option>
+  <option value="Engineering">Engineering</option>
+  <option value="Sales">Sales</option>
+</select>
+
+{#if $users.data}
+  <UserList users={$users.data} />
+{/if}
+```
+
+### Derived State with $derived
+
+Use `$derived` for computed values:
+
+```svelte
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  const db = duckdb({ autoConnect: true });
+  
+  let selectedUserId = $state(null);
+  
+  const users = db.query('SELECT * FROM users');
+  const orders = db.query('SELECT * FROM orders');
+  
+  // Derived state updates automatically
+  const selectedUser = $derived(
+    $users.data?.find(u => u.id === selectedUserId)
+  );
+  
+  const userOrders = $derived(
+    $orders.data?.filter(o => o.user_id === selectedUserId)
+  );
+  
+  const orderStats = $derived({
+    count: userOrders?.length || 0,
+    total: userOrders?.reduce((sum, o) => sum + o.amount, 0) || 0,
+    average: userOrders?.length 
+      ? userOrders.reduce((sum, o) => sum + o.amount, 0) / userOrders.length 
+      : 0
+  });
+</script>
+
+<UserSelector bind:selectedId={selectedUserId} users={$users.data} />
+
+{#if selectedUser}
+  <div class="user-details">
+    <h2>{selectedUser.name}</h2>
+    <p>Orders: {orderStats.count}</p>
+    <p>Total: ${orderStats.total.toFixed(2)}</p>
+    <p>Average: ${orderStats.average.toFixed(2)}</p>
+  </div>
+{/if}
+```
+
+### Side Effects with $effect
+
+Handle side effects with the `$effect` rune:
+
+```svelte
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  const db = duckdb({ autoConnect: true });
+  
+  let tableData = $state([]);
+  let chartInstance = $state(null);
+  
+  const analytics = db.query(
+    'SELECT date, revenue FROM analytics ORDER BY date'
+  );
+  
+  // Effect runs when dependencies change
+  $effect(() => {
+    if ($analytics.data && chartInstance) {
+      // Update chart when data changes
+      chartInstance.updateData($analytics.data);
+    }
+  });
+  
+  // Cleanup effect
+  $effect(() => {
+    console.log('Analytics data loaded:', $analytics.data);
+    
+    return () => {
+      // Cleanup when component unmounts
+      chartInstance?.destroy();
+    };
+  });
+  
+  // Effect with async operations
+  $effect(async () => {
+    if ($analytics.data) {
+      try {
+        const processed = await processData($analytics.data);
+        tableData = processed;
+      } catch (error) {
+        console.error('Processing failed:', error);
+      }
+    }
+  });
+</script>
+
+<div bind:this={chartInstance}>
+  <!-- Chart renders here -->
+</div>
+```
+
+### Component Props with $props
+
+Modern prop handling with `$props`:
+
+```svelte
+<!-- UserCard.svelte -->
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  // Destructure props with defaults
+  let { 
+    userId, 
+    showOrders = false,
+    showStats = true,
+    ...restProps 
+  } = $props();
+  
+  const db = duckdb({ autoConnect: true });
+  
+  const user = db.query(
+    'SELECT * FROM users WHERE id = ?',
+    [userId]
+  );
+  
+  const orders = $derived(
+    showOrders 
+      ? db.query('SELECT * FROM orders WHERE user_id = ?', [userId])
+      : { data: null }
+  );
+</script>
+
+<div class="user-card" {...restProps}>
+  {#if $user.data}
+    <h3>{$user.data[0].name}</h3>
+    <p>{$user.data[0].email}</p>
+    
+    {#if showStats}
+      <UserStats userId={userId} />
+    {/if}
+    
+    {#if showOrders && $orders.data}
+      <OrderList orders={$orders.data} />
+    {/if}
+  {/if}
+</div>
+```
+
+### Two-way Binding with $bindable
+
+Create bindable component props:
+
+```svelte
+<!-- FilterInput.svelte -->
+<script>
+  let { 
+    value = $bindable(''),
+    min = 0,
+    max = 100,
+    step = 1 
+  } = $props();
+  
+  // Internal state
+  let localValue = $state(value);
+  
+  $effect(() => {
+    // Sync with parent
+    value = localValue;
+  });
+</script>
+
+<div class="filter-input">
+  <input 
+    type="range" 
+    bind:value={localValue}
+    {min} 
+    {max} 
+    {step}
+  />
+  <span>{localValue}</span>
+</div>
+
+<!-- Parent Component -->
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  import FilterInput from './FilterInput.svelte';
+  
+  let minSalary = $state(50000);
+  let maxSalary = $state(150000);
+  
+  const db = duckdb({ autoConnect: true });
+  
+  const users = db.query(
+    'SELECT * FROM users WHERE salary BETWEEN ? AND ?',
+    () => [minSalary, maxSalary]
+  );
+</script>
+
+<FilterInput bind:value={minSalary} min={0} max={200000} step={5000} />
+<FilterInput bind:value={maxSalary} min={0} max={200000} step={5000} />
+
+<UserList users={$users.data} />
+```
+
+### Advanced Patterns with Runes
+
+```svelte
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  // Reactive class with runes
+  class DataManager {
+    query = $state('');
+    results = $state([]);
+    loading = $state(false);
+    
+    constructor(db) {
+      this.db = db;
+    }
+    
+    async execute() {
+      this.loading = true;
+      try {
+        const result = await this.db.execute(this.query);
+        this.results = result.toArray();
+      } catch (error) {
+        console.error('Query failed:', error);
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
+  
+  const db = duckdb({ autoConnect: true });
+  const manager = new DataManager(db);
+  
+  // Effect for auto-execution
+  $effect(() => {
+    if (manager.query && manager.query.length > 10) {
+      manager.execute();
+    }
+  });
+</script>
+
+<textarea bind:value={manager.query} placeholder="Enter SQL query..." />
+<button onclick={() => manager.execute()} disabled={manager.loading}>
+  {manager.loading ? 'Executing...' : 'Execute'}
+</button>
+
+{#if manager.results.length > 0}
+  <DataTable data={manager.results} />
+{/if}
+```
+
+### Migrating from Stores to Runes
+
+```svelte
+<!-- Old Store Pattern -->
+<script>
+  import { writable, derived } from 'svelte/store';
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  const searchTerm = writable('');
+  const users = writable([]);
+  
+  const filteredUsers = derived(
+    [users, searchTerm],
+    ([$users, $searchTerm]) => 
+      $users.filter(u => u.name.includes($searchTerm))
+  );
+</script>
+
+<!-- New Runes Pattern -->
+<script>
+  import { duckdb } from '@northprint/duckdb-wasm-adapter-svelte';
+  
+  let searchTerm = $state('');
+  let users = $state([]);
+  
+  const filteredUsers = $derived(
+    users.filter(u => u.name.includes(searchTerm))
+  );
+  
+  const db = duckdb({ autoConnect: true });
+  
+  // Load users with effect
+  $effect(async () => {
+    const result = await db.execute('SELECT * FROM users');
+    users = result.toArray();
+  });
+</script>
 ```
 
 ## Testing

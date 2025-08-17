@@ -339,3 +339,9 @@ export { useQueryBuilder, useQueryBuilderQuery } from './hooks/useQueryBuilder.j
 
 // Re-export cache hooks
 export { useCache } from './hooks/useCache.js';
+
+// Re-export React 19.1+ hooks
+export { useOptimisticQuery } from './hooks/useOptimisticQuery.js';
+export { useDuckDBAction, useFormWorkflow } from './hooks/useActionState.js';
+export { useTransitionQuery, useDeferredQuery } from './hooks/useTransitionQuery.js';
+export { useSuspenseQuery, createQueryResource, useStreamingQuery } from './hooks/useSuspenseQuery.js';

@@ -824,6 +824,239 @@ function PaginatedUsers() {
 }
 ```
 
+## React 19.1 Features
+
+### Using with useActionState
+
+React 19.1's `useActionState` hook provides better form state management:
+
+```jsx
+import { useActionState } from 'react';
+import { useMutation } from '@northprint/duckdb-wasm-adapter-react';
+
+function UserForm() {
+  const { mutate } = useMutation();
+  
+  const [state, formAction, isPending] = useActionState(
+    async (prevState, formData) => {
+      try {
+        const result = await mutate(
+          'INSERT INTO users (name, email) VALUES (?, ?) RETURNING *',
+          [formData.get('name'), formData.get('email')]
+        );
+        return { success: true, user: result[0] };
+      } catch (error) {
+        return { success: false, error: error.message };
+      }
+    },
+    { success: false }
+  );
+
+  return (
+    <form action={formAction}>
+      <input name="name" placeholder="Name" required />
+      <input name="email" type="email" placeholder="Email" required />
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Creating...' : 'Create User'}
+      </button>
+      {state.success && <p>User created successfully!</p>}
+      {state.error && <p>Error: {state.error}</p>}
+    </form>
+  );
+}
+```
+
+### Optimistic Updates with useOptimistic
+
+React 19.1's `useOptimistic` enables immediate UI updates:
+
+```jsx
+import { useOptimistic } from 'react';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-react';
+
+function TodoList() {
+  const { data: todos, refetch } = useQuery('SELECT * FROM todos ORDER BY created_at DESC');
+  const { mutate } = useMutation();
+  
+  const [optimisticTodos, addOptimisticTodo] = useOptimistic(
+    todos || [],
+    (state, newTodo) => [newTodo, ...state]
+  );
+
+  const handleAddTodo = async (text) => {
+    const tempTodo = { 
+      id: `temp-${Date.now()}`, 
+      text, 
+      completed: false,
+      created_at: new Date().toISOString()
+    };
+    
+    // Optimistically add the todo
+    addOptimisticTodo(tempTodo);
+    
+    try {
+      await mutate(
+        'INSERT INTO todos (text, completed) VALUES (?, false)',
+        [text]
+      );
+      await refetch(); // Sync with database
+    } catch (error) {
+      console.error('Failed to add todo:', error);
+      // The optimistic update will be rolled back automatically
+    }
+  };
+
+  return (
+    <div>
+      <TodoInput onAdd={handleAddTodo} />
+      <ul>
+        {optimisticTodos.map(todo => (
+          <li key={todo.id} className={todo.id.startsWith('temp-') ? 'pending' : ''}>
+            {todo.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+### Background Data Loading with useTransition
+
+React 19.1's `useTransition` helps manage non-urgent updates:
+
+```jsx
+import { useState, useTransition } from 'react';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-react';
+
+function DataAnalytics() {
+  const [isPending, startTransition] = useTransition();
+  const [timeRange, setTimeRange] = useState('week');
+  const [displayRange, setDisplayRange] = useState('week');
+  
+  const { data, loading } = useQuery(
+    `SELECT * FROM analytics 
+     WHERE created_at > now() - interval '1 ${displayRange}'
+     ORDER BY created_at DESC`,
+    [displayRange]
+  );
+
+  const handleRangeChange = (newRange) => {
+    setTimeRange(newRange);
+    startTransition(() => {
+      setDisplayRange(newRange);
+    });
+  };
+
+  return (
+    <div>
+      <div className="controls">
+        <select value={timeRange} onChange={(e) => handleRangeChange(e.target.value)}>
+          <option value="day">Last Day</option>
+          <option value="week">Last Week</option>
+          <option value="month">Last Month</option>
+          <option value="year">Last Year</option>
+        </select>
+        {isPending && <span className="pending-indicator">Updating...</span>}
+      </div>
+      
+      <div className={isPending ? 'updating' : ''}>
+        {loading ? (
+          <div>Loading analytics...</div>
+        ) : (
+          <AnalyticsChart data={data} />
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+### Suspense with use() Hook
+
+React 19.1's `use()` hook works seamlessly with Suspense:
+
+```jsx
+import { use, Suspense } from 'react';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-react';
+
+// Create a promise that resolves with query results
+function createQueryPromise(sql, params) {
+  return createConnection().then(conn => 
+    conn.execute(sql, params).then(result => result.toArray())
+  );
+}
+
+function UserData({ userPromise }) {
+  // use() unwraps the promise in a Suspense-compatible way
+  const userData = use(userPromise);
+  
+  return (
+    <div className="user-data">
+      <h2>{userData.name}</h2>
+      <p>Email: {userData.email}</p>
+      <p>Department: {userData.department}</p>
+    </div>
+  );
+}
+
+function UserProfile({ userId }) {
+  const userPromise = createQueryPromise(
+    'SELECT * FROM users WHERE id = ?',
+    [userId]
+  ).then(results => results[0]);
+
+  return (
+    <Suspense fallback={<div>Loading user profile...</div>}>
+      <UserData userPromise={userPromise} />
+    </Suspense>
+  );
+}
+```
+
+### Server Components Integration
+
+When using React Server Components with DuckDB:
+
+```jsx
+// app/users/page.jsx (Server Component)
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
+
+async function UsersPage() {
+  const connection = await createConnection();
+  const result = await connection.execute('SELECT * FROM users ORDER BY name');
+  const users = result.toArray();
+  
+  return (
+    <div>
+      <h1>Users</h1>
+      <UserList users={users} />
+    </div>
+  );
+}
+
+// components/UserList.jsx (Client Component)
+'use client';
+
+import { useState } from 'react';
+import { useOptimistic } from 'react';
+
+export function UserList({ users: initialUsers }) {
+  const [users, setUsers] = useState(initialUsers);
+  const [optimisticUsers, updateOptimisticUsers] = useOptimistic(users);
+  
+  // Client-side interactions...
+  
+  return (
+    <ul>
+      {optimisticUsers.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
 ## Testing
 
 ### Component Testing

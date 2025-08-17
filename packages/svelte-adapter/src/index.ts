@@ -4,6 +4,42 @@ export { createDuckDB } from './store.js';
 // Hooks for common operations
 export { useQuery, useMutation, useBatch, useTransaction } from './hooks.js';
 
+// Svelte 5 Runes API
+export {
+  DuckDBRunes,
+  QueryRune,
+  MutationRune,
+  TableRune,
+  createDuckDBRunes,
+  createQueryRune,
+  createMutationRune,
+  createTableRune,
+} from './runes.svelte.js';
+
+// Svelte 5 Props types
+export type {
+  QueryProps,
+  FormProps,
+  TableProps,
+  ChartProps,
+  FilterProps,
+  ExportProps,
+  ImportProps,
+  DashboardProps,
+  SchemaProps,
+  QueryEditorProps,
+  PaginationProps,
+  QueryComponentProps,
+  TableComponentProps,
+  FormComponentProps,
+  BindableQueryProps,
+  VirtualTableProps,
+  QueryHistoryProps,
+  ConnectionStatusProps,
+  DuckDBQueryProps,
+  BindableModelProps,
+} from './props.svelte.js';
+
 // Utility functions
 export {
   formatBytes,

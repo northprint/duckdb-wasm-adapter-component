@@ -1248,6 +1248,298 @@ onMounted(() => {
 </script>
 ```
 
+## Vue 3.4 Features
+
+### Effect Scope Management
+
+Vue 3.4's `effectScope` API for better reactivity management:
+
+```vue
+<script setup>
+import { effectScope, ref, watch } from 'vue';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-vue';
+
+// Create a scope for dashboard queries
+const dashboardScope = effectScope();
+
+dashboardScope.run(() => {
+  const { data: metrics } = useQuery('SELECT * FROM metrics');
+  const { data: users } = useQuery('SELECT * FROM users WHERE active = true');
+  
+  // Watchers within the scope
+  watch(metrics, (newMetrics) => {
+    console.log('Metrics updated:', newMetrics);
+  });
+  
+  watch(users, (newUsers) => {
+    console.log('Active users updated:', newUsers);
+  });
+});
+
+// Clean up all effects at once
+onUnmounted(() => {
+  dashboardScope.stop();
+});
+</script>
+```
+
+### Advanced Watchers with watchPostEffect
+
+Using Vue 3.4's `watchPostEffect` and `watchSyncEffect`:
+
+```vue
+<script setup>
+import { ref, watchPostEffect, watchSyncEffect } from 'vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
+
+const selectedTable = ref('users');
+const tableElement = ref(null);
+
+// Sync effect - runs immediately when data changes
+watchSyncEffect(() => {
+  console.log(`Switching to table: ${selectedTable.value}`);
+});
+
+const { data, refresh } = useQuery(
+  () => `SELECT * FROM ${selectedTable.value} LIMIT 100`
+);
+
+// Post effect - runs after DOM updates
+watchPostEffect(() => {
+  if (data.value && tableElement.value) {
+    // Access updated DOM after data changes
+    const rows = tableElement.value.querySelectorAll('tr');
+    console.log(`Rendered ${rows.length} rows`);
+  }
+});
+</script>
+
+<template>
+  <div>
+    <select v-model="selectedTable">
+      <option value="users">Users</option>
+      <option value="orders">Orders</option>
+      <option value="products">Products</option>
+    </select>
+    
+    <table ref="tableElement">
+      <tr v-for="row in data" :key="row.id">
+        <td v-for="(value, key) in row" :key="key">{{ value }}</td>
+      </tr>
+    </table>
+  </div>
+</template>
+```
+
+### defineModel for Two-way Binding
+
+Vue 3.4's `defineModel` macro for cleaner component props:
+
+```vue
+<!-- FilterInput.vue -->
+<script setup>
+const modelValue = defineModel('value', { 
+  type: String,
+  default: ''
+});
+
+const activeFilter = defineModel('active', {
+  type: Boolean,
+  default: true
+});
+</script>
+
+<template>
+  <div class="filter-input">
+    <input v-model="modelValue" placeholder="Search..." />
+    <label>
+      <input type="checkbox" v-model="activeFilter" />
+      Active only
+    </label>
+  </div>
+</template>
+
+<!-- Parent Component -->
+<script setup>
+import { ref } from 'vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
+import FilterInput from './FilterInput.vue';
+
+const searchTerm = ref('');
+const activeOnly = ref(true);
+
+const { data: users } = useQuery(
+  () => `
+    SELECT * FROM users 
+    WHERE name ILIKE '%' || ? || '%'
+    AND (? = false OR active = true)
+  `,
+  () => [searchTerm.value, activeOnly.value]
+);
+</script>
+
+<template>
+  <div>
+    <FilterInput v-model:value="searchTerm" v-model:active="activeOnly" />
+    <UserList :users="users" />
+  </div>
+</template>
+```
+
+### Computed Debugging with onTrack/onTrigger
+
+Debug reactive dependencies in computed properties:
+
+```vue
+<script setup>
+import { computed, ref } from 'vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
+
+const department = ref('Engineering');
+const minSalary = ref(50000);
+
+const { data: users } = useQuery('SELECT * FROM users');
+
+const filteredUsers = computed(() => {
+  return users.value?.filter(user => 
+    user.department === department.value && 
+    user.salary >= minSalary.value
+  ) || [];
+}, {
+  onTrack(event) {
+    console.log('Tracking:', event);
+  },
+  onTrigger(event) {
+    console.log('Triggered by:', event);
+  }
+});
+</script>
+```
+
+### Type-safe Props with TypeScript
+
+Vue 3.4 improved TypeScript support:
+
+```vue
+<script setup lang="ts">
+import { PropType } from 'vue';
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
+
+// Generic type support
+interface QueryResult<T> {
+  data: T[];
+  loading: boolean;
+  error: Error | null;
+}
+
+// Type-safe props definition
+const props = defineProps<{
+  userId: number;
+  includeOrders?: boolean;
+}>();
+
+// Type-safe emits
+const emit = defineEmits<{
+  update: [user: User];
+  delete: [id: number];
+}>();
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const { data: user } = useQuery<User>(
+  `SELECT * FROM users WHERE id = ?`,
+  [props.userId]
+);
+
+const handleUpdate = () => {
+  if (user.value) {
+    emit('update', user.value[0]);
+  }
+};
+</script>
+```
+
+### Async Component with Suspense
+
+Enhanced async component handling:
+
+```vue
+<!-- AsyncUserTable.vue -->
+<script setup>
+import { useQuery } from '@northprint/duckdb-wasm-adapter-vue';
+
+// This component can be async
+const { data: users } = await useQuery('SELECT * FROM users').promise;
+</script>
+
+<template>
+  <table>
+    <tr v-for="user in users" :key="user.id">
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+    </tr>
+  </table>
+</template>
+
+<!-- Parent Component -->
+<template>
+  <Suspense>
+    <template #default>
+      <AsyncUserTable />
+    </template>
+    <template #fallback>
+      <div class="skeleton-loader">Loading table...</div>
+    </template>
+  </Suspense>
+</template>
+```
+
+### Teleport for Modals and Overlays
+
+Using Vue 3's Teleport with DuckDB queries:
+
+```vue
+<script setup>
+import { ref } from 'vue';
+import { useQuery, useMutation } from '@northprint/duckdb-wasm-adapter-vue';
+
+const showModal = ref(false);
+const selectedUser = ref(null);
+const { mutate: deleteUser } = useMutation();
+
+const handleDelete = async () => {
+  if (selectedUser.value) {
+    await deleteUser(
+      'DELETE FROM users WHERE id = ?',
+      [selectedUser.value.id]
+    );
+    showModal.value = false;
+  }
+};
+</script>
+
+<template>
+  <div>
+    <button @click="showModal = true">Delete User</button>
+    
+    <Teleport to="body">
+      <div v-if="showModal" class="modal-overlay">
+        <div class="modal">
+          <h2>Confirm Deletion</h2>
+          <p>Are you sure you want to delete {{ selectedUser?.name }}?</p>
+          <button @click="handleDelete">Delete</button>
+          <button @click="showModal = false">Cancel</button>
+        </div>
+      </div>
+    </Teleport>
+  </div>
+</template>
+```
+
 ## Testing
 
 ### Component Testing

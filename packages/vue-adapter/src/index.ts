@@ -13,6 +13,30 @@ export {
 
 export { useQueryBuilder } from './useQueryBuilder.js';
 
+// Vue 3.4+ composables
+export {
+  useDuckDBScope,
+  useQueryWithEffects,
+  useDashboardScope,
+} from './composables/useEffectScope.js';
+
+export {
+  useModelQuery,
+  useBatchModelQuery,
+  useValidatedModel,
+} from './composables/useModelQuery.js';
+
+export {
+  useTypedQuery,
+  useTypedMutation,
+  useRelationshipQuery,
+  useAggregationQuery,
+  type TypedTable,
+  type TypedQueryOptions,
+  type Relationship,
+  type AggregationOptions,
+} from './composables/useTypedQuery.js';
+
 // Utility functions
 export {
   formatBytes,
