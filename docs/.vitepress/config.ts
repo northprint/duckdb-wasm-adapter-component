@@ -141,6 +141,68 @@ export default defineConfig({
             { text: 'Full Applications', link: '/examples/full-apps' }
           ]
         }
+      ],
+      // 日本語ナビゲーション
+      '/ja/guide/': [
+        {
+          text: 'はじめに',
+          items: [
+            { text: 'はじめに', link: '/ja/guide/getting-started' },
+            { text: '基本的な使い方', link: '/ja/guide/basic-usage' }
+          ]
+        },
+        {
+          text: '機能',
+          items: [
+            { text: 'クエリビルダー', link: '/ja/guide/query-builder' },
+            { text: 'データのインポート/エクスポート', link: '/ja/guide/data-import-export' },
+            { text: 'キャッシング', link: '/ja/guide/caching' }
+          ]
+        }
+      ],
+      '/ja/api/': [
+        {
+          text: 'Core',
+          items: [
+            { text: 'Core API', link: '/ja/api/core' }
+          ]
+        },
+        {
+          text: 'React',
+          items: [
+            { text: 'React API', link: '/ja/api/react' }
+          ]
+        },
+        {
+          text: 'Vue',
+          items: [
+            { text: 'Vue API', link: '/ja/api/vue' }
+          ]
+        },
+        {
+          text: 'Svelte',
+          items: [
+            { text: 'Svelte API', link: '/ja/api/svelte' }
+          ]
+        }
+      ],
+      '/ja/frameworks/': [
+        {
+          text: 'フレームワークガイド',
+          items: [
+            { text: 'React', link: '/ja/frameworks/react' },
+            { text: 'Vue', link: '/ja/frameworks/vue' },
+            { text: 'Svelte', link: '/ja/frameworks/svelte' }
+          ]
+        }
+      ],
+      '/ja/examples/': [
+        {
+          text: 'サンプルコード',
+          items: [
+            { text: 'サンプル一覧', link: '/ja/examples/' }
+          ]
+        }
       ]
     },
 
