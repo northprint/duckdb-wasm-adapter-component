@@ -2,8 +2,6 @@ import type {
   Connection,
   ConnectionConfig,
   ConnectionEvents,
-  ImportOptions,
-  ExportOptions,
   DebugConfig,
   QueryBuilderFactory,
 } from '@northprint/duckdb-wasm-adapter-core';

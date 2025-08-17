@@ -10,7 +10,7 @@ export interface ConnectionConfig {
   debug?: DebugConfig;
   cache?: {
     enabled?: boolean;
-    options?: import('./cache/types.js').CacheOptions;
+    options?: import('./cache/types.js').CacheOptions; // eslint-disable-line @typescript-eslint/consistent-type-imports
   };
 }
 
@@ -35,7 +35,7 @@ export interface Connection {
   exportCSV(query: string, options?: ExportOptions): Promise<string>;
   exportJSON<T = Record<string, unknown>>(query: string): Promise<T[]>;
   clearCache?(): void;
-  getCacheStats?(): import('./cache/types.js').CacheStats;
+  getCacheStats?(): import('./cache/types.js').CacheStats; // eslint-disable-line @typescript-eslint/consistent-type-imports
   invalidateCache?(pattern: string | RegExp): number;
 }
 

@@ -1,7 +1,5 @@
-/// <reference path="../types/react-19.d.ts" />
 import { useOptimistic, useCallback } from 'react';
 import { useQuery } from '../hooks.js';
-import type { QueryResult } from '../types.js';
 
 /**
  * Hook for optimistic query updates (React 19.1+)

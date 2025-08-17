@@ -1,4 +1,3 @@
-/// <reference path="../types/react-19.d.ts" />
 import { useActionState } from 'react';
 import { useMutation } from '../hooks.js';
 

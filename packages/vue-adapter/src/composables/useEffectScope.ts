@@ -1,4 +1,4 @@
-import { effectScope, watch, watchEffect, watchPostEffect, watchSyncEffect, onUnmounted, type EffectScope } from 'vue';
+import { effectScope, watch, watchEffect, watchPostEffect, watchSyncEffect, onUnmounted } from 'vue';
 import { useQuery, useMutation } from '../composables.js';
 import type { QueryResult } from '../types.js';
 

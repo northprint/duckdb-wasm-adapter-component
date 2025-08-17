@@ -1,4 +1,3 @@
-/// <reference path="../types/react-19.d.ts" />
 import { use, useMemo } from 'react';
 import { useDuckDB } from '../context.js';
 

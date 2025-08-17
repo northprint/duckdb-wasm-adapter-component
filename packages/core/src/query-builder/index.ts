@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from './select.js';
-import type { QueryBuilder, InsertBuilder, UpdateBuilder, DeleteBuilder, CreateTableBuilder } from './types.js';
+import type { QueryBuilder } from './types.js';
 import type { Connection } from '../types.js';
 
 export * from './types.js';

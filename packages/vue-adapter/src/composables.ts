@@ -13,8 +13,8 @@ import type {
 
 // Global connection instance for shared use
 let globalConnection: Connection | null = null;
-let globalStatus = ref<ConnectionStatus>('idle');
-let globalError = ref<Error | null>(null);
+const globalStatus = ref<ConnectionStatus>('idle');
+const globalError = ref<Error | null>(null);
 
 /**
  * Create or get a DuckDB connection instance

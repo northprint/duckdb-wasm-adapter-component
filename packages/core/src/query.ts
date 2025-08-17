@@ -2,7 +2,7 @@ import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ResultSet, QueryProfile } from './types.js';
 import { DuckDBError } from './errors.js';
 import { ResultSetImpl } from './result-set.js';
-import { DebugLogger } from './debug.js';
+import type { DebugLogger } from './debug.js';
 
 export class QueryExecutor {
   private debugLogger?: DebugLogger;

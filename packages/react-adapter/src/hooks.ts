@@ -148,7 +148,7 @@ export function useMutation<T = Record<string, unknown>>(
   }, [connection, options]);
   
   const mutate = useCallback(async (sql: string, params?: unknown[]): Promise<T[]> => {
-    return mutateAsync(sql, params).catch((error) => {
+    return mutateAsync(sql, params).catch((_error) => {
       // Error is already handled in mutateAsync
       return [] as T[];
     });

@@ -124,7 +124,7 @@ export function useBatchModelQuery<T extends Record<string, any>>(
     const batchSql = `
       UPDATE ${tableName}
       SET data = CASE id
-        ${updates.map(([id]) => `WHEN ? THEN ?`).join(' ')}
+        ${updates.map(([_id]) => `WHEN ? THEN ?`).join(' ')}
       END
       WHERE id IN (${updates.map(() => '?').join(',')})
     `;
@@ -158,7 +158,7 @@ export function useBatchModelQuery<T extends Record<string, any>>(
       return models.get(id)!;
     }
     
-    const { data, refetch } = useQuery<T>(
+    const { data } = useQuery<T>(
       `SELECT * FROM ${tableName} WHERE id = ?`,
       [id]
     );

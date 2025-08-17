@@ -1,4 +1,4 @@
-import { ref, computed, type Ref, type ComputedRef } from 'vue';
+import { ref, computed, type ComputedRef } from 'vue';
 import { useQuery, useMutation } from '../composables.js';
 import type { QueryResult } from '../types.js';
 

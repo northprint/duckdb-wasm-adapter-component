@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 import { useDuckDB } from './composables.js';
-import { createQueryBuilder, type QueryBuilderFactory, type QueryBuilder } from '@northprint/duckdb-wasm-adapter-core';
+import { createQueryBuilder, type QueryBuilder } from '@northprint/duckdb-wasm-adapter-core';
 
 export function useQueryBuilder() {
   const { connection, isConnected } = useDuckDB();

@@ -2,9 +2,6 @@ import type {
   QueryBuilder,
   QueryBuilderState,
   WhereCondition,
-  JoinClause,
-  OrderByClause,
-  CTEDefinition,
   ComparisonOperator,
   OrderDirection,
   JoinType,
@@ -187,7 +184,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this.addWhere({ column, operator: operator || '=', value });
   }
 
-  whereRaw(raw: string, bindings?: any[]): QueryBuilder {
+  whereRaw(raw: string, _bindings?: any[]): QueryBuilder {
     // Note: bindings would need to be handled properly in production
     return this.addWhere({ raw });
   }
@@ -234,7 +231,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this.addWhere({ column, operator: operator || '=', value }, 'OR');
   }
 
-  orWhereRaw(raw: string, bindings?: any[]): QueryBuilder {
+  orWhereRaw(raw: string, _bindings?: any[]): QueryBuilder {
     return this.addWhere({ raw }, 'OR');
   }
 
@@ -289,7 +286,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this;
   }
 
-  havingRaw(raw: string, bindings?: any[]): QueryBuilder {
+  havingRaw(raw: string, _bindings?: any[]): QueryBuilder {
     this.state.having = { condition: { raw } };
     return this;
   }

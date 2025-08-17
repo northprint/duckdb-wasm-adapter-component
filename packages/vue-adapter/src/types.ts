@@ -3,8 +3,6 @@ import type {
   Connection,
   ConnectionConfig,
   ConnectionEvents,
-  ImportOptions,
-  ExportOptions,
 } from '@northprint/duckdb-wasm-adapter-core';
 
 export interface DuckDBInstance {
