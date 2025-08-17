@@ -358,7 +358,7 @@ export class SelectQueryBuilder implements QueryBuilder {
       if (parts.length > 1) {
         return `(${parts.join(` ${condition.logicalOperator || 'AND'} `)})`;
       }
-      return parts[0];
+      return parts[0] || '1=1';
     }
     
     if (!condition.column || !condition.operator) {
