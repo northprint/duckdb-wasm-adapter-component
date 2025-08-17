@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { DebugLogger } from '../src/debug.js';
 
 describe('DebugLogger', () => {
@@ -12,6 +12,7 @@ describe('DebugLogger', () => {
   };
 
   beforeEach(() => {
+    vi.useFakeTimers();
     consoleSpy = {
       log: vi.spyOn(console, 'log').mockImplementation(() => {}),
       group: vi.spyOn(console, 'group').mockImplementation(() => {}),
@@ -20,6 +21,10 @@ describe('DebugLogger', () => {
       error: vi.spyOn(console, 'error').mockImplementation(() => {}),
       table: vi.spyOn(console, 'table').mockImplementation(() => {}),
     };
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   describe('when disabled', () => {
@@ -83,16 +88,24 @@ describe('DebugLogger', () => {
         slowQueryThreshold: 10 
       });
       
+      // Mock performance.now to simulate slow query
+      const originalPerformanceNow = performance.now;
+      let currentTime = 0;
+      vi.spyOn(performance, 'now').mockImplementation(() => {
+        const result = currentTime;
+        currentTime += 20; // Simulate 20ms elapsed time
+        return result;
+      });
+      
       logger.startQuery('SELECT * FROM test');
-      
-      // Simulate slow query
-      vi.advanceTimersByTime(20);
-      
       logger.endQuery(100);
       
       expect(consoleSpy.warn).toHaveBeenCalledWith(
         expect.stringContaining('Slow query detected')
       );
+      
+      // Restore performance.now
+      vi.spyOn(performance, 'now').mockRestore();
     });
 
     it('should log connection status changes', () => {
@@ -179,13 +192,18 @@ describe('DebugLogger', () => {
         logTiming: true 
       });
       
-      const result = await logger.createTimingWrapper(
+      const promise = logger.createTimingWrapper(
         'Test operation',
         async () => {
-          await new Promise(resolve => setTimeout(resolve, 10));
+          await new Promise(resolve => {
+            setTimeout(resolve, 10);
+            vi.runAllTimers();
+          });
           return 'result';
         }
       );
+      
+      const result = await promise;
       
       expect(result).toBe('result');
       expect(consoleSpy.log).toHaveBeenCalledWith(

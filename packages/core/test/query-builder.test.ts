@@ -167,7 +167,7 @@ describe('Query Builder', () => {
       });
 
       it('should build where exists', () => {
-        const subquery = new SelectQueryBuilder().select('1').from('orders').where('orders.user_id', '=', 'users.id');
+        const subquery = new SelectQueryBuilder().select('1').from('orders').whereRaw('orders.user_id = users.id');
         const sql = builder.from('users').whereExists(subquery).build();
         expect(sql).toBe('SELECT *\nFROM users\nWHERE EXISTS (SELECT 1\nFROM orders\nWHERE orders.user_id = users.id)');
       });
@@ -405,7 +405,7 @@ describe('Query Builder', () => {
           .select('e.*', 's.avg_salary')
           .from('employees', 'e')
           .join('(' + innerSubquery.build() + ')', 's.department_id = e.department_id', 's')
-          .where('e.salary', '>', 's.avg_salary')
+          .whereRaw('e.salary > s.avg_salary')
           .build();
         
         expect(sql.includes('JOIN (SELECT department_id, AVG(salary) AS avg_salary')).toBe(true);

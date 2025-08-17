@@ -53,7 +53,7 @@ export class SelectQueryBuilder implements QueryBuilder {
 
   distinct(): QueryBuilder {
     if (!this.state.select) {
-      this.state.select = { columns: ['*'], distinct: true };
+      this.state.select = { columns: [], distinct: true };
     } else {
       this.state.select.distinct = true;
     }
@@ -133,23 +133,42 @@ export class SelectQueryBuilder implements QueryBuilder {
     if (!this.state.where) {
       this.state.where = condition;
     } else {
-      // Wrap existing condition if needed
-      if (!this.state.where.conditions) {
-        this.state.where = {
-          conditions: [this.state.where],
-          logicalOperator: 'AND',
-        };
-      }
-      
-      // Add new condition
-      if (logicalOperator === 'OR' && this.state.where.logicalOperator === 'AND') {
-        // Need to restructure for OR
-        this.state.where = {
-          conditions: [this.state.where, condition],
-          logicalOperator: 'OR',
-        };
+      // If adding with OR and current conditions exist
+      if (logicalOperator === 'OR') {
+        // If current where is not a group, wrap it
+        if (!this.state.where.conditions) {
+          this.state.where = {
+            conditions: [this.state.where, condition],
+            logicalOperator: 'OR',
+          };
+        } else if (this.state.where.logicalOperator === 'OR') {
+          // Already an OR group, just add
+          this.state.where.conditions.push(condition);
+        } else {
+          // Current is AND group, need to restructure
+          this.state.where = {
+            conditions: [this.state.where, condition],
+            logicalOperator: 'OR',
+          };
+        }
       } else {
-        this.state.where.conditions!.push(condition);
+        // Adding with AND
+        if (!this.state.where.conditions) {
+          // Not a group yet, create AND group
+          this.state.where = {
+            conditions: [this.state.where, condition],
+            logicalOperator: 'AND',
+          };
+        } else if (this.state.where.logicalOperator === 'AND') {
+          // Already an AND group, just add
+          this.state.where.conditions.push(condition);
+        } else {
+          // Current is OR group, need to restructure
+          this.state.where = {
+            conditions: [this.state.where, condition],
+            logicalOperator: 'AND',
+          };
+        }
       }
     }
     return this;
@@ -325,8 +344,21 @@ export class SelectQueryBuilder implements QueryBuilder {
     }
     
     if (condition.conditions) {
-      const parts = condition.conditions.map(c => this.buildWhereClause(c));
-      return `(${parts.join(` ${condition.logicalOperator || 'AND'} `)})`;
+      const parts = condition.conditions.map(c => {
+        // Don't add extra parentheses for simple conditions
+        const clause = this.buildWhereClause(c);
+        // Only add parentheses if it's a complex condition (contains AND/OR)
+        if (c.conditions && c.conditions.length > 1) {
+          return clause; // Already has parentheses from recursive call
+        }
+        return clause;
+      });
+      
+      // Only add parentheses if there are multiple conditions
+      if (parts.length > 1) {
+        return `(${parts.join(` ${condition.logicalOperator || 'AND'} `)})`;
+      }
+      return parts[0];
     }
     
     if (!condition.column || !condition.operator) {

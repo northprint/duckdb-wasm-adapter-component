@@ -26,7 +26,7 @@ export function useQuery<T = Record<string, unknown>>(
   const mountedRef = useRef(true);
   
   const execute = useCallback(async () => {
-    if (!connection || !options.enabled) {
+    if (!connection || options.enabled === false) {
       return;
     }
     
@@ -40,8 +40,6 @@ export function useQuery<T = Record<string, unknown>>(
       
       const resultData = result.toArray();
       const resultMetadata = result.getMetadata();
-      
-      console.log('Query result:', resultData); // Debug log
       
       setData(resultData);
       setMetadata(resultMetadata);

@@ -27,6 +27,25 @@ vi.mock('@northprint/duckdb-wasm-adapter-core', () => ({
     exportCSV: vi.fn().mockResolvedValue('id,name\n1,Test'),
     exportJSON: vi.fn().mockResolvedValue([{ id: 1, name: 'Test' }]),
   }),
+  createQueryBuilder: vi.fn(() => ({
+    select: vi.fn().mockReturnThis(),
+    from: vi.fn().mockReturnThis(),
+    where: vi.fn().mockReturnThis(),
+    orderBy: vi.fn().mockReturnThis(),
+    limit: vi.fn().mockReturnThis(),
+    offset: vi.fn().mockReturnThis(),
+    build: vi.fn().mockReturnValue('SELECT * FROM test'),
+    execute: vi.fn().mockResolvedValue({
+      toArray: () => [{ id: 1, name: 'Test' }],
+      getMetadata: () => [
+        { name: 'id', type: 'INTEGER', nullable: false },
+        { name: 'name', type: 'VARCHAR', nullable: true },
+      ],
+      rows: [{ id: 1, name: 'Test' }],
+      columns: [],
+      rowCount: 1,
+    }),
+  })),
   DuckDBError: class DuckDBError extends Error {
     constructor(message: string, public code: string) {
       super(message);
