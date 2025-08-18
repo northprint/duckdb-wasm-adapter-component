@@ -94,9 +94,17 @@ describe('useMutation', () => {
   });
 
   it('should execute mutation', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useMutation(), { wrapper });
 
-    // Wait for connection to be established
+    // Wait for mutation to be ready
     await waitFor(() => {
       expect(result.current.mutateAsync).toBeDefined();
     });
@@ -247,6 +255,14 @@ describe('useImportCSV', () => {
   });
 
   it('should import CSV file', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useImportCSV(), { wrapper });
 
     await waitFor(() => {
@@ -270,6 +286,14 @@ describe('useImportJSON', () => {
   });
 
   it('should import JSON data', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useImportJSON(), { wrapper });
 
     await waitFor(() => {
