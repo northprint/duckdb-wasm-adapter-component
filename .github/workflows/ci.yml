@@ -36,6 +36,12 @@ jobs:
       - name: Run type check
         run: pnpm typecheck
       
+      - name: Build core package
+        run: |
+          cd packages/core
+          pnpm build
+          ls -la dist/*.d.ts || echo "No .d.ts files found"
+      
       - name: Build packages
         run: pnpm build
       

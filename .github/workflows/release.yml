@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build core package
+        run: |
+          cd packages/core
+          pnpm build
+          ls -la dist/*.d.ts || echo "No .d.ts files found"
+
       - name: Build packages
         run: pnpm build
 
