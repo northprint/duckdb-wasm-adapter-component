@@ -85,13 +85,15 @@ export class DataExporter {
 
         // Read the file buffer
         // @ts-expect-error - Using internal DuckDB API
-        const buffer = await this.connection.copyFileToBuffer(fileName) as Uint8Array;
+        const uint8Array = await this.connection.copyFileToBuffer(fileName) as Uint8Array;
         
         // Clean up the file
         // @ts-expect-error - Using internal DuckDB API
         await this.connection.dropFile(fileName);
         
-        return buffer;
+        // Convert Uint8Array to ArrayBuffer
+        const arrayBuffer = uint8Array.buffer.slice(uint8Array.byteOffset, uint8Array.byteOffset + uint8Array.byteLength);
+        return arrayBuffer as ArrayBuffer;
       } finally {
         // Clean up temporary table
         await this.connection.query(`DROP TABLE IF EXISTS ${tempTableName}`);

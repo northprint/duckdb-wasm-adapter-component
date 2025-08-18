@@ -327,8 +327,8 @@ export class ConnectionManager {
       const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
       
       // Configure logger
-      const logLevel = config?.logLevel || 'warning';
-      const logger = new duckdb.ConsoleLogger(logLevel as duckdb.LogLevel);
+      const logLevel = (config?.logLevel || 'warning') as unknown as duckdb.LogLevel;
+      const logger = new duckdb.ConsoleLogger(logLevel);
 
       // Create DuckDB instance with or without worker
       if (config?.worker !== false && bundle.mainWorker) {
