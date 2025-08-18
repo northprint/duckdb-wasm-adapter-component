@@ -6,6 +6,12 @@ import type {
   QueryBuilderFactory,
 } from '@northprint/duckdb-wasm-adapter-core';
 
+// Re-export types
+export type { 
+  ImportOptions, 
+  ExportOptions 
+} from '@northprint/duckdb-wasm-adapter-core';
+
 export interface DuckDBContextValue {
   connection: Connection | null;
   status: ConnectionStatus;
@@ -57,7 +63,7 @@ export interface UseQueryOptions {
   initialData?: any[];
 }
 
-export interface UseMutationOptions<T = any> {
+export interface UseMutationOptions<T = Record<string, unknown>> {
   onSuccess?: (data: T[]) => void;
   onError?: (error: Error) => void;
   onSettled?: () => void;

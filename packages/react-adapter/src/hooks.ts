@@ -5,7 +5,8 @@ import type {
   MutationResult, 
   UseQueryOptions, 
   UseMutationOptions,
-  ColumnMetadata 
+  ColumnMetadata,
+  ImportOptions
 } from './types.js';
 
 /**
@@ -239,7 +240,7 @@ export function useImportCSV() {
   const importCSV = useCallback(async (
     file: File | string,
     tableName: string,
-    options?: any
+    options?: ImportOptions
   ): Promise<void> => {
     if (!connection) {
       throw new Error('Not connected to database');
@@ -303,7 +304,7 @@ export function useExportCSV() {
   
   const exportCSV = useCallback(async (
     query: string,
-    options?: any
+    options?: ImportOptions
   ): Promise<string> => {
     if (!connection) {
       throw new Error('Not connected to database');

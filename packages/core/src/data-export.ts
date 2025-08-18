@@ -84,10 +84,12 @@ export class DataExporter {
         );
 
         // Read the file buffer
-        const buffer = await (this.connection as any).copyFileToBuffer(fileName);
+        // @ts-expect-error - Using internal DuckDB API
+        const buffer = await this.connection.copyFileToBuffer(fileName) as Uint8Array;
         
         // Clean up the file
-        await (this.connection as any).dropFile(fileName);
+        // @ts-expect-error - Using internal DuckDB API
+        await this.connection.dropFile(fileName);
         
         return buffer;
       } finally {
