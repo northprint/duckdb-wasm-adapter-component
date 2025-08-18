@@ -111,6 +111,14 @@ describe('useMutation', () => {
   });
 
   it('should handle mutation with callbacks', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const onSuccess = vi.fn();
     const onError = vi.fn();
     const onSettled = vi.fn();
@@ -164,6 +172,14 @@ describe('useBatch', () => {
   });
 
   it('should execute batch operations', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useBatch(), { wrapper });
 
     await waitFor(() => {
@@ -176,9 +192,9 @@ describe('useBatch', () => {
     ];
 
     // Should execute without error
-    await expect(act(async () => {
+    await act(async () => {
       await result.current(operations);
-    })).resolves.not.toThrow();
+    });
   });
 });
 
@@ -188,6 +204,14 @@ describe('useTransaction', () => {
   });
 
   it('should execute callback in transaction', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useTransaction(), { wrapper });
 
     await waitFor(() => {
@@ -261,6 +285,14 @@ describe('useExportCSV', () => {
   });
 
   it('should export data as CSV', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useExportCSV(), { wrapper });
 
     await waitFor(() => {

@@ -257,7 +257,7 @@ export function useBatch() {
     }
   };
 
-  return execute;
+  return { execute };
 }
 
 /**
@@ -286,7 +286,7 @@ export function useTransaction() {
     }
   };
 
-  return execute;
+  return { execute };
 }
 
 /**
@@ -373,7 +373,7 @@ export function useExportCSV() {
     return conn.exportCSV(query, options);
   };
 
-  return exportCSV;
+  return { exportCSV };
 }
 
 /**
@@ -390,5 +390,5 @@ export function useExportJSON<T = Record<string, unknown>>() {
     return conn.exportJSON<T>(query);
   };
 
-  return exportJSON;
+  return { exportJSON };
 }

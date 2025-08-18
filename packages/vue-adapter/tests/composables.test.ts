@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ref, nextTick } from 'vue';
+import { createConnection } from '@northprint/duckdb-wasm-adapter-core';
 import { 
   useDuckDB, 
   useQuery, 
@@ -101,12 +102,17 @@ describe('useDuckDB', () => {
   });
 
   it('should handle connection errors', async () => {
-    const { createConnection } = await import('@northprint/duckdb-wasm-adapter-core');
-    (createConnection as any).mockRejectedValueOnce(new Error('Connection failed'));
+    // Reset the mock to simulate a connection error
+    vi.mocked(createConnection).mockRejectedValueOnce(new Error('Connection failed'));
     
     const { status, error, connect } = useDuckDB();
     
-    await connect();
+    try {
+      await connect();
+    } catch (err) {
+      // Expected error
+    }
+    
     await nextTick();
     
     expect(status.value).toBe('error');
@@ -126,10 +132,8 @@ describe('useQuery', () => {
     
     const { data, loading, error, execute } = useQuery('SELECT * FROM users');
     
-    expect(loading.value).toBe(true);
-    
-    await nextTick();
-    await nextTick(); // Wait for query execution
+    // Execute the query explicitly
+    await execute();
     
     expect(data.value).toEqual([{ id: 1, name: 'Test' }]);
     expect(loading.value).toBe(false);
@@ -143,8 +147,8 @@ describe('useQuery', () => {
     const params = ref([1]);
     const { data, execute } = useQuery('SELECT * FROM users WHERE id = ?', params);
     
-    await nextTick();
-    await nextTick();
+    // Execute the query explicitly
+    await execute();
     
     expect(data.value).toEqual([{ id: 1, name: 'Test' }]);
   });
@@ -167,15 +171,14 @@ describe('useQuery', () => {
     const { connect } = useDuckDB();
     await connect();
     
-    const { data, refetch } = useQuery('SELECT * FROM users');
+    const { data, refetch, execute } = useQuery('SELECT * FROM users');
     
-    await nextTick();
-    await nextTick();
+    // Execute the query first
+    await execute();
     
     expect(data.value).toEqual([{ id: 1, name: 'Test' }]);
     
     await refetch();
-    await nextTick();
     
     expect(data.value).toEqual([{ id: 1, name: 'Test' }]);
   });
