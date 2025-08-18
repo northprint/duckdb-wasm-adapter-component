@@ -143,9 +143,17 @@ describe('useMutation', () => {
   });
 
   it('should reset mutation state', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useMutation(), { wrapper });
 
-    // Wait for connection
+    // Wait for mutation to be ready
     await waitFor(() => {
       expect(result.current.mutateAsync).toBeDefined();
     });
@@ -314,6 +322,14 @@ describe('useExportJSON', () => {
   });
 
   it('should export data as JSON', async () => {
+    // First ensure connection is established
+    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    
+    // Wait for connection
+    await waitFor(() => {
+      expect(dbResult.current.isConnected).toBe(true);
+    }, { timeout: 3000 });
+
     const { result } = renderHook(() => useExportJSON(), { wrapper });
 
     await waitFor(() => {
