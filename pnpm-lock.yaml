@@ -176,8 +176,8 @@ importers:
   packages/react-adapter:
     dependencies:
       '@northprint/duckdb-wasm-adapter-core':
-        specifier: ^0.1.0
-        version: 0.1.1(@duckdb/duckdb-wasm@1.29.0)
+        specifier: workspace:^
+        version: link:../core
     devDependencies:
       '@testing-library/react':
         specifier: ^14.3.1
@@ -216,8 +216,8 @@ importers:
   packages/svelte-adapter:
     dependencies:
       '@northprint/duckdb-wasm-adapter-core':
-        specifier: ^0.1.0
-        version: 0.1.1(@duckdb/duckdb-wasm@1.29.0)
+        specifier: workspace:^
+        version: link:../core
     devDependencies:
       '@testing-library/svelte':
         specifier: ^4.1.0
@@ -244,8 +244,8 @@ importers:
   packages/vue-adapter:
     dependencies:
       '@northprint/duckdb-wasm-adapter-core':
-        specifier: ^0.1.0
-        version: 0.1.1(@duckdb/duckdb-wasm@1.29.0)
+        specifier: workspace:^
+        version: link:../core
     devDependencies:
       '@testing-library/vue':
         specifier: ^8.1.0
@@ -941,11 +941,6 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
-
-  '@northprint/duckdb-wasm-adapter-core@0.1.1':
-    resolution: {integrity: sha512-ydnhSBCl1ROyBQ/6NOsmW6wF2WSDLs0ANhJz8Pxi0bwjM9B58MdM2qin6qjzCWHp8VZKoOyDfaXaJOiA7An2HQ==}
-    peerDependencies:
-      '@duckdb/duckdb-wasm': ^1.28.0
 
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
@@ -4309,10 +4304,6 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
-
-  '@northprint/duckdb-wasm-adapter-core@0.1.1(@duckdb/duckdb-wasm@1.29.0)':
-    dependencies:
-      '@duckdb/duckdb-wasm': 1.29.0
 
   '@one-ini/wasm@0.1.1': {}
 

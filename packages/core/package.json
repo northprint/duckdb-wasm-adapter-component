@@ -1,6 +1,6 @@
 {
   "name": "@northprint/duckdb-wasm-adapter-core",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Core library for DuckDB WASM adapter",
   "type": "module",
   "main": "./dist/index.js",
