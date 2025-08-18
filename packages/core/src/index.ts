@@ -45,10 +45,8 @@ export type {
 
 // Type exports
 export type {
-  Connection,
   ConnectionConfig,
   ConnectionEvents,
-  ResultSet,
   ColumnMetadata,
   DuckDBType,
   ImportOptions,
@@ -57,6 +55,9 @@ export type {
   DebugConfig,
   QueryProfile,
 } from './types.js';
+
+// Re-export types
+export type { Connection, ResultSet } from './types.js';
 
 export { ErrorCode } from './types.js';
 
