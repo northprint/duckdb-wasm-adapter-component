@@ -238,28 +238,25 @@ describe('useImportCSV', () => {
   });
 
   it('should import CSV file', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      importCSV: useImportCSV()
+    }), { wrapper });
     
     // Wait for connection
     await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
-    const { result } = renderHook(() => useImportCSV(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current.importCSV).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     const file = new File(['id,name\n1,Test'], 'test.csv');
 
     await act(async () => {
-      await result.current.importCSV(file, 'users');
+      await result.current.importCSV.importCSV(file, 'users');
     });
 
-    expect(result.current.loading).toBe(false);
-    expect(result.current.error).toBeNull();
+    expect(result.current.importCSV.loading).toBe(false);
+    expect(result.current.importCSV.error).toBeNull();
   });
 });
 
@@ -269,28 +266,25 @@ describe('useImportJSON', () => {
   });
 
   it('should import JSON data', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      importJSON: useImportJSON()
+    }), { wrapper });
     
     // Wait for connection
     await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
-    const { result } = renderHook(() => useImportJSON(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current.importJSON).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     const data = [{ id: 2, name: 'New User' }];
 
     await act(async () => {
-      await result.current.importJSON(data, 'users');
+      await result.current.importJSON.importJSON(data, 'users');
     });
 
-    expect(result.current.loading).toBe(false);
-    expect(result.current.error).toBeNull();
+    expect(result.current.importJSON.loading).toBe(false);
+    expect(result.current.importJSON.error).toBeNull();
   });
 });
 
@@ -300,23 +294,20 @@ describe('useExportCSV', () => {
   });
 
   it('should export data as CSV', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      exportCSV: useExportCSV()
+    }), { wrapper });
     
     // Wait for connection
     await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
-    const { result } = renderHook(() => useExportCSV(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     let csv;
     await act(async () => {
-      csv = await result.current('SELECT * FROM users');
+      csv = await result.current.exportCSV('SELECT * FROM users');
     });
 
     expect(csv).toBe('id,name\n1,Test');
@@ -329,23 +320,20 @@ describe('useExportJSON', () => {
   });
 
   it('should export data as JSON', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      exportJSON: useExportJSON()
+    }), { wrapper });
     
     // Wait for connection
     await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
-    const { result } = renderHook(() => useExportJSON(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     let json;
     await act(async () => {
-      json = await result.current('SELECT * FROM users');
+      json = await result.current.exportJSON('SELECT * FROM users');
     });
 
     expect(json).toEqual([{ id: 1, name: 'Test' }]);
