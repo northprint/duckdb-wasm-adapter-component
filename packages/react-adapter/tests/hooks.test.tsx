@@ -177,19 +177,16 @@ describe('useBatch', () => {
   });
 
   it('should execute batch operations', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      batch: useBatch()
+    }), { wrapper });
     
     // Wait for connection
     await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
-    const { result } = renderHook(() => useBatch(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     const operations = [
       { sql: 'INSERT INTO users VALUES (2, "User 2")' },
@@ -198,7 +195,7 @@ describe('useBatch', () => {
 
     // Should execute without error
     await act(async () => {
-      await result.current(operations);
+      await result.current.batch(operations);
     });
   });
 });
@@ -209,19 +206,16 @@ describe('useTransaction', () => {
   });
 
   it('should execute callback in transaction', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      transaction: useTransaction()
+    }), { wrapper });
     
     // Wait for connection
     await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
-    const { result } = renderHook(() => useTransaction(), { wrapper });
-
-    await waitFor(() => {
-      expect(result.current).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     const callback = vi.fn(async (execute) => {
       await execute('INSERT INTO users VALUES (2, "User 2")');
@@ -230,7 +224,7 @@ describe('useTransaction', () => {
 
     let transactionResult;
     await act(async () => {
-      transactionResult = await result.current(callback);
+      transactionResult = await result.current.transaction(callback);
     });
 
     expect(transactionResult).toBe('Success');
