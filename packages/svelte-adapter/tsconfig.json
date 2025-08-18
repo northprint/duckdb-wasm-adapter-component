@@ -6,7 +6,11 @@
     "tsBuildInfoFile": "./tsconfig.tsbuildinfo",
     "composite": true,
     "incremental": true,
-    "types": ["svelte", "node"]
+    "types": ["svelte", "node"],
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "tests/**/*"]

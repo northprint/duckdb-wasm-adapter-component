@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup && tsc --declaration --emitDeclarationOnly --outDir dist",
+    "build": "tsup && tsc --emitDeclarationOnly --downlevelIteration --skipLibCheck",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"

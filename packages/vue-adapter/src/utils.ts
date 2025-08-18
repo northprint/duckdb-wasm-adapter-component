@@ -35,7 +35,12 @@ export function resultToCSV<T extends Record<string, any>>(data: T[]): string {
     return '';
   }
   
-  const headers = Object.keys(data[0]);
+  const firstRow = data[0];
+  if (!firstRow) {
+    return '';
+  }
+  
+  const headers = Object.keys(firstRow);
   const rows = data.map(row => 
     headers.map(header => {
       const value = row[header];

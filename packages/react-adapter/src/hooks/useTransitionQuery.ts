@@ -153,6 +153,7 @@ export function useDeferredQuery<T = Record<string, unknown>>(
       
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [shouldExecute, executeQuery, options?.enabled, options?.delay]);
 
   return {

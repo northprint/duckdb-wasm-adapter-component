@@ -82,6 +82,7 @@ export function useQuery<T = Record<string, unknown>>(
         }
       };
     }
+    return undefined;
   }, [execute, options.refetchInterval]);
   
   return {
