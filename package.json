@@ -20,7 +20,7 @@
     "pnpm": ">=8.0.0"
   },
   "scripts": {
-    "build": "pnpm --filter @northprint/duckdb-wasm-adapter-core build && pnpm -r build",
+    "build": "pnpm -r --topological build",
     "dev": "pnpm -r --parallel dev",
     "test": "pnpm -r test",
     "test:coverage": "pnpm -r test:coverage",
