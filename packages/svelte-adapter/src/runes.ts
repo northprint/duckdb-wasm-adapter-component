@@ -153,13 +153,13 @@ export class QueryRune<T = Record<string, unknown>> {
     
     // Execute immediately if configured
     if (options?.immediate !== false) {
-      this.execute();
+      void this.execute();
     }
     
     // Set up interval if configured
     if (options?.refetchInterval && options.refetchInterval > 0) {
       this.intervalId = setInterval(() => {
-        this.execute();
+        void this.execute();
       }, options.refetchInterval);
     }
   }
@@ -300,8 +300,8 @@ export class TableRune<T extends Record<string, any>> {
     if (!this.sortColumn) return this.filteredRows;
     
     const sorted = [...this.filteredRows].sort((a, b) => {
-      const aVal = a[this.sortColumn!];
-      const bVal = b[this.sortColumn!];
+      const aVal = a[this.sortColumn as keyof T];
+      const bVal = b[this.sortColumn as keyof T];
       
       if (aVal < bVal) return this.sortDirection === 'asc' ? -1 : 1;
       if (aVal > bVal) return this.sortDirection === 'asc' ? 1 : -1;

@@ -137,7 +137,7 @@ export function createDuckDB(config?: DuckDBStoreConfig): DuckDBStore {
     }
     
     // Execute query immediately
-    executeQuery();
+    void executeQuery();
     
     // Create query store with refetch and cancel methods
     const { subscribe } = result;
