@@ -119,30 +119,23 @@ describe('useMutation', () => {
   });
 
   it('should handle mutation with callbacks', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
-    
-    // Wait for connection
-    await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
-
     const onSuccess = vi.fn();
     const onError = vi.fn();
     const onSettled = vi.fn();
 
-    const { result } = renderHook(
-      () => useMutation({ onSuccess, onError, onSettled }),
-      { wrapper }
-    );
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      mutation: useMutation({ onSuccess, onError, onSettled })
+    }), { wrapper });
 
-    // Wait for connection
+    // Wait for connection with longer timeout
     await waitFor(() => {
-      expect(result.current.mutateAsync).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     await act(async () => {
-      await result.current.mutateAsync('INSERT INTO users VALUES (2, "New")');
+      await result.current.mutation.mutateAsync('INSERT INTO users VALUES (2, "New")');
     });
 
     expect(onSuccess).toHaveBeenCalledWith([{ id: 1, name: 'Test' }]);
@@ -151,34 +144,30 @@ describe('useMutation', () => {
   });
 
   it('should reset mutation state', async () => {
-    // First ensure connection is established
-    const { result: dbResult } = renderHook(() => useDuckDB(), { wrapper });
-    
-    // Wait for connection
-    await waitFor(() => {
-      expect(dbResult.current.isConnected).toBe(true);
-    }, { timeout: 3000 });
+    // Render both hooks together to share the same context
+    const { result } = renderHook(() => ({
+      db: useDuckDB(),
+      mutation: useMutation()
+    }), { wrapper });
 
-    const { result } = renderHook(() => useMutation(), { wrapper });
-
-    // Wait for mutation to be ready
+    // Wait for connection with longer timeout
     await waitFor(() => {
-      expect(result.current.mutateAsync).toBeDefined();
-    });
+      expect(result.current.db.isConnected).toBe(true);
+    }, { timeout: 5000 });
 
     await act(async () => {
-      await result.current.mutateAsync('INSERT INTO users VALUES (2, "New")');
+      await result.current.mutation.mutateAsync('INSERT INTO users VALUES (2, "New")');
     });
 
-    expect(result.current.data).toBeTruthy();
+    expect(result.current.mutation.data).toBeTruthy();
 
     act(() => {
-      result.current.reset();
+      result.current.mutation.reset();
     });
 
-    expect(result.current.data).toBeUndefined();
-    expect(result.current.error).toBeNull();
-    expect(result.current.loading).toBe(false);
+    expect(result.current.mutation.data).toBeUndefined();
+    expect(result.current.mutation.error).toBeNull();
+    expect(result.current.mutation.loading).toBe(false);
   });
 });
 
