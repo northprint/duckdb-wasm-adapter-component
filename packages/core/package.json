@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup && tsc --declaration --emitDeclarationOnly --outDir dist",
+    "build": "tsup && tsc",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
