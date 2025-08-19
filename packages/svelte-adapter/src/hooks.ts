@@ -25,7 +25,7 @@ export function useQuery<T = Record<string, unknown>>(
     };
     return {
       subscribe: writable(emptyResult).subscribe,
-      refetch: async () => {},
+      refetch: async () => { await Promise.resolve(); },
       cancel: () => {},
     };
   }

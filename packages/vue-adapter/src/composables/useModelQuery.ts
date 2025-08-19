@@ -71,8 +71,9 @@ export function useModelQuery<T = Record<string, unknown>>(
     }
   });
   
-  const sync = () => {
-    return Promise.resolve(refetch());
+  const sync = async () => {
+    refetch();
+    await Promise.resolve();
   };
   
   // Method to set the ID and trigger data fetch
@@ -114,7 +115,10 @@ export function useBatchModelQuery<T extends Record<string, unknown>>(
   const { mutate } = useMutation<T>();
   
   const flushUpdates = async () => {
-    if (updateQueue.size === 0) return;
+    if (updateQueue.size === 0) {
+      await Promise.resolve();
+      return;
+    }
     
     const updates = Array.from(updateQueue.entries());
     updateQueue.clear();
@@ -229,7 +233,10 @@ export function useValidatedModel<T extends Record<string, unknown>>(
   });
   
   const save = async () => {
-    if (!isValid.value || !localValue.value) return;
+    if (!isValid.value || !localValue.value) {
+      await Promise.resolve();
+      return;
+    }
     
     await mutate(
       `INSERT OR REPLACE INTO ${tableName} (data) VALUES (?)`,

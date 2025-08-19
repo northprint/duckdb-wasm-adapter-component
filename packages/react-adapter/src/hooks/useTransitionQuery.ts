@@ -117,7 +117,10 @@ export function useDeferredQuery<T = Record<string, unknown>>(
   const [metadata, setMetadata] = useState<ColumnMetadata[] | null>(null);
 
   const executeQuery = useCallback(async () => {
-    if (!connection || (options?.enabled === false && !shouldExecute)) return;
+    if (!connection || (options?.enabled === false && !shouldExecute)) {
+      await Promise.resolve();
+      return;
+    }
 
     setLoading(true);
     setError(null);

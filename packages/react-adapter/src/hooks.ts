@@ -28,6 +28,7 @@ export function useQuery<T = Record<string, unknown>>(
   
   const execute = useCallback(async () => {
     if (!connection || options.enabled === false) {
+      await Promise.resolve();
       return;
     }
     
