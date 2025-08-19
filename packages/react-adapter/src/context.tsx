@@ -11,10 +11,10 @@ export function DuckDBProvider({
   events,
   debug 
 }: DuckDBProviderProps) {
-  const [connection, setConnection] = useState<Connection | null>(() => null);
-  const [status, setStatus] = useState<ConnectionStatus>(() => 'idle' as ConnectionStatus);
-  const [error, setError] = useState<Error | null>(() => null);
-  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(() => null);
+  const [connection, setConnection] = useState<Connection | null>(null);
+  const [status, setStatus] = useState<ConnectionStatus>('idle');
+  const [error, setError] = useState<Error | null>(null);
+  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(null);
 
   const connect = useCallback(async () => {
     try {
@@ -46,7 +46,7 @@ export function DuckDBProvider({
       const errorObj: Error = err instanceof Error ? err : new Error(String(err));
       setError(errorObj);
       setStatus('error');
-      throw error;
+      throw errorObj;
     }
   }, [config, events, debug]);
 
@@ -61,7 +61,7 @@ export function DuckDBProvider({
       } catch (err) {
         const errorObj: Error = err instanceof Error ? err : new Error(String(err));
         setError(errorObj);
-        throw error;
+        throw errorObj;
       }
     }
   }, [connection]);

@@ -32,7 +32,7 @@ export function useQuery<T = Record<string, unknown>>(
   const [error, setError] = useState<Error | null>(null);
   const [metadata, setMetadata] = useState<ColumnMetadata[] | null>(null);
   
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
   const mountedRef = useRef(true);
   
   const execute = useCallback(async () => {

@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { useDuckDB } from '../context.js';
-import type { QueryBuilder } from '@northprint/duckdb-wasm-adapter-core';
+import type { QueryBuilder, QueryBuilderFactory } from '@northprint/duckdb-wasm-adapter-core';
 
 export function useQueryBuilder() {
   const context = useDuckDB();
-  const queryBuilder = context.queryBuilder;
-  const isConnected = context.isConnected;
+  const queryBuilder: QueryBuilderFactory | null = context.queryBuilder;
+  const isConnected: boolean = context.isConnected;
 
   const createQuery = useCallback(() => {
     if (!isConnected || !queryBuilder) {
@@ -52,7 +52,10 @@ export function useQueryBuilderQuery<T = Record<string, unknown>>(
     table: (tableName: string) => unknown;
   }) => QueryBuilder | Promise<T[]>
 ) {
-  const { queryBuilder, isConnected, connection } = useDuckDB();
+  const context = useDuckDB();
+  const queryBuilder = context.queryBuilder;
+  const isConnected = context.isConnected;
+  const connection = context.connection;
   
   const execute = useCallback(async (): Promise<T[]> => {
     if (!isConnected || !queryBuilder || !connection) {
