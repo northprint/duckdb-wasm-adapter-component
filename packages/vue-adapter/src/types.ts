@@ -44,13 +44,13 @@ export interface ColumnMetadata {
   nullable: boolean;
 }
 
-export interface UseQueryOptions {
+export interface UseQueryOptions<T = unknown> {
   enabled?: boolean | Ref<boolean>;
   immediate?: boolean;
   refetchInterval?: number;
-  onSuccess?: (data: unknown[]) => void;
+  onSuccess?: (data: T[]) => void;
   onError?: (error: Error) => void;
-  initialData?: unknown[];
+  initialData?: T[];
 }
 
 export interface UseMutationOptions<T = unknown> {

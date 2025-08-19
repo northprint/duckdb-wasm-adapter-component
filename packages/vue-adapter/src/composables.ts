@@ -1,5 +1,5 @@
 import { ref, shallowRef, computed, watch, onUnmounted, unref, type Ref } from 'vue';
-import { createConnection, type Connection } from '@northprint/duckdb-wasm-adapter-core';
+import { createConnection, type Connection, type ImportOptions, type ExportOptions } from '@northprint/duckdb-wasm-adapter-core';
 import type {
   DuckDBInstance,
   DuckDBConfig,
@@ -103,7 +103,7 @@ export function useDuckDB(config?: DuckDBConfig): DuckDBInstance {
 export function useQuery<T = Record<string, unknown>>(
   sql: string | Ref<string>,
   params?: unknown[] | Ref<unknown[] | undefined>,
-  options: UseQueryOptions = {}
+  options: UseQueryOptions<T> = {}
 ): QueryResult<T> {
   // Use shallowRef for DuckDB results to avoid proxy issues
   const data = shallowRef<T[] | undefined>(options.initialData);
@@ -299,7 +299,7 @@ export function useImportCSV() {
   const importCSV = async (
     file: File | string,
     tableName: string,
-    options?: unknown
+    options?: ImportOptions
   ): Promise<void> => {
     const conn = globalConnection;
     if (!conn) {
@@ -363,7 +363,7 @@ export function useExportCSV() {
 
   const exportCSV = async (
     query: string,
-    options?: unknown
+    options?: ExportOptions
   ): Promise<string> => {
     const conn = globalConnection;
     if (!conn) {

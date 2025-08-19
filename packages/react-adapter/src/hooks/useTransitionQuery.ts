@@ -1,6 +1,6 @@
 import { useTransition, useState, useCallback, useEffect } from 'react';
 import { useDuckDB } from '../context.js';
-import type { QueryResult } from '../types.js';
+import type { QueryResult, ColumnMetadata } from '../types.js';
 
 /**
  * Hook for non-urgent query updates with useTransition (React 19.1+)
@@ -114,7 +114,7 @@ export function useDeferredQuery<T = Record<string, unknown>>(
   const [data, setData] = useState<T[] | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [metadata, setMetadata] = useState<unknown>(null);
+  const [metadata, setMetadata] = useState<ColumnMetadata[] | null>(null);
 
   const executeQuery = useCallback(async () => {
     if (!connection || (options?.enabled === false && !shouldExecute)) return;
@@ -129,7 +129,7 @@ export function useDeferredQuery<T = Record<string, unknown>>(
       
       startTransition(() => {
         setData(resultData);
-        setMetadata(resultMetadata);
+        setMetadata(resultMetadata as ColumnMetadata[]);
       });
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));

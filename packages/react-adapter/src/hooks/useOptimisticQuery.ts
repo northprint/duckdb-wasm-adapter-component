@@ -1,5 +1,6 @@
 import { useOptimistic, useCallback } from 'react';
 import { useQuery } from '../hooks.js';
+import type { UseQueryOptions } from '../types.js';
 
 /**
  * Hook for optimistic query updates (React 19.1+)
@@ -8,12 +9,7 @@ import { useQuery } from '../hooks.js';
 export function useOptimisticQuery<T = Record<string, unknown>>(
   sql: string,
   params?: unknown[],
-  options?: {
-    enabled?: boolean;
-    initialData?: T[];
-    onSuccess?: (data: T[]) => void;
-    onError?: (error: Error) => void;
-  }
+  options?: UseQueryOptions<T>
 ): {
   data: T[];
   optimisticData: T[];

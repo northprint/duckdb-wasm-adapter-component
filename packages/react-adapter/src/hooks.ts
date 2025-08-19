@@ -15,7 +15,7 @@ import type {
 export function useQuery<T = Record<string, unknown>>(
   sql: string,
   params?: unknown[],
-  options: UseQueryOptions = {}
+  options: UseQueryOptions<T> = {}
 ): QueryResult<T> {
   const { connection } = useDuckDB();
   const [data, setData] = useState<T[] | undefined>(options.initialData);

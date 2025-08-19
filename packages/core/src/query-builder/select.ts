@@ -515,7 +515,7 @@ export class SelectQueryBuilder implements QueryBuilder {
   // Cloning
   clone(): QueryBuilder {
     const cloned = new SelectQueryBuilder(this.connection);
-    cloned.state = JSON.parse(JSON.stringify(this.state)) as QueryState;
+    cloned.state = JSON.parse(JSON.stringify(this.state)) as QueryBuilderState;
     return cloned;
   }
 }

@@ -1,6 +1,6 @@
-import { effectScope, watch, watchEffect, watchPostEffect, watchSyncEffect, onUnmounted } from 'vue';
+import { effectScope, watch, watchEffect, watchPostEffect, watchSyncEffect, onUnmounted, ref, type Ref } from 'vue';
 import { useQuery, useMutation } from '../composables.js';
-import type { QueryResult } from '../types.js';
+import type { QueryResult, UseQueryOptions, UseMutationOptions } from '../types.js';
 
 /**
  * Creates a managed scope for DuckDB queries using Vue 3.4's effectScope
@@ -18,10 +18,12 @@ export function useDuckDBScope() {
     key: string,
     sql: string | (() => string),
     params?: unknown[] | (() => unknown[]),
-    options?: unknown
+    options?: UseQueryOptions<T>
   ): QueryResult<T> => {
     return runInScope(() => {
-      const result = useQuery<T>(sql, params, options);
+      const sqlRef = typeof sql === 'function' ? ref(sql()) : ref(sql);
+      const paramsRef = typeof params === 'function' ? ref(params()) : ref(params);
+      const result = useQuery<T>(sqlRef, paramsRef, options);
       queries.set(key, result);
       return result;
     });
@@ -29,7 +31,7 @@ export function useDuckDBScope() {
 
   const createMutation = <T = Record<string, unknown>>(
     key: string,
-    options?: unknown
+    options?: UseMutationOptions<T>
   ) => {
     return runInScope(() => {
       const result = useMutation<T>(options);
@@ -76,7 +78,9 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
     onUpdate?: (data: T[]) => void;
   }
 ) {
-  const queryResult = useQuery<T>(sql, params);
+  const sqlRef = typeof sql === 'function' ? ref(sql()) : ref(sql);
+  const paramsRef = typeof params === 'function' ? ref(params()) : ref(params);
+  const queryResult = useQuery<T>(sqlRef, paramsRef);
 
   // Watch for updates after DOM flush
   if (options?.onPostUpdate) {
@@ -115,7 +119,7 @@ export function useDashboardScope(config: {
   queries: Record<string, {
     sql: string | (() => string);
     params?: unknown[] | (() => unknown[]);
-    options?: unknown;
+    options?: UseQueryOptions<unknown>;
   }>;
   onAllLoaded?: () => void;
   autoStop?: boolean;
@@ -126,7 +130,9 @@ export function useDashboardScope(config: {
 
   scope.run(() => {
     Object.entries(config.queries).forEach(([key, queryConfig]) => {
-      const result = useQuery(queryConfig.sql, queryConfig.params, queryConfig.options);
+      const sqlRef = typeof queryConfig.sql === 'function' ? ref(queryConfig.sql()) : ref(queryConfig.sql);
+      const paramsRef = typeof queryConfig.params === 'function' ? ref(queryConfig.params()) : ref(queryConfig.params);
+      const result = useQuery(sqlRef, paramsRef, queryConfig.options);
       results.set(key, result);
       
       // Track loading states
