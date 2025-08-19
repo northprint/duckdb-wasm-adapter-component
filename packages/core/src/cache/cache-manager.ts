@@ -298,7 +298,7 @@ export class QueryCacheManager<T = unknown> implements CacheManager<T> {
         const data = await loader();
         this.set(key, data);
       } catch (error) {
-        console.error(`Failed to warm up cache for query: ${key.query}`, error);
+        // Failed to warm up cache for query
       }
     });
     
@@ -354,7 +354,7 @@ export class QueryCacheManager<T = unknown> implements CacheManager<T> {
         this.updateHitRate();
       }
     } catch (error) {
-      console.error('Failed to import cache state:', error);
+      // Failed to import cache state
     }
   }
 }

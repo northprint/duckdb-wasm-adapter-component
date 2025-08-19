@@ -39,8 +39,8 @@ export class DuckDBRunes {
     
     // Auto-connect if configured
     if (config?.autoConnect) {
-      this.connect().catch(err => {
-        console.error('Auto-connect failed:', err);
+      this.connect().catch(() => {
+        // Auto-connect failed
       });
     }
   }

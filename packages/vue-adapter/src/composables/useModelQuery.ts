@@ -137,13 +137,8 @@ export function useBatchModelQuery<T extends Record<string, any>>(
       params.push(id);
     });
     
-    try {
-      await mutate(batchSql, params);
-      options?.onBatchUpdate?.(updates.map(([, data]) => data));
-    } catch (error) {
-      console.error('Batch update failed:', error);
-      throw error;
-    }
+    await mutate(batchSql, params);
+    options?.onBatchUpdate?.(updates.map(([, data]) => data));
   };
   
   const scheduleFlush = () => {
@@ -236,15 +231,10 @@ export function useValidatedModel<T extends Record<string, any>>(
   const save = async () => {
     if (!isValid.value || !localValue.value) return;
     
-    try {
-      await mutate(
-        `INSERT OR REPLACE INTO ${tableName} (data) VALUES (?)`,
-        [JSON.stringify(localValue.value)]
-      );
-    } catch (error) {
-      console.error('Save failed:', error);
-      throw error;
-    }
+    await mutate(
+      `INSERT OR REPLACE INTO ${tableName} (data) VALUES (?)`,
+      [JSON.stringify(localValue.value)]
+    );
   };
   
   return {

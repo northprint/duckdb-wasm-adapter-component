@@ -149,7 +149,7 @@ export function createAutoRefreshStore<T>(
       const data = await queryFn();
       set(data);
     } catch (error) {
-      console.error('Auto-refresh query failed:', error);
+      // Auto-refresh query failed
     }
     
     // Set up interval
@@ -158,7 +158,7 @@ export function createAutoRefreshStore<T>(
         const data = await queryFn();
         set(data);
       } catch (error) {
-        console.error('Auto-refresh query failed:', error);
+        // Auto-refresh query failed
       }
     }, interval);
   };

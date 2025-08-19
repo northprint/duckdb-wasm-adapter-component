@@ -202,8 +202,8 @@ export function createDuckDB(config?: DuckDBStoreConfig): DuckDBStore {
   
   // Auto-connect if configured
   if (autoConnect) {
-    connect().catch(err => {
-      console.error('Auto-connect failed:', err);
+    connect().catch(() => {
+      // Auto-connect failed
     });
   }
   

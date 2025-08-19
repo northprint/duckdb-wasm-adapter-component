@@ -67,15 +67,15 @@ export function DuckDBProvider({
 
   useEffect(() => {
     if (autoConnect) {
-      connect().catch(err => {
-        console.error('Auto-connect failed:', err);
+      connect().catch(() => {
+        // Auto-connect failed
       });
     }
     
     return () => {
       if (connection) {
-        connection.close().catch(err => {
-          console.error('Disconnect on unmount failed:', err);
+        connection.close().catch(() => {
+          // Disconnect on unmount failed
         });
       }
     };

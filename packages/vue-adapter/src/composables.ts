@@ -76,8 +76,8 @@ export function useDuckDB(config?: DuckDBConfig): DuckDBInstance {
 
   // Auto-connect if configured
   if (config?.autoConnect && !globalConnection) {
-    connect().catch(err => {
-      console.error('Auto-connect failed:', err);
+    connect().catch(() => {
+      // Auto-connect failed
     });
   }
 
