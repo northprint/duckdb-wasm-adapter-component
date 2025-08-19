@@ -68,7 +68,7 @@ export class QueryExecutor {
       const preparedStatement = await this.connection.prepare(query);
       
       try {
-        this.bindParameters(preparedStatement as PreparedStatement, params);
+        this.bindParameters(preparedStatement as unknown as PreparedStatement, params);
         const arrowResult = await preparedStatement.query();
         const resultSet = new ResultSetImpl<T>(arrowResult);
         

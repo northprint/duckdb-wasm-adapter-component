@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from './select.js';
-import type { QueryBuilder } from './types.js';
+import type { QueryBuilder, ComparisonOperator } from './types.js';
 import type { Connection } from '../types.js';
 
 export * from './types.js';
@@ -70,7 +70,7 @@ export class QueryBuilderFactory {
           value = operator;
           operator = '=';
         }
-        return new SelectQueryBuilder(this.connection).from(tableName).where(column, operator, value);
+        return new SelectQueryBuilder(this.connection).from(tableName).where(column, operator as ComparisonOperator, value);
       },
     };
   }
@@ -110,7 +110,7 @@ export class QueryBuilderFactory {
               value = operator;
               operator = '=';
             }
-            state.conditions.push(`${column} ${operator} ${this.formatValue(value)}`);
+            state.conditions.push(`${column} ${operator as string} ${this.formatValue(value)}`);
             return {
               execute: () => {
                 const setClauses = Object.entries(state.updates)

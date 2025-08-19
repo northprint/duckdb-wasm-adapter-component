@@ -121,13 +121,15 @@ export class DataExporter {
     
     // Add header if requested
     if (includeHeader) {
-      const headers = Object.keys(table[0]);
+      const firstRow = table[0] as Record<string, unknown>;
+      const headers = Object.keys(firstRow);
       rows.push(headers.map(h => this.escapeCSVField(h, delimiter)).join(delimiter));
     }
 
     // Add data rows
     for (const row of table) {
-      const values = Object.values(row).map(value => 
+      const rowObj = row as Record<string, unknown>;
+      const values = Object.values(rowObj).map(value => 
         this.escapeCSVField(this.formatValue(value, options), delimiter)
       );
       rows.push(values.join(delimiter));
@@ -140,10 +142,11 @@ export class DataExporter {
     const table = result.toArray();
     
     // Process dates and other special types
-    return table.map((row: Record<string, unknown>) => {
+    return table.map((row) => {
+      const rowObj = row as Record<string, unknown>;
       const processedRow: Record<string, unknown> = {};
       
-      for (const [key, value] of Object.entries(row)) {
+      for (const [key, value] of Object.entries(rowObj)) {
         processedRow[key] = this.processJSONValue(value);
       }
       
