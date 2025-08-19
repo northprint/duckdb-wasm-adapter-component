@@ -3,7 +3,9 @@ import { useDuckDB } from '../context.js';
 import type { QueryBuilder } from '@northprint/duckdb-wasm-adapter-core';
 
 export function useQueryBuilder() {
-  const { queryBuilder, isConnected } = useDuckDB();
+  const context = useDuckDB();
+  const queryBuilder = context.queryBuilder;
+  const isConnected = context.isConnected;
 
   const createQuery = useCallback(() => {
     if (!isConnected || !queryBuilder) {

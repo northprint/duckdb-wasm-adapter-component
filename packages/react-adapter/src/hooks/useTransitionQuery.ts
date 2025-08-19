@@ -18,7 +18,8 @@ export function useTransitionQuery<T = Record<string, unknown>>(
   updateQuery: (newParams: unknown) => void;
   refetch: () => void;
 } {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const [isPending, startTransition] = useTransition();
   
   const [params, setParams] = useState(initialParams);
@@ -107,7 +108,8 @@ export function useDeferredQuery<T = Record<string, unknown>>(
     delay?: number;
   }
 ): QueryResult<T> & { isPending: boolean; startQuery: () => void } {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const [isPending, startTransition] = useTransition();
   const [shouldExecute, setShouldExecute] = useState(false);
   

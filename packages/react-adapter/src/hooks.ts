@@ -17,7 +17,8 @@ export function useQuery<T = Record<string, unknown>>(
   params?: unknown[],
   options: UseQueryOptions<T> = {}
 ): QueryResult<T> {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const [data, setData] = useState<T[] | undefined>(options.initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -101,7 +102,8 @@ export function useQuery<T = Record<string, unknown>>(
 export function useMutation<T = Record<string, unknown>>(
   options: UseMutationOptions<T> = {}
 ): MutationResult<T> {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const [data, setData] = useState<T[] | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -177,7 +179,8 @@ export function useMutation<T = Record<string, unknown>>(
  * Hook for batch operations
  */
 export function useBatch() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   
   const execute = useCallback(async (
     operations: Array<{ sql: string; params?: unknown[] }>
@@ -206,7 +209,8 @@ export function useBatch() {
  * Hook for transactions
  */
 export function useTransaction() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   
   const execute = useCallback(async <T>(
     callback: (execute: (sql: string, params?: unknown[]) => Promise<unknown>) => Promise<T>
@@ -235,7 +239,8 @@ export function useTransaction() {
  * Hook for importing CSV data
  */
 export function useImportCSV() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   
@@ -269,7 +274,8 @@ export function useImportCSV() {
  * Hook for importing JSON data
  */
 export function useImportJSON() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   
@@ -302,7 +308,8 @@ export function useImportJSON() {
  * Hook for exporting data as CSV
  */
 export function useExportCSV() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   
   const exportCSV = useCallback(async (
     query: string,
@@ -322,7 +329,8 @@ export function useExportCSV() {
  * Hook for exporting data as JSON
  */
 export function useExportJSON<T = Record<string, unknown>>() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   
   const exportJSON = useCallback(async (query: string): Promise<T[]> => {
     if (!connection) {

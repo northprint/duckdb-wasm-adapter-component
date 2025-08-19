@@ -13,7 +13,8 @@ export function useSuspenseQuery<T = Record<string, unknown>>(
   data: T[];
   metadata: unknown;
 } {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
 
   const queryPromise = useMemo(() => {
     if (!connection) {
@@ -88,7 +89,8 @@ export function useStreamingQuery<T = Record<string, unknown>>(
   stream: AsyncIterable<T[]>;
   cancel: () => void;
 } {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
   const batchSize = options?.batchSize || 100;
   
   const streamPromise = useMemo(() => {

@@ -3,7 +3,8 @@ import { useDuckDB } from '../context.js';
 import type { CacheStats } from '@northprint/duckdb-wasm-adapter-core';
 
 export function useCache() {
-  const { connection } = useDuckDB();
+  const context = useDuckDB();
+  const connection = context.connection;
 
   const clearCache = useCallback(() => {
     if (connection?.clearCache) {
