@@ -11,10 +11,21 @@ export function DuckDBProvider({
   events,
   debug 
 }: DuckDBProviderProps) {
-  const [connection, setConnection] = useState<Connection | null>(null);
-  const [status, setStatus] = useState<ConnectionStatus>('idle');
-  const [error, setError] = useState<Error | null>(null);
-  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(null);
+  const connectionState = useState<Connection | null>(null);
+  const connection = connectionState[0];
+  const setConnection = connectionState[1];
+  
+  const statusState = useState<ConnectionStatus>('idle');
+  const status = statusState[0];
+  const setStatus = statusState[1];
+  
+  const errorState = useState<Error | null>(null);
+  const error = errorState[0];
+  const setError = errorState[1];
+  
+  const queryBuilderState = useState<QueryBuilderFactory | null>(null);
+  const queryBuilder = queryBuilderState[0];
+  const setQueryBuilder = queryBuilderState[1];
 
   const connect = useCallback(async () => {
     try {
