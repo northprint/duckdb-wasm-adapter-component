@@ -24,7 +24,7 @@ export interface JoinClause {
 export interface WhereCondition {
   column?: string;
   operator?: ComparisonOperator;
-  value?: any;
+  value?: unknown;
   conditions?: WhereCondition[];
   logicalOperator?: LogicalOperator;
   raw?: string;
@@ -94,33 +94,33 @@ export interface QueryBuilder {
   crossJoin(table: string, alias?: string): QueryBuilder;
   
   // WHERE
-  where(column: string | WhereCondition | ((qb: QueryBuilder) => QueryBuilder), operator?: ComparisonOperator, value?: any): QueryBuilder;
+  where(column: string | WhereCondition | ((qb: QueryBuilder) => QueryBuilder), operator?: ComparisonOperator, value?: unknown): QueryBuilder;
   whereRaw(raw: string, bindings?: any[]): QueryBuilder;
   whereIn(column: string, values: any[]): QueryBuilder;
   whereNotIn(column: string, values: any[]): QueryBuilder;
   whereNull(column: string): QueryBuilder;
   whereNotNull(column: string): QueryBuilder;
-  whereBetween(column: string, min: any, max: any): QueryBuilder;
-  whereNotBetween(column: string, min: any, max: any): QueryBuilder;
+  whereBetween(column: string, min: unknown, max: unknown): QueryBuilder;
+  whereNotBetween(column: string, min: unknown, max: unknown): QueryBuilder;
   whereExists(subquery: QueryBuilder | ((qb: QueryBuilder) => QueryBuilder)): QueryBuilder;
   whereNotExists(subquery: QueryBuilder | ((qb: QueryBuilder) => QueryBuilder)): QueryBuilder;
   
   // OR WHERE
-  orWhere(column: string | WhereCondition, operator?: ComparisonOperator, value?: any): QueryBuilder;
+  orWhere(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): QueryBuilder;
   orWhereRaw(raw: string, bindings?: any[]): QueryBuilder;
   orWhereIn(column: string, values: any[]): QueryBuilder;
   orWhereNotIn(column: string, values: any[]): QueryBuilder;
   orWhereNull(column: string): QueryBuilder;
   orWhereNotNull(column: string): QueryBuilder;
-  orWhereBetween(column: string, min: any, max: any): QueryBuilder;
-  orWhereNotBetween(column: string, min: any, max: any): QueryBuilder;
+  orWhereBetween(column: string, min: unknown, max: unknown): QueryBuilder;
+  orWhereNotBetween(column: string, min: unknown, max: unknown): QueryBuilder;
   
   // GROUP BY
   groupBy(...columns: string[]): QueryBuilder;
   groupByRaw(raw: string): QueryBuilder;
   
   // HAVING
-  having(column: string | WhereCondition, operator?: ComparisonOperator, value?: any): QueryBuilder;
+  having(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): QueryBuilder;
   havingRaw(raw: string, bindings?: any[]): QueryBuilder;
   
   // ORDER BY
@@ -164,9 +164,9 @@ export interface InsertBuilder {
 
 export interface UpdateBuilder {
   table(table: string): UpdateBuilder;
-  set(column: string, value: any): UpdateBuilder;
+  set(column: string, value: unknown): UpdateBuilder;
   setMany(updates: Record<string, any>): UpdateBuilder;
-  where(column: string | WhereCondition, operator?: ComparisonOperator, value?: any): UpdateBuilder;
+  where(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): UpdateBuilder;
   whereRaw(raw: string, bindings?: any[]): UpdateBuilder;
   from(table: string, alias?: string): UpdateBuilder;
   returning(...columns: string[]): UpdateBuilder;
@@ -176,7 +176,7 @@ export interface UpdateBuilder {
 
 export interface DeleteBuilder {
   from(table: string): DeleteBuilder;
-  where(column: string | WhereCondition, operator?: ComparisonOperator, value?: any): DeleteBuilder;
+  where(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): DeleteBuilder;
   whereRaw(raw: string, bindings?: any[]): DeleteBuilder;
   returning(...columns: string[]): DeleteBuilder;
   build(): string;

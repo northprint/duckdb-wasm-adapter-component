@@ -108,7 +108,7 @@ export class ResultSetImpl<T = Record<string, unknown>> implements ResultSet<T> 
     return columns;
   }
 
-  private mapArrowTypeToDuckDBType(arrowType: any): DuckDBType {
+  private mapArrowTypeToDuckDBType(arrowType: unknown): DuckDBType {
     if (!arrowType) {
       return 'VARCHAR';
     }

@@ -56,7 +56,7 @@ export class DataExporter {
           mimeType = 'application/octet-stream';
           break;
         default:
-          throw new Error(`Unsupported export format: ${format}`);
+          throw new Error(`Unsupported export format: ${format as string}`);
       }
 
       return new Blob([content], { type: mimeType });
@@ -106,7 +106,7 @@ export class DataExporter {
     }
   }
 
-  private convertToCSV(result: any, options?: ExportOptions): string {
+  private convertToCSV(result: { toArray(): unknown[]; schema?: { fields: Array<{ name: string }> } }, options?: ExportOptions): string {
     const delimiter = options?.delimiter || ',';
     const includeHeader = options?.header !== false;
     
@@ -136,7 +136,7 @@ export class DataExporter {
     return rows.join('\n');
   }
 
-  private convertToJSON<T>(result: any): T[] {
+  private convertToJSON<T>(result: { toArray(): unknown[] }): T[] {
     const table = result.toArray();
     
     // Process dates and other special types

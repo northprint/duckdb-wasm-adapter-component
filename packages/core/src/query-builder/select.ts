@@ -171,7 +171,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this;
   }
 
-  where(column: string | WhereCondition | ((qb: QueryBuilder) => QueryBuilder), operator?: ComparisonOperator, value?: any): QueryBuilder {
+  where(column: string | WhereCondition | ((qb: QueryBuilder) => QueryBuilder), operator?: ComparisonOperator, value?: unknown): QueryBuilder {
     if (typeof column === 'function') {
       const subquery = column(new SelectQueryBuilder());
       return this.addWhere({ raw: `(${subquery.build()})` });
@@ -205,11 +205,11 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this.addWhere({ column, operator: 'IS NOT NULL' });
   }
 
-  whereBetween(column: string, min: any, max: any): QueryBuilder {
+  whereBetween(column: string, min: unknown, max: unknown): QueryBuilder {
     return this.addWhere({ column, operator: 'BETWEEN', value: [min, max] });
   }
 
-  whereNotBetween(column: string, min: any, max: any): QueryBuilder {
+  whereNotBetween(column: string, min: unknown, max: unknown): QueryBuilder {
     return this.addWhere({ column, operator: 'NOT BETWEEN', value: [min, max] });
   }
 
@@ -224,7 +224,7 @@ export class SelectQueryBuilder implements QueryBuilder {
   }
 
   // OR WHERE
-  orWhere(column: string | WhereCondition, operator?: ComparisonOperator, value?: any): QueryBuilder {
+  orWhere(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): QueryBuilder {
     if (typeof column === 'object') {
       return this.addWhere(column, 'OR');
     }
@@ -251,11 +251,11 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this.addWhere({ column, operator: 'IS NOT NULL' }, 'OR');
   }
 
-  orWhereBetween(column: string, min: any, max: any): QueryBuilder {
+  orWhereBetween(column: string, min: unknown, max: unknown): QueryBuilder {
     return this.addWhere({ column, operator: 'BETWEEN', value: [min, max] }, 'OR');
   }
 
-  orWhereNotBetween(column: string, min: any, max: any): QueryBuilder {
+  orWhereNotBetween(column: string, min: unknown, max: unknown): QueryBuilder {
     return this.addWhere({ column, operator: 'NOT BETWEEN', value: [min, max] }, 'OR');
   }
 
@@ -277,7 +277,7 @@ export class SelectQueryBuilder implements QueryBuilder {
   }
 
   // HAVING
-  having(column: string | WhereCondition, operator?: ComparisonOperator, value?: any): QueryBuilder {
+  having(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): QueryBuilder {
     const condition: WhereCondition = typeof column === 'object'
       ? column
       : { column, operator: operator || '=', value };
@@ -383,7 +383,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return `${column} ${operator} ${this.formatValue(condition.value)}`;
   }
 
-  private formatValue(value: any): string {
+  private formatValue(value: unknown): string {
     if (value === null || value === undefined) {
       return 'NULL';
     }

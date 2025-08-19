@@ -65,7 +65,7 @@ export class QueryBuilderFactory {
       delete: () => 
         this.deleteFrom(tableName),
       
-      where: (column: string, operator?: any, value?: any) => {
+      where: (column: string, operator?: unknown, value?: unknown) => {
         if (value === undefined) {
           value = operator;
           operator = '=';
@@ -105,7 +105,7 @@ export class QueryBuilderFactory {
       set: (updates: Record<string, any>) => {
         state.updates = updates;
         return {
-          where: (column: string, operator?: any, value?: any) => {
+          where: (column: string, operator?: unknown, value?: unknown) => {
             if (value === undefined) {
               value = operator;
               operator = '=';
@@ -143,7 +143,7 @@ export class QueryBuilderFactory {
     const conditions: string[] = [];
 
     return {
-      where: (column: string, operator?: any, value?: any) => {
+      where: (column: string, operator?: unknown, value?: unknown) => {
         if (value === undefined) {
           value = operator;
           operator = '=';
@@ -167,7 +167,7 @@ export class QueryBuilderFactory {
     };
   }
 
-  private formatValue(value: any): string {
+  private formatValue(value: unknown): string {
     if (value === null || value === undefined) {
       return 'NULL';
     }

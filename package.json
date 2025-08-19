@@ -25,7 +25,7 @@
     "test": "pnpm -r test",
     "test:coverage": "pnpm -r test:coverage",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
-    "lint:ci": "eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 400",
+    "lint:ci": "eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 250",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

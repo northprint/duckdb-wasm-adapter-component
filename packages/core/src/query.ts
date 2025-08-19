@@ -4,6 +4,20 @@ import { DuckDBError } from './errors.js';
 import { ResultSetImpl } from './result-set.js';
 import type { DebugLogger } from './debug.js';
 
+// Internal DuckDB statement interface
+interface PreparedStatement {
+  bindNull(index: number): void;
+  bindBoolean(index: number, value: boolean): void;
+  bindInt8(index: number, value: number): void;
+  bindInt16(index: number, value: number): void;
+  bindInt32(index: number, value: number): void;
+  bindInt64(index: number, value: bigint): void;
+  bindDouble(index: number, value: number): void;
+  bindVarchar(index: number, value: string): void;
+  bindTimestamp(index: number, value: Date): void;
+  bindBlob(index: number, value: Uint8Array): void;
+}
+
 export class QueryExecutor {
   private debugLogger?: DebugLogger;
   
@@ -54,7 +68,7 @@ export class QueryExecutor {
       const preparedStatement = await this.connection.prepare(query);
       
       try {
-        this.bindParameters(preparedStatement as any, params);
+        this.bindParameters(preparedStatement as PreparedStatement, params);
         const arrowResult = await preparedStatement.query();
         const resultSet = new ResultSetImpl<T>(arrowResult);
         
@@ -81,7 +95,7 @@ export class QueryExecutor {
     }
   }
 
-  private bindParameters(stmt: any, params: unknown[]): void {
+  private bindParameters(stmt: PreparedStatement, params: unknown[]): void {
     params.forEach((param, index) => {
       const paramIndex = index + 1; // DuckDB parameters are 1-indexed
 
