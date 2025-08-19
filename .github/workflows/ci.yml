@@ -40,6 +40,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
+      - name: Check TypeScript and ESLint versions
+        run: |
+          echo "TypeScript version:"
+          pnpm exec tsc --version
+          echo "ESLint version:"
+          pnpm exec eslint --version
+          echo "@types/react version:"
+          pnpm list @types/react
+      
       - name: Run lint
         run: pnpm lint:ci
       
