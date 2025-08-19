@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { createConnection, createQueryBuilder, type Connection, type QueryBuilderFactory } from '@northprint/duckdb-wasm-adapter-core';
 import type { DuckDBContextValue, DuckDBProviderProps, ConnectionStatus } from './types.js';
