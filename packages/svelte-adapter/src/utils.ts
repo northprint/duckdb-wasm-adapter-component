@@ -34,7 +34,7 @@ export function resultToCSV<T>(result: QueryResult<T>): string {
   const headers = Object.keys(result.data[0] as object);
   const rows = result.data.map(row => 
     headers.map(header => {
-      const value = (row as any)[header];
+      const value = (row as Record<string, unknown>)[header];
       // Escape values containing comma, quotes, or newlines
       if (value === null || value === undefined) return '';
       const str = String(value);
@@ -75,7 +75,7 @@ export function downloadFile(
 /**
  * Debounce function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

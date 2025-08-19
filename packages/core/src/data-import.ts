@@ -2,6 +2,13 @@ import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ImportOptions } from './types.js';
 import { DuckDBError } from './errors.js';
 
+// DuckDB internal file management API
+interface DuckDBFileManagement extends AsyncDuckDBConnection {
+  registerFileText(fileName: string, content: string): Promise<void>;
+  registerFileBuffer(fileName: string, buffer: Uint8Array): Promise<void>;
+  dropFile(fileName: string): Promise<void>;
+}
+
 export class DataImporter {
   private connection: AsyncDuckDBConnection;
   
@@ -27,7 +34,7 @@ export class DataImporter {
       if (csvContent.length > 1024 * 1024) {
         // For large files, register as a file buffer
         const fileName = `${tableName}_import.csv`;
-        await (this.connection as any).registerFileText(fileName, csvContent);
+        await (this.connection as DuckDBFileManagement).registerFileText(fileName, csvContent);
         
         const query = `
           CREATE OR REPLACE TABLE ${tableName} AS 
@@ -38,7 +45,7 @@ export class DataImporter {
           await this.connection.query(query);
         } finally {
           // Clean up registered file
-          await (this.connection as any).dropFile(fileName);
+          await (this.connection as DuckDBFileManagement).dropFile(fileName);
         }
       } else {
         // For small files, use inline data
@@ -67,7 +74,7 @@ export class DataImporter {
       // For large JSON, use file registration
       if (jsonString.length > 1024 * 1024) {
         const fileName = `${tableName}_import.json`;
-        await (this.connection as any).registerFileText(fileName, jsonString);
+        await (this.connection as DuckDBFileManagement).registerFileText(fileName, jsonString);
         
         const query = `
           CREATE OR REPLACE TABLE ${tableName} AS 
@@ -77,7 +84,7 @@ export class DataImporter {
         try {
           await this.connection.query(query);
         } finally {
-          await (this.connection as any).dropFile(fileName);
+          await (this.connection as DuckDBFileManagement).dropFile(fileName);
         }
       } else {
         // For small JSON, use inline
@@ -111,7 +118,7 @@ export class DataImporter {
       const fileName = `${tableName}_import.parquet`;
       
       // Register the parquet file
-      await (this.connection as any).registerFileBuffer(
+      await (this.connection as DuckDBFileManagement).registerFileBuffer(
         fileName,
         new Uint8Array(buffer)
       );
@@ -125,7 +132,7 @@ export class DataImporter {
         await this.connection.query(query);
       } finally {
         // Clean up registered file
-        await (this.connection as any).dropFile(fileName);
+        await (this.connection as DuckDBFileManagement).dropFile(fileName);
       }
     } catch (error) {
       throw DuckDBError.importFailed(

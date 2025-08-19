@@ -1,5 +1,6 @@
 import { use, useMemo } from 'react';
 import { useDuckDB } from '../context.js';
+import type { Connection } from '@northprint/duckdb-wasm-adapter-core';
 
 /**
  * Hook for Suspense-compatible queries using React 19.1's use() hook
@@ -10,7 +11,7 @@ export function useSuspenseQuery<T = Record<string, unknown>>(
   params?: unknown[]
 ): {
   data: T[];
-  metadata: any;
+  metadata: unknown;
 } {
   const { connection } = useDuckDB();
 
@@ -36,16 +37,16 @@ export function useSuspenseQuery<T = Record<string, unknown>>(
  * Can be created outside of components and passed as props
  */
 export function createQueryResource<T = Record<string, unknown>>(
-  connectionPromise: Promise<any>,
+  connectionPromise: Promise<unknown>,
   sql: string,
   params?: unknown[]
 ) {
   let status: 'pending' | 'success' | 'error' = 'pending';
-  let result: { data: T[]; metadata: any } | undefined;
+  let result: { data: T[]; metadata: unknown } | undefined;
   let error: Error | undefined;
 
   const suspender = connectionPromise
-    .then(connection => connection.execute(sql, params) as Promise<any>)
+    .then(connection => (connection as Connection).execute<T>(sql, params))
     .then(queryResult => {
       status = 'success';
       result = {
@@ -59,7 +60,7 @@ export function createQueryResource<T = Record<string, unknown>>(
     });
 
   return {
-    read(): { data: T[]; metadata: any } {
+    read(): { data: T[]; metadata: unknown } {
       if (status === 'pending') {
         throw suspender;
       } else if (status === 'error') {
@@ -99,7 +100,7 @@ export function useStreamingQuery<T = Record<string, unknown>>(
 
     const stream = {
       async *[Symbol.asyncIterator]() {
-        const result = await connection.execute(sql, params) as any;
+        const result = await connection.execute(sql, params);
         const data = result.toArray() as T[];
         
         for (let i = 0; i < data.length; i += batchSize) {

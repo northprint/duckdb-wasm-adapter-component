@@ -23,7 +23,7 @@ export interface TypedQueryOptions<T> {
 /**
  * Create a type-safe query composable
  */
-export function useTypedQuery<T extends Record<string, any>>(
+export function useTypedQuery<T extends Record<string, unknown>>(
   table: TypedTable<T>,
   options?: TypedQueryOptions<T>
 ): QueryResult<T> & {
@@ -90,7 +90,7 @@ export function useTypedQuery<T extends Record<string, any>>(
   const count = computed(() => queryResult.data.value?.length || 0);
   
   const updateOptions = (newOptions: TypedQueryOptions<T>) => {
-    queryOptions.value = { ...queryOptions.value, ...newOptions } as any;
+    queryOptions.value = { ...queryOptions.value, ...newOptions };
   };
   
   return {
@@ -103,12 +103,12 @@ export function useTypedQuery<T extends Record<string, any>>(
 /**
  * Type-safe mutation builder
  */
-export function useTypedMutation<T extends Record<string, any>>(
+export function useTypedMutation<T extends Record<string, unknown>>(
   table: TypedTable<T>
 ): {
   insert: (data: T) => Promise<T[]>;
-  update: (id: any, data: Partial<T>) => Promise<T[]>;
-  delete: (id: any) => Promise<void>;
+  update: (id: string | number, data: Partial<T>) => Promise<T[]>;
+  delete: (id: string | number) => Promise<void>;
   upsert: (data: T) => Promise<T[]>;
 } {
   const { mutate } = useMutation<T>();
@@ -127,13 +127,14 @@ export function useTypedMutation<T extends Record<string, any>>(
     return mutate(sql, params);
   };
   
-  const update = async (id: any, data: Partial<T>): Promise<T[]> => {
+  const update = async (id: string | number, data: Partial<T>): Promise<T[]> => {
     const updates = Object.entries(data)
       .filter(([_, value]) => value !== undefined)
       .map(([key]) => `${key} = ?`);
     
+    const filteredValues = Object.values(data).filter(v => v !== undefined);
     const params = [
-      ...Object.values(data).filter(v => v !== undefined),
+      ...filteredValues,
       id
     ];
     
@@ -147,7 +148,7 @@ export function useTypedMutation<T extends Record<string, any>>(
     return mutate(sql, params);
   };
   
-  const deleteRow = async (id: any): Promise<void> => {
+  const deleteRow = async (id: string | number): Promise<void> => {
     const sql = `
       DELETE FROM ${table.name}
       WHERE ${String(table.primaryKey || 'id')} = ?
@@ -196,10 +197,10 @@ export interface Relationship<T, R> {
   };
 }
 
-export function useRelationshipQuery<T extends Record<string, any>, R extends Record<string, any>>(
+export function useRelationshipQuery<T extends Record<string, unknown>, R extends Record<string, unknown>>(
   table: TypedTable<T>,
   relationship: Relationship<T, R>,
-  id: any
+  id: unknown
 ): QueryResult<R> {
   const sql = computed(() => {
     if (relationship.type === 'many-to-many' && relationship.through) {
@@ -247,10 +248,10 @@ export interface AggregationOptions<T> {
   };
 }
 
-export function useAggregationQuery<T extends Record<string, any>>(
+export function useAggregationQuery<T extends Record<string, unknown>>(
   table: TypedTable<T>,
   options: AggregationOptions<T>
-): QueryResult<Record<string, any>> {
+): QueryResult<Record<string, unknown>> {
   const sql = computed(() => {
     const aggregateSelects = Object.entries(options.aggregates).map(([key, agg]) => {
       const column = agg.column ? String(agg.column) : '*';
@@ -277,5 +278,5 @@ export function useAggregationQuery<T extends Record<string, any>>(
     `.trim().replace(/\s+/g, ' ');
   });
   
-  return useQuery<Record<string, any>>(sql);
+  return useQuery<Record<string, unknown>>(sql);
 }

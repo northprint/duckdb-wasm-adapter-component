@@ -28,20 +28,25 @@ export function useOptimisticQuery<T = Record<string, unknown>>(
   
   const [optimisticData, setOptimisticData] = useOptimistic(
     queryResult.data || [],
-    (state: T[], action: { type: string; payload: any }) => {
+    (state: T[], action: { type: string; payload: unknown }) => {
       switch (action.type) {
         case 'ADD':
-          return [action.payload, ...state];
+          return [action.payload as T, ...state];
         case 'UPDATE':
-          return state.map((item: any) => 
-            item.id === action.payload.id 
-              ? { ...item, ...action.payload.updates }
-              : item
-          );
+          return state.map((item) => {
+            const typedItem = item as { id?: unknown };
+            const typedPayload = action.payload as { id: unknown; updates: Partial<T> };
+            return typedItem.id === typedPayload.id 
+              ? { ...item, ...typedPayload.updates }
+              : item;
+          });
         case 'REMOVE':
-          return state.filter((item: any) => item.id !== action.payload);
+          return state.filter((item) => {
+            const typedItem = item as { id?: unknown };
+            return typedItem.id !== action.payload;
+          });
         case 'SET':
-          return action.payload;
+          return action.payload as T[];
         default:
           return state;
       }

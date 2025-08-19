@@ -29,14 +29,14 @@ export interface FormProps<T = Record<string, unknown>> {
 /**
  * Props for table components
  */
-export interface TableProps<T extends Record<string, any>> {
+export interface TableProps<T extends Record<string, unknown>> {
   data: T[];
   columns: {
     key: keyof T;
     label: string;
     sortable?: boolean;
     width?: string;
-    render?: (value: any, row: T) => string;
+    render?: (value: unknown, row: T) => string;
   }[];
   pageSize?: number;
   selectable?: boolean;
@@ -87,7 +87,7 @@ export interface FilterProps<T = Record<string, unknown>> {
     key: keyof T;
     label: string;
     type: 'text' | 'number' | 'date' | 'select';
-    options?: Array<{ value: any; label: string }>;
+    options?: Array<{ value: unknown; label: string }>;
   }>;
   onFilterChange?: (filters: Partial<T>) => void;
   debounce?: number;
@@ -100,7 +100,7 @@ export interface ExportProps {
   query: string;
   filename?: string;
   format: 'csv' | 'json' | 'parquet';
-  onExport?: (data: any) => void;
+  onExport?: (data: unknown) => void;
   onError?: (error: Error) => void;
 }
 
@@ -178,7 +178,7 @@ export type QueryComponentProps<T = Record<string, unknown>> = QueryProps<T> & {
   style?: string;
 };
 
-export type TableComponentProps<T extends Record<string, any>> = TableProps<T> & {
+export type TableComponentProps<T extends Record<string, unknown>> = TableProps<T> & {
   class?: string;
   style?: string;
   striped?: boolean;
@@ -207,7 +207,7 @@ export interface BindableQueryProps<T = Record<string, unknown>> {
 /**
  * Props for virtualized table (large datasets)
  */
-export interface VirtualTableProps<T extends Record<string, any>> {
+export interface VirtualTableProps<T extends Record<string, unknown>> {
   data: T[];
   columns: Array<{
     key: keyof T;

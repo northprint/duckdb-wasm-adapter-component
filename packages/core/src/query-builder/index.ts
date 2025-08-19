@@ -29,7 +29,7 @@ export function from(table: string, alias?: string): QueryBuilder {
 /**
  * Create a raw SQL query
  */
-export function raw(sql: string, bindings?: any[]): { sql: string; bindings: any[] } {
+export function raw(sql: string, bindings?: unknown[]): { sql: string; bindings: unknown[] } {
   return { sql, bindings: bindings || [] };
 }
 
@@ -56,10 +56,10 @@ export class QueryBuilderFactory {
       select: (...columns: string[]) => 
         new SelectQueryBuilder(this.connection).select(...columns).from(tableName),
       
-      insert: (data: Record<string, any> | Record<string, any>[]) => 
+      insert: (data: Record<string, unknown> | Record<string, unknown>[]) => 
         this.insertInto(tableName, data),
       
-      update: (data: Record<string, any>) => 
+      update: (data: Record<string, unknown>) => 
         this.update(tableName).set(data),
       
       delete: () => 
@@ -75,7 +75,7 @@ export class QueryBuilderFactory {
     };
   }
 
-  private insertInto(table: string, data: Record<string, any> | Record<string, any>[]): Promise<any> {
+  private insertInto(table: string, data: Record<string, unknown> | Record<string, unknown>[]): Promise<unknown> {
     const records = Array.isArray(data) ? data : [data];
     if (records.length === 0) {
       throw new Error('No data to insert');
@@ -97,12 +97,12 @@ export class QueryBuilderFactory {
   private update(table: string) {
     const state = {
       table,
-      updates: {} as Record<string, any>,
+      updates: {} as Record<string, unknown>,
       conditions: [] as string[],
     };
 
     return {
-      set: (updates: Record<string, any>) => {
+      set: (updates: Record<string, unknown>) => {
         state.updates = updates;
         return {
           where: (column: string, operator?: unknown, value?: unknown) => {

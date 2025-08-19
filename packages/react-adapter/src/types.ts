@@ -58,9 +58,9 @@ export interface ColumnMetadata {
 export interface UseQueryOptions {
   enabled?: boolean;
   refetchInterval?: number;
-  onSuccess?: (data: any[]) => void;
+  onSuccess?: (data: unknown[]) => void;
   onError?: (error: Error) => void;
-  initialData?: any[];
+  initialData?: unknown[];
 }
 
 export interface UseMutationOptions<T = Record<string, unknown>> {

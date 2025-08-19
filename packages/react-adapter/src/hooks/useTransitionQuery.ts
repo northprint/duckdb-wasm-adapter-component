@@ -7,15 +7,15 @@ import type { QueryResult } from '../types.js';
  * Allows marking updates as non-blocking for better UX
  */
 export function useTransitionQuery<T = Record<string, unknown>>(
-  sqlGenerator: (params: any) => string,
-  initialParams?: any
+  sqlGenerator: (params: unknown) => string,
+  initialParams?: unknown
 ): {
   data: T[] | undefined;
   displayData: T[] | undefined;
   loading: boolean;
   isPending: boolean;
   error: Error | null;
-  updateQuery: (newParams: any) => void;
+  updateQuery: (newParams: unknown) => void;
   refetch: () => void;
 } {
   const { connection } = useDuckDB();
@@ -29,7 +29,7 @@ export function useTransitionQuery<T = Record<string, unknown>>(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const executeQuery = useCallback(async (queryParams: any, isTransition = false) => {
+  const executeQuery = useCallback(async (queryParams: unknown, isTransition = false) => {
     if (!connection) return;
 
     const sql = sqlGenerator(queryParams);
@@ -59,7 +59,7 @@ export function useTransitionQuery<T = Record<string, unknown>>(
     }
   }, [connection, sqlGenerator]);
 
-  const updateQuery = useCallback((newParams: any) => {
+  const updateQuery = useCallback((newParams: unknown) => {
     setParams(newParams);
     
     // Start non-blocking transition
@@ -114,7 +114,7 @@ export function useDeferredQuery<T = Record<string, unknown>>(
   const [data, setData] = useState<T[] | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [metadata, setMetadata] = useState<any>(null);
+  const [metadata, setMetadata] = useState<unknown>(null);
 
   const executeQuery = useCallback(async () => {
     if (!connection || (options?.enabled === false && !shouldExecute)) return;

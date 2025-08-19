@@ -208,7 +208,7 @@ export function useTransaction() {
   const { connection } = useDuckDB();
   
   const execute = useCallback(async <T>(
-    callback: (execute: (sql: string, params?: unknown[]) => Promise<any>) => Promise<T>
+    callback: (execute: (sql: string, params?: unknown[]) => Promise<unknown>) => Promise<T>
   ): Promise<T> => {
     if (!connection) {
       throw new Error('Not connected to database');

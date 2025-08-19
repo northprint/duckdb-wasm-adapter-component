@@ -48,12 +48,12 @@ export interface UseQueryOptions {
   enabled?: boolean | Ref<boolean>;
   immediate?: boolean;
   refetchInterval?: number;
-  onSuccess?: (data: any[]) => void;
+  onSuccess?: (data: unknown[]) => void;
   onError?: (error: Error) => void;
-  initialData?: any[];
+  initialData?: unknown[];
 }
 
-export interface UseMutationOptions<T = any> {
+export interface UseMutationOptions<T = unknown> {
   onSuccess?: (data: T[]) => void;
   onError?: (error: Error) => void;
   onSettled?: () => void;

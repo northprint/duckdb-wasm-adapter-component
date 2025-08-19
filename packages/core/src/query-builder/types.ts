@@ -95,9 +95,9 @@ export interface QueryBuilder {
   
   // WHERE
   where(column: string | WhereCondition | ((qb: QueryBuilder) => QueryBuilder), operator?: ComparisonOperator, value?: unknown): QueryBuilder;
-  whereRaw(raw: string, bindings?: any[]): QueryBuilder;
-  whereIn(column: string, values: any[]): QueryBuilder;
-  whereNotIn(column: string, values: any[]): QueryBuilder;
+  whereRaw(raw: string, bindings?: unknown[]): QueryBuilder;
+  whereIn(column: string, values: unknown[]): QueryBuilder;
+  whereNotIn(column: string, values: unknown[]): QueryBuilder;
   whereNull(column: string): QueryBuilder;
   whereNotNull(column: string): QueryBuilder;
   whereBetween(column: string, min: unknown, max: unknown): QueryBuilder;
@@ -107,9 +107,9 @@ export interface QueryBuilder {
   
   // OR WHERE
   orWhere(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): QueryBuilder;
-  orWhereRaw(raw: string, bindings?: any[]): QueryBuilder;
-  orWhereIn(column: string, values: any[]): QueryBuilder;
-  orWhereNotIn(column: string, values: any[]): QueryBuilder;
+  orWhereRaw(raw: string, bindings?: unknown[]): QueryBuilder;
+  orWhereIn(column: string, values: unknown[]): QueryBuilder;
+  orWhereNotIn(column: string, values: unknown[]): QueryBuilder;
   orWhereNull(column: string): QueryBuilder;
   orWhereNotNull(column: string): QueryBuilder;
   orWhereBetween(column: string, min: unknown, max: unknown): QueryBuilder;
@@ -121,7 +121,7 @@ export interface QueryBuilder {
   
   // HAVING
   having(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): QueryBuilder;
-  havingRaw(raw: string, bindings?: any[]): QueryBuilder;
+  havingRaw(raw: string, bindings?: unknown[]): QueryBuilder;
   
   // ORDER BY
   orderBy(column: string, direction?: OrderDirection): QueryBuilder;
@@ -137,7 +137,7 @@ export interface QueryBuilder {
   
   // Building
   build(): string;
-  toSQL(): { sql: string; bindings: any[] };
+  toSQL(): { sql: string; bindings: unknown[] };
   toString(): string;
   
   // Execution (when connected)
@@ -151,36 +151,36 @@ export interface QueryBuilder {
 export interface InsertBuilder {
   into(table: string): InsertBuilder;
   columns(...columns: string[]): InsertBuilder;
-  values(...values: any[]): InsertBuilder;
-  valuesMany(values: any[][]): InsertBuilder;
+  values(...values: unknown[]): InsertBuilder;
+  valuesMany(values: unknown[][]): InsertBuilder;
   fromSelect(query: QueryBuilder): InsertBuilder;
   returning(...columns: string[]): InsertBuilder;
   onConflict(columns: string[]): InsertBuilder;
   doNothing(): InsertBuilder;
-  doUpdate(updates: Record<string, any>): InsertBuilder;
+  doUpdate(updates: Record<string, unknown>): InsertBuilder;
   build(): string;
-  toSQL(): { sql: string; bindings: any[] };
+  toSQL(): { sql: string; bindings: unknown[] };
 }
 
 export interface UpdateBuilder {
   table(table: string): UpdateBuilder;
   set(column: string, value: unknown): UpdateBuilder;
-  setMany(updates: Record<string, any>): UpdateBuilder;
+  setMany(updates: Record<string, unknown>): UpdateBuilder;
   where(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): UpdateBuilder;
-  whereRaw(raw: string, bindings?: any[]): UpdateBuilder;
+  whereRaw(raw: string, bindings?: unknown[]): UpdateBuilder;
   from(table: string, alias?: string): UpdateBuilder;
   returning(...columns: string[]): UpdateBuilder;
   build(): string;
-  toSQL(): { sql: string; bindings: any[] };
+  toSQL(): { sql: string; bindings: unknown[] };
 }
 
 export interface DeleteBuilder {
   from(table: string): DeleteBuilder;
   where(column: string | WhereCondition, operator?: ComparisonOperator, value?: unknown): DeleteBuilder;
-  whereRaw(raw: string, bindings?: any[]): DeleteBuilder;
+  whereRaw(raw: string, bindings?: unknown[]): DeleteBuilder;
   returning(...columns: string[]): DeleteBuilder;
   build(): string;
-  toSQL(): { sql: string; bindings: any[] };
+  toSQL(): { sql: string; bindings: unknown[] };
 }
 
 export interface CreateTableBuilder {
@@ -200,7 +200,7 @@ export interface ColumnOptions {
   nullable?: boolean;
   primaryKey?: boolean;
   unique?: boolean;
-  default?: any;
+  default?: unknown;
   references?: string;
   onDelete?: 'CASCADE' | 'SET NULL' | 'RESTRICT';
   onUpdate?: 'CASCADE' | 'SET NULL' | 'RESTRICT';

@@ -8,7 +8,7 @@ import type { QueryResult } from '../types.js';
  */
 export function useDuckDBScope() {
   const scope = effectScope();
-  const queries = new Map<string, any>();
+  const queries = new Map<string, unknown>();
   
   const runInScope = <T>(fn: () => T): T => {
     return scope.run(fn) as T;
@@ -18,10 +18,10 @@ export function useDuckDBScope() {
     key: string,
     sql: string | (() => string),
     params?: unknown[] | (() => unknown[]),
-    options?: any
+    options?: unknown
   ): QueryResult<T> => {
     return runInScope(() => {
-      const result = useQuery<T>(sql as any, params as any, options);
+      const result = useQuery<T>(sql, params, options);
       queries.set(key, result);
       return result;
     });
@@ -29,7 +29,7 @@ export function useDuckDBScope() {
 
   const createMutation = <T = Record<string, unknown>>(
     key: string,
-    options?: any
+    options?: unknown
   ) => {
     return runInScope(() => {
       const result = useMutation<T>(options);
@@ -76,7 +76,7 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
     onUpdate?: (data: T[]) => void;
   }
 ) {
-  const queryResult = useQuery<T>(sql as any, params as any);
+  const queryResult = useQuery<T>(sql, params);
 
   // Watch for updates after DOM flush
   if (options?.onPostUpdate) {
@@ -115,18 +115,18 @@ export function useDashboardScope(config: {
   queries: Record<string, {
     sql: string | (() => string);
     params?: unknown[] | (() => unknown[]);
-    options?: any;
+    options?: unknown;
   }>;
   onAllLoaded?: () => void;
   autoStop?: boolean;
 }) {
   const scope = effectScope();
-  const results = new Map<string, any>();
+  const results = new Map<string, unknown>();
   const allLoaded = new Map<string, boolean>();
 
   scope.run(() => {
     Object.entries(config.queries).forEach(([key, queryConfig]) => {
-      const result = useQuery(queryConfig.sql as any, queryConfig.params as any, queryConfig.options);
+      const result = useQuery(queryConfig.sql, queryConfig.params, queryConfig.options);
       results.set(key, result);
       
       // Track loading states
@@ -149,9 +149,10 @@ export function useDashboardScope(config: {
   const getQuery = (key: string) => results.get(key);
   
   const refreshAll = async () => {
-    const promises = Array.from(results.values()).map(result => 
-      result.refetch ? result.refetch() : Promise.resolve()
-    );
+    const promises = Array.from(results.values()).map(result => {
+      const typedResult = result as { refetch?: () => Promise<void> };
+      return typedResult.refetch ? typedResult.refetch() : Promise.resolve();
+    });
     await Promise.all(promises);
   };
 

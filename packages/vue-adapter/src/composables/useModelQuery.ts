@@ -93,7 +93,7 @@ export function useModelQuery<T = Record<string, unknown>>(
  * Enhanced model query with batch updates
  * Supports updating multiple fields efficiently
  */
-export function useBatchModelQuery<T extends Record<string, any>>(
+export function useBatchModelQuery<T extends Record<string, unknown>>(
   tableName: string,
   options?: {
     debounce?: number;
@@ -182,7 +182,7 @@ export function useBatchModelQuery<T extends Record<string, any>>(
 /**
  * Create a model with validation
  */
-export function useValidatedModel<T extends Record<string, any>>(
+export function useValidatedModel<T extends Record<string, unknown>>(
   tableName: string,
   validator: (value: T) => { valid: boolean; errors?: string[] },
   options?: {

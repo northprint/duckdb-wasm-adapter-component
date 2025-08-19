@@ -274,7 +274,7 @@ export class MutationRune<T = Record<string, unknown>> {
 /**
  * Table management class for Svelte 5
  */
-export class TableRune<T extends Record<string, any>> {
+export class TableRune<T extends Record<string, unknown>> {
   // State properties
   rows: T[] = [];
   selectedRows: Set<number> = new Set();
@@ -436,7 +436,7 @@ export function createMutationRune<T = Record<string, unknown>>(
   return new MutationRune<T>(db, options);
 }
 
-export function createTableRune<T extends Record<string, any>>(
+export function createTableRune<T extends Record<string, unknown>>(
   query: QueryRune<T>
 ): TableRune<T> {
   return new TableRune<T>(query);

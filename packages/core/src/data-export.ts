@@ -2,6 +2,12 @@ import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ExportOptions } from './types.js';
 import { DuckDBError } from './errors.js';
 
+// DuckDB internal file management API
+interface DuckDBFileOperations extends AsyncDuckDBConnection {
+  copyFileToBuffer(fileName: string): Promise<Uint8Array>;
+  dropFile(fileName: string): Promise<void>;
+}
+
 export class DataExporter {
   private connection: AsyncDuckDBConnection;
   
@@ -84,12 +90,10 @@ export class DataExporter {
         );
 
         // Read the file buffer
-        // @ts-expect-error - Using internal DuckDB API
-        const uint8Array = await this.connection.copyFileToBuffer(fileName) as Uint8Array;
+        const uint8Array = await (this.connection as DuckDBFileOperations).copyFileToBuffer(fileName);
         
         // Clean up the file
-        // @ts-expect-error - Using internal DuckDB API
-        await this.connection.dropFile(fileName);
+        await (this.connection as DuckDBFileOperations).dropFile(fileName);
         
         // Convert Uint8Array to ArrayBuffer
         const arrayBuffer = uint8Array.buffer.slice(uint8Array.byteOffset, uint8Array.byteOffset + uint8Array.byteLength);

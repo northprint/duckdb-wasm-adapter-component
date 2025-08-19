@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { DebugConfig, QueryProfile } from './types.js';
 import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 
@@ -134,7 +135,8 @@ export class DebugLogger {
 
       // Get memory usage (this is approximate)
       const memoryResult = await connection.query(`SELECT * FROM duckdb_memory()`);
-      const memoryUsed = memoryResult.get(0)?.memory_usage_bytes || 0;
+      const memoryRow = memoryResult.get(0) as { memory_usage_bytes?: number } | undefined;
+      const memoryUsed = memoryRow?.memory_usage_bytes || 0;
 
       return {
         executionTime: 0, // Will be filled by actual execution

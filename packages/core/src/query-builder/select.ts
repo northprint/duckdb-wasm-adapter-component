@@ -184,16 +184,16 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this.addWhere({ column, operator: operator || '=', value });
   }
 
-  whereRaw(raw: string, _bindings?: any[]): QueryBuilder {
+  whereRaw(raw: string, _bindings?: unknown[]): QueryBuilder {
     // Note: bindings would need to be handled properly in production
     return this.addWhere({ raw });
   }
 
-  whereIn(column: string, values: any[]): QueryBuilder {
+  whereIn(column: string, values: unknown[]): QueryBuilder {
     return this.addWhere({ column, operator: 'IN', value: values });
   }
 
-  whereNotIn(column: string, values: any[]): QueryBuilder {
+  whereNotIn(column: string, values: unknown[]): QueryBuilder {
     return this.addWhere({ column, operator: 'NOT IN', value: values });
   }
 
@@ -231,15 +231,15 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this.addWhere({ column, operator: operator || '=', value }, 'OR');
   }
 
-  orWhereRaw(raw: string, _bindings?: any[]): QueryBuilder {
+  orWhereRaw(raw: string, _bindings?: unknown[]): QueryBuilder {
     return this.addWhere({ raw }, 'OR');
   }
 
-  orWhereIn(column: string, values: any[]): QueryBuilder {
+  orWhereIn(column: string, values: unknown[]): QueryBuilder {
     return this.addWhere({ column, operator: 'IN', value: values }, 'OR');
   }
 
-  orWhereNotIn(column: string, values: any[]): QueryBuilder {
+  orWhereNotIn(column: string, values: unknown[]): QueryBuilder {
     return this.addWhere({ column, operator: 'NOT IN', value: values }, 'OR');
   }
 
@@ -286,7 +286,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return this;
   }
 
-  havingRaw(raw: string, _bindings?: any[]): QueryBuilder {
+  havingRaw(raw: string, _bindings?: unknown[]): QueryBuilder {
     this.state.having = { condition: { raw } };
     return this;
   }
@@ -376,7 +376,8 @@ export class SelectQueryBuilder implements QueryBuilder {
     }
     
     if (operator === 'BETWEEN' || operator === 'NOT BETWEEN') {
-      const [min, max] = Array.isArray(condition.value) ? condition.value : [condition.value, condition.value];
+      const values = Array.isArray(condition.value) ? condition.value : [condition.value, condition.value];
+      const [min, max] = values as [unknown, unknown];
       return `${column} ${operator} ${this.formatValue(min)} AND ${this.formatValue(max)}`;
     }
     
@@ -487,7 +488,7 @@ export class SelectQueryBuilder implements QueryBuilder {
     return sql;
   }
 
-  toSQL(): { sql: string; bindings: any[] } {
+  toSQL(): { sql: string; bindings: unknown[] } {
     // In a production implementation, would track bindings
     return { sql: this.build(), bindings: [] };
   }
@@ -514,7 +515,7 @@ export class SelectQueryBuilder implements QueryBuilder {
   // Cloning
   clone(): QueryBuilder {
     const cloned = new SelectQueryBuilder(this.connection);
-    cloned.state = JSON.parse(JSON.stringify(this.state));
+    cloned.state = JSON.parse(JSON.stringify(this.state)) as QueryState;
     return cloned;
   }
 }

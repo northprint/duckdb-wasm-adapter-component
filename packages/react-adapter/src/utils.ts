@@ -30,7 +30,7 @@ export function formatNumber(num: number): string {
 /**
  * Convert query result to CSV string
  */
-export function resultToCSV<T extends Record<string, any>>(data: T[]): string {
+export function resultToCSV<T extends Record<string, unknown>>(data: T[]): string {
   if (!data || data.length === 0) {
     return '';
   }
@@ -122,7 +122,7 @@ export function isReadOnlyQuery(sql: string): boolean {
 /**
  * Debounce function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -137,7 +137,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttle function
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {

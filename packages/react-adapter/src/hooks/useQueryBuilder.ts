@@ -47,7 +47,7 @@ export function useQueryBuilderQuery<T = Record<string, unknown>>(
   buildQuery: (qb: { 
     select: (...columns: string[]) => QueryBuilder;
     from: (table: string, alias?: string) => QueryBuilder;
-    table: (tableName: string) => any;
+    table: (tableName: string) => unknown;
   }) => QueryBuilder | Promise<T[]>
 ) {
   const { queryBuilder, isConnected, connection } = useDuckDB();
@@ -60,7 +60,7 @@ export function useQueryBuilderQuery<T = Record<string, unknown>>(
     const result = buildQuery(queryBuilder);
     
     // If result is already a promise (from execute methods), return it
-    if (result && typeof (result as any).then === 'function') {
+    if (result && typeof (result as Promise<unknown>).then === 'function') {
       return result as Promise<T[]>;
     }
     

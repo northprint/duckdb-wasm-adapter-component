@@ -266,7 +266,7 @@ export function useBatch() {
 export function useTransaction() {
 
   const execute = async <T>(
-    callback: (execute: (sql: string, params?: unknown[]) => Promise<any>) => Promise<T>
+    callback: (execute: (sql: string, params?: unknown[]) => Promise<unknown>) => Promise<T>
   ): Promise<T> => {
     const conn = globalConnection;
     if (!conn) {
@@ -299,7 +299,7 @@ export function useImportCSV() {
   const importCSV = async (
     file: File | string,
     tableName: string,
-    options?: any
+    options?: unknown
   ): Promise<void> => {
     const conn = globalConnection;
     if (!conn) {
@@ -363,7 +363,7 @@ export function useExportCSV() {
 
   const exportCSV = async (
     query: string,
-    options?: any
+    options?: unknown
   ): Promise<string> => {
     const conn = globalConnection;
     if (!conn) {

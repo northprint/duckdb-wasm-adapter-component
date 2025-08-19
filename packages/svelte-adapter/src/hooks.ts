@@ -135,7 +135,7 @@ export async function useBatch(
  */
 export async function useTransaction<T>(
   db: DuckDBStore,
-  callback: (execute: (sql: string, params?: unknown[]) => Promise<any>) => Promise<T>
+  callback: (execute: (sql: string, params?: unknown[]) => Promise<unknown>) => Promise<T>
 ): Promise<T> {
   const conn = get(db.connection);
   
