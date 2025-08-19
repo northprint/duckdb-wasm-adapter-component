@@ -23,6 +23,20 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm@10.14.0
       
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-pnpm-store-
+      
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
@@ -71,6 +85,20 @@ jobs:
       
       - name: Install pnpm
         run: npm install -g pnpm@10.14.0
+      
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-pnpm-store-
       
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
