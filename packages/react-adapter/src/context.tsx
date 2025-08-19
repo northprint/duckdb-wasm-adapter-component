@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { createConnection, createQueryBuilder, type Connection, type QueryBuilderFactory } from '@northprint/duckdb-wasm-adapter-core';
 import type { DuckDBContextValue, DuckDBProviderProps, ConnectionStatus } from './types.js';
@@ -11,26 +14,10 @@ export function DuckDBProvider({
   events,
   debug 
 }: DuckDBProviderProps) {
-  // Use indexed access to avoid destructuring issues in CI
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
-  const connectionState = useState<Connection | null>(null) as [Connection | null, React.Dispatch<React.SetStateAction<Connection | null>>];
-  const connection: Connection | null = connectionState[0];
-  const setConnection = connectionState[1];
-  
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
-  const statusState = useState<ConnectionStatus>('idle') as [ConnectionStatus, React.Dispatch<React.SetStateAction<ConnectionStatus>>];
-  const status: ConnectionStatus = statusState[0];
-  const setStatus = statusState[1];
-  
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
-  const errorState = useState<Error | null>(null) as [Error | null, React.Dispatch<React.SetStateAction<Error | null>>];
-  const error: Error | null = errorState[0];
-  const setError = errorState[1];
-  
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
-  const queryBuilderState = useState<QueryBuilderFactory | null>(null) as [QueryBuilderFactory | null, React.Dispatch<React.SetStateAction<QueryBuilderFactory | null>>];
-  const queryBuilder: QueryBuilderFactory | null = queryBuilderState[0];
-  const setQueryBuilder = queryBuilderState[1];
+  const [connection, setConnection] = useState<Connection | null>(null);
+  const [status, setStatus] = useState<ConnectionStatus>('idle');
+  const [error, setError] = useState<Error | null>(null);
+  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(null);
 
   const connect = useCallback(async () => {
     try {
