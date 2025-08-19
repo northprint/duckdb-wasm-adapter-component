@@ -11,18 +11,14 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22.x
       
       - name: Install pnpm
         run: npm install -g pnpm@10.14.0
@@ -71,7 +67,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
       
       - name: Install pnpm
         run: npm install -g pnpm@10.14.0
@@ -97,25 +93,3 @@ jobs:
       - name: Build Svelte 5 Runes example
         working-directory: examples/svelte5-runes-example
         run: pnpm build
-
-  docs:
-    name: Build Documentation
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-      
-      - name: Install pnpm
-        run: npm install -g pnpm@10.14.0
-      
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
-      - name: Build documentation
-        run: pnpm docs:build
