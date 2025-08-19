@@ -27,7 +27,13 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm install --frozen-lockfile
+          echo "=== Verifying build scripts ==="
+          for pkg in core react-adapter vue-adapter svelte-adapter; do
+            echo "--- $pkg build script ---"
+            grep '"build"' packages/$pkg/package.json || echo "Build script not found"
+          done
 
       - name: Link packages
         run: pnpm -r --filter='./packages/*' exec pnpm link --global && pnpm -r --filter='./packages/*' exec pnpm link --global @northprint/duckdb-wasm-adapter-core
