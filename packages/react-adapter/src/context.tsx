@@ -11,10 +11,21 @@ export function DuckDBProvider({
   events,
   debug 
 }: DuckDBProviderProps) {
-  const [connection, setConnection] = useState<Connection | null>(null);
-  const [status, setStatus] = useState<ConnectionStatus>('idle');
-  const [error, setError] = useState<Error | null>(null);
-  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const connectionState = useState<Connection | null>(null) as [Connection | null, React.Dispatch<React.SetStateAction<Connection | null>>];
+  const [connection, setConnection] = connectionState;
+  
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const statusState = useState<ConnectionStatus>('idle') as [ConnectionStatus, React.Dispatch<React.SetStateAction<ConnectionStatus>>];
+  const [status, setStatus] = statusState;
+  
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const errorState = useState<Error | null>(null) as [Error | null, React.Dispatch<React.SetStateAction<Error | null>>];
+  const [error, setError] = errorState;
+  
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const queryBuilderState = useState<QueryBuilderFactory | null>(null) as [QueryBuilderFactory | null, React.Dispatch<React.SetStateAction<QueryBuilderFactory | null>>];
+  const [queryBuilder, setQueryBuilder] = queryBuilderState;
 
   const connect = useCallback(async () => {
     try {
