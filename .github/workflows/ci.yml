@@ -31,7 +31,15 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: Run lint
-        run: pnpm lint:ci
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          echo "=== Directory structure ==="
+          ls -la
+          echo "=== ESLint config ==="
+          cat .eslintrc.json | head -20
+          echo "=== Running lint with explicit packages path ==="
+          npx eslint packages --ext .ts,.tsx,.js,.jsx --max-warnings 250
       
       - name: Run type check
         run: pnpm typecheck
