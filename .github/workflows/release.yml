@@ -35,27 +35,13 @@ jobs:
             grep '"build"' packages/$pkg/package.json || echo "Build script not found"
           done
 
-      - name: Link packages
-        run: pnpm -r --filter='./packages/*' exec pnpm link --global && pnpm -r --filter='./packages/*' exec pnpm link --global @northprint/duckdb-wasm-adapter-core
-
-      - name: Build core package
-        run: |
-          cd packages/core
-          pnpm build
-          echo "=== Checking core package dist folder ==="
-          ls -la dist/ || echo "No dist folder"
-          echo "=== Checking for .d.ts files ==="
-          find dist -name "*.d.ts" 2>/dev/null || echo "No .d.ts files found"
-          echo "=== Checking package.json types field ==="
-          cat package.json | grep -A2 -B2 '"types"'
-
       - name: Build packages
         run: |
           pnpm build
           echo "=== Checking all packages for .d.ts files ==="
           for pkg in core react-adapter svelte-adapter vue-adapter; do
             echo "--- Package: $pkg ---"
-            ls -la packages/$pkg/dist/*.d.ts 2>/dev/null || echo "No .d.ts files in $pkg"
+            ls packages/$pkg/dist/*.d.ts 2>/dev/null | head -5 || echo "No .d.ts files in $pkg"
           done
 
       - name: Create Release Pull Request or Publish
