@@ -11,21 +11,26 @@ export function DuckDBProvider({
   events,
   debug 
 }: DuckDBProviderProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  // Use indexed access to avoid destructuring issues in CI
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
   const connectionState = useState<Connection | null>(null) as [Connection | null, React.Dispatch<React.SetStateAction<Connection | null>>];
-  const [connection, setConnection] = connectionState;
+  const connection = connectionState[0];
+  const setConnection = connectionState[1];
   
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
   const statusState = useState<ConnectionStatus>('idle') as [ConnectionStatus, React.Dispatch<React.SetStateAction<ConnectionStatus>>];
-  const [status, setStatus] = statusState;
+  const status = statusState[0];
+  const setStatus = statusState[1];
   
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
   const errorState = useState<Error | null>(null) as [Error | null, React.Dispatch<React.SetStateAction<Error | null>>];
-  const [error, setError] = errorState;
+  const error = errorState[0];
+  const setError = errorState[1];
   
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-redundant-type-constituents
   const queryBuilderState = useState<QueryBuilderFactory | null>(null) as [QueryBuilderFactory | null, React.Dispatch<React.SetStateAction<QueryBuilderFactory | null>>];
-  const [queryBuilder, setQueryBuilder] = queryBuilderState;
+  const queryBuilder = queryBuilderState[0];
+  const setQueryBuilder = queryBuilderState[1];
 
   const connect = useCallback(async () => {
     try {
