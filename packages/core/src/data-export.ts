@@ -97,7 +97,7 @@ export class DataExporter {
         
         // Convert Uint8Array to ArrayBuffer
         const arrayBuffer = uint8Array.buffer.slice(uint8Array.byteOffset, uint8Array.byteOffset + uint8Array.byteLength);
-        return arrayBuffer as ArrayBuffer;
+        return arrayBuffer;
       } finally {
         // Clean up temporary table
         await this.connection.query(`DROP TABLE IF EXISTS ${tempTableName}`);

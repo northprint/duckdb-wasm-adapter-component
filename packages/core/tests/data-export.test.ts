@@ -256,10 +256,11 @@ describe('DataExporter', () => {
     });
 
     it('should export to Parquet file', async () => {
-      const mockBuffer = new ArrayBuffer(100);
+      const mockBuffer = new Uint8Array(100);
       
       vi.mocked(mockConnection.query).mockResolvedValue(undefined as any);
       vi.mocked(mockConnection.copyFileToBuffer).mockResolvedValue(mockBuffer as any);
+      vi.mocked(mockConnection.dropFile).mockResolvedValue(undefined as any);
 
       const blob = await dataExporter.exportToFile('SELECT * FROM users', 'parquet');
 
