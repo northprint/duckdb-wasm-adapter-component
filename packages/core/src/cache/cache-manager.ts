@@ -20,7 +20,7 @@ export class QueryCacheManager<T = unknown> implements CacheManager<T> {
       ttl: options.ttl || 5 * 60 * 1000, // 5 minutes default
       evictionStrategy: options.evictionStrategy || 'lru',
       enableStats: options.enableStats !== false,
-      keyGenerator: options.keyGenerator || this.defaultKeyGenerator,
+      keyGenerator: options.keyGenerator || this.defaultKeyGenerator.bind(this),
     };
   }
 

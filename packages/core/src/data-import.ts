@@ -176,7 +176,7 @@ export class DataImporter {
           `;
           break;
         default:
-          throw new Error(`Unsupported format: ${format}`);
+          throw new Error(`Unsupported format: ${format as string}`);
       }
       
       await this.connection.query(query);

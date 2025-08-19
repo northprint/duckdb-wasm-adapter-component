@@ -69,18 +69,18 @@ export function useTransitionQuery<T = Record<string, unknown>>(
   }, []);
 
   const refetch = useCallback(() => {
-    executeQuery(params, false);
+    void executeQuery(params, false);
   }, [params, executeQuery]);
 
   // Execute query when params change
   useEffect(() => {
-    executeQuery(params, false);
+    void executeQuery(params, false);
   }, [params, executeQuery]);
 
   // Execute transition query when display params change
   useEffect(() => {
     if (displayParams !== params) {
-      executeQuery(displayParams, true);
+      void executeQuery(displayParams, true);
     }
   }, [displayParams, params, executeQuery]);
 
@@ -147,7 +147,7 @@ export function useDeferredQuery<T = Record<string, unknown>>(
   useEffect(() => {
     if (shouldExecute || options?.enabled !== false) {
       const timer = setTimeout(
-        () => executeQuery(),
+        () => void executeQuery(),
         options?.delay || 0
       );
       

@@ -1,4 +1,4 @@
-import { effectScope, watch, watchEffect, watchPostEffect, watchSyncEffect, onUnmounted, ref, type Ref } from 'vue';
+import { effectScope, watch, watchEffect, watchPostEffect, watchSyncEffect, onUnmounted, ref } from 'vue';
 import { useQuery, useMutation } from '../composables.js';
 import type { QueryResult, UseQueryOptions, UseMutationOptions } from '../types.js';
 
@@ -86,7 +86,7 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
   if (options?.onPostUpdate) {
     watchPostEffect(() => {
       if (queryResult.data.value) {
-        options.onPostUpdate!(queryResult.data.value);
+        options.onPostUpdate?.(queryResult.data.value);
       }
     });
   }
@@ -95,7 +95,7 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
   if (options?.onSyncUpdate) {
     watchSyncEffect(() => {
       if (queryResult.data.value) {
-        options.onSyncUpdate!(queryResult.data.value);
+        options.onSyncUpdate?.(queryResult.data.value);
       }
     });
   }
@@ -104,7 +104,7 @@ export function useQueryWithEffects<T = Record<string, unknown>>(
   if (options?.onUpdate) {
     watchEffect(() => {
       if (queryResult.data.value) {
-        options.onUpdate!(queryResult.data.value);
+        options.onUpdate?.(queryResult.data.value);
       }
     });
   }

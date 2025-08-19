@@ -353,7 +353,7 @@ export class ConnectionManager {
     }
   }
 
-  async getConnection(id: string): Promise<Connection | undefined> {
+  getConnection(id: string): Connection | undefined {
     return this.connections.get(id);
   }
 

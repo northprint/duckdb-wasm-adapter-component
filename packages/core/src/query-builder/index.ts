@@ -148,7 +148,8 @@ export class QueryBuilderFactory {
           value = operator;
           operator = '=';
         }
-        conditions.push(`${column} ${operator} ${this.formatValue(value)}`);
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        conditions.push(`${column} ${operator} ${String(this.formatValue(value as string | number | boolean | null))}`);
         return {
           execute: () => {
             const whereClause = conditions.length > 0 

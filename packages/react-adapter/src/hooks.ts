@@ -62,7 +62,7 @@ export function useQuery<T = Record<string, unknown>>(
     mountedRef.current = true;
     
     if (options.enabled !== false) {
-      execute();
+      void execute();
     }
     
     return () => {
@@ -73,7 +73,7 @@ export function useQuery<T = Record<string, unknown>>(
   useEffect(() => {
     if (options.refetchInterval && options.refetchInterval > 0) {
       intervalRef.current = setInterval(() => {
-        execute();
+        void execute();
       }, options.refetchInterval);
       
       return () => {

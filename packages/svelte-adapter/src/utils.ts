@@ -153,13 +153,15 @@ export function createAutoRefreshStore<T>(
     }
     
     // Set up interval
-    intervalId = setInterval(async () => {
-      try {
-        const data = await queryFn();
-        set(data);
-      } catch (error) {
-        // Auto-refresh query failed
-      }
+    intervalId = setInterval(() => {
+      void (async () => {
+        try {
+          const data = await queryFn();
+          set(data);
+        } catch (error) {
+          // Auto-refresh query failed
+        }
+      })();
     }, interval);
   };
   

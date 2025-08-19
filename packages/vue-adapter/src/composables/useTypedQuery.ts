@@ -132,7 +132,7 @@ export function useTypedMutation<T extends Record<string, unknown>>(
       .filter(([_, value]) => value !== undefined)
       .map(([key]) => `${key} = ?`);
     
-    const filteredValues = Object.values(data).filter(v => v !== undefined);
+    const filteredValues = Object.values(data).filter(v => v !== undefined) as unknown[];
     const params = [
       ...filteredValues,
       id

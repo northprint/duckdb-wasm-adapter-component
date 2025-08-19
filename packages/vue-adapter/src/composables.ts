@@ -147,19 +147,17 @@ export function useQuery<T = Record<string, unknown>>(
     }
   };
 
-  const refetch = () => execute();
-
   // Watch for changes in SQL, params, and connection state
   watch([() => unref(sql), () => unref(params), () => globalConnection], () => {
     if (options.immediate !== false && globalConnection) {
-      execute();
+      void execute();
     }
   }, { immediate: options.immediate !== false });
 
   // Set up refetch interval if specified
   if (options.refetchInterval && options.refetchInterval > 0) {
     const interval = setInterval(() => {
-      execute();
+      void execute();
     }, options.refetchInterval);
 
     onUnmounted(() => {
@@ -173,7 +171,7 @@ export function useQuery<T = Record<string, unknown>>(
     error,
     metadata,
     execute,
-    refetch,
+    refetch: () => { void execute(); },
   };
 }
 

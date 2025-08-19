@@ -49,7 +49,7 @@ export function useModelQuery<T = Record<string, unknown>>(
   // Create v-model compatible computed property
   const model = computed({
     get: () => localValue.value,
-    set: async (value: T | undefined) => {
+    set: (value: T | undefined) => {
       if (!value) {
         localValue.value = undefined;
         return;
@@ -62,7 +62,7 @@ export function useModelQuery<T = Record<string, unknown>>(
         const updateSql = options?.updateQuery || 
           `UPDATE ${tableName} SET data = ? WHERE ${idField} = ?`;
         
-        await mutate(updateSql, [JSON.stringify(value), currentId.value]);
+        void mutate(updateSql, [JSON.stringify(value), currentId.value]);
         options?.onUpdate?.(value);
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
@@ -71,8 +71,8 @@ export function useModelQuery<T = Record<string, unknown>>(
     }
   });
   
-  const sync = async () => {
-    await refetch();
+  const sync = () => {
+    return Promise.resolve(refetch());
   };
   
   // Method to set the ID and trigger data fetch
@@ -144,13 +144,13 @@ export function useBatchModelQuery<T extends Record<string, unknown>>(
   const scheduleFlush = () => {
     if (flushTimer) clearTimeout(flushTimer);
     flushTimer = setTimeout(() => {
-      flushUpdates();
+      void flushUpdates();
     }, options?.debounce || 500);
   };
   
   const createModel = (id: string): WritableComputedRef<T> => {
     if (models.has(id)) {
-      return models.get(id)!;
+      return models.get(id) as WritableComputedRef<T>;
     }
     
     const { data } = useQuery<T>(
@@ -223,7 +223,7 @@ export function useValidatedModel<T extends Record<string, unknown>>(
       localValue.value = value;
       
       if (options?.autoSave && validation.valid) {
-        save();
+        void save();
       }
     }
   });
