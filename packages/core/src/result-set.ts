@@ -115,7 +115,7 @@ export class ResultSetImpl<T = Record<string, unknown>> implements ResultSet<T> 
     
     const typeString = typeof arrowType === 'string' 
       ? arrowType.toUpperCase() 
-      : arrowType.toString?.().toUpperCase() || 'VARCHAR';
+      : (arrowType as { toString?: () => string })?.toString?.()?.toUpperCase() || 'VARCHAR';
 
     // Map Arrow types to DuckDB types
     const typeMap: Record<string, DuckDBType> = {
