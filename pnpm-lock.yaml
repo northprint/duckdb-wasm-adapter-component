@@ -148,12 +148,15 @@ importers:
         specifier: ^1.28.0
         version: 1.29.0
     devDependencies:
+      '@types/emscripten':
+        specifier: ^1.40.1
+        version: 1.40.1
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(happy-dom@18.0.1)(jsdom@26.1.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jsdom@26.1.0))
       apache-arrow:
         specifier: 17.0.0
         version: 17.0.0
@@ -171,7 +174,7 @@ importers:
         version: 5.9.2
       vitest:
         specifier: ^1.2.0
-        version: 1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(happy-dom@18.0.1)(jsdom@26.1.0)
+        version: 1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jsdom@26.1.0)
 
   packages/react-adapter:
     dependencies:
@@ -1189,6 +1192,9 @@ packages:
 
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
+
+  '@types/emscripten@1.40.1':
+    resolution: {integrity: sha512-sr53lnYkQNhjHNN0oJDdUm5564biioI5DuOpycufDVK7D3y+GR3oUswe2rlwY1nPNyusHbrJ9WoTyIHl4/Bpwg==}
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
@@ -4546,6 +4552,8 @@ snapshots:
 
   '@types/deep-eql@4.0.2': {}
 
+  '@types/emscripten@1.40.1': {}
+
   '@types/estree@1.0.8': {}
 
   '@types/hast@3.0.4':
@@ -4692,7 +4700,7 @@ snapshots:
       vite: 5.4.19(@types/node@24.3.0)
       vue: 3.5.18(typescript@5.9.2)
 
-  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(happy-dom@18.0.1)(jsdom@26.1.0))':
+  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jsdom@26.1.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -4707,7 +4715,7 @@ snapshots:
       std-env: 3.9.0
       strip-literal: 2.1.1
       test-exclude: 6.0.0
-      vitest: 1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(happy-dom@18.0.1)(jsdom@26.1.0)
+      vitest: 1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jsdom@26.1.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7085,7 +7093,7 @@ snapshots:
       - supports-color
       - terser
 
-  vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(happy-dom@18.0.1)(jsdom@26.1.0):
+  vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jsdom@26.1.0):
     dependencies:
       '@vitest/expect': 1.6.1
       '@vitest/runner': 1.6.1

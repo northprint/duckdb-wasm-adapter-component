@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly --downlevelIteration --skipLibCheck",
+    "build": "tsup && npx tsc -p tsconfig.build.json",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -29,6 +29,7 @@
     "@duckdb/duckdb-wasm": "^1.28.0"
   },
   "devDependencies": {
+    "@types/emscripten": "^1.40.1",
     "@types/node": "^24.3.0",
     "@vitest/coverage-v8": "^1.2.0",
     "apache-arrow": "17.0.0",

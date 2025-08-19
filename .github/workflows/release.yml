@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Link packages
+        run: pnpm -r --filter='./packages/*' exec pnpm link --global && pnpm -r --filter='./packages/*' exec pnpm link --global @northprint/duckdb-wasm-adapter-core
+
       - name: Build core package
         run: |
           cd packages/core

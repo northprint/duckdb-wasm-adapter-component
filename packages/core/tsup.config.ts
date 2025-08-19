@@ -10,6 +10,7 @@ export default defineConfig({
   treeshake: true,
   minify: false,
   external: ['@duckdb/duckdb-wasm'],
+  skipNodeModulesBundle: true,
   esbuildOptions(options) {
     options.platform = 'browser';
   },

@@ -8,4 +8,6 @@ export default defineConfig({
   clean: true,
   target: 'es2022',
   external: ['vue', '@northprint/duckdb-wasm-adapter-core'],
+  skipNodeModulesBundle: true,
+  tsconfig: './tsconfig.json',
 });

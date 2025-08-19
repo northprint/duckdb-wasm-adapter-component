@@ -10,6 +10,8 @@ export default defineConfig({
   treeshake: true,
   minify: false,
   external: ['svelte', '@northprint/duckdb-wasm-adapter-core', '@duckdb/duckdb-wasm'],
+  skipNodeModulesBundle: true,
+  tsconfig: './tsconfig.json',
   esbuildOptions(options) {
     options.platform = 'browser';
   },
