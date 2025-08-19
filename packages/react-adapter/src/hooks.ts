@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDuckDB } from './context.js';
+import type { Connection } from '@northprint/duckdb-wasm-adapter-core';
 import type { 
   QueryResult, 
   MutationResult, 
@@ -8,6 +9,13 @@ import type {
   ColumnMetadata,
   ImportOptions
 } from './types.js';
+
+// Type guard for connection
+function assertConnection(conn: Connection | null): asserts conn is Connection {
+  if (!conn) {
+    throw new Error('Not connected to database');
+  }
+}
 
 /**
  * Hook for executing queries
@@ -18,7 +26,7 @@ export function useQuery<T = Record<string, unknown>>(
   options: UseQueryOptions<T> = {}
 ): QueryResult<T> {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   const [data, setData] = useState<T[] | undefined>(options.initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -28,8 +36,13 @@ export function useQuery<T = Record<string, unknown>>(
   const mountedRef = useRef(true);
   
   const execute = useCallback(async () => {
-    if (!connection || options.enabled === false) {
+    if (options.enabled === false) {
       await Promise.resolve();
+      return;
+    }
+    
+    if (!connection) {
+      setError(new Error('Not connected to database'));
       return;
     }
     
@@ -37,6 +50,7 @@ export function useQuery<T = Record<string, unknown>>(
     setError(null);
     
     try {
+      assertConnection(connection);
       const result = await connection.execute<T>(sql, params);
       
       if (!mountedRef.current) return;
@@ -103,7 +117,7 @@ export function useMutation<T = Record<string, unknown>>(
   options: UseMutationOptions<T> = {}
 ): MutationResult<T> {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   const [data, setData] = useState<T[] | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -180,7 +194,7 @@ export function useMutation<T = Record<string, unknown>>(
  */
 export function useBatch() {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   
   const execute = useCallback(async (
     operations: Array<{ sql: string; params?: unknown[] }>
@@ -210,7 +224,7 @@ export function useBatch() {
  */
 export function useTransaction() {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   
   const execute = useCallback(async <T>(
     callback: (execute: (sql: string, params?: unknown[]) => Promise<unknown>) => Promise<T>
@@ -240,7 +254,7 @@ export function useTransaction() {
  */
 export function useImportCSV() {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   
@@ -275,7 +289,7 @@ export function useImportCSV() {
  */
 export function useImportJSON() {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   
@@ -309,7 +323,7 @@ export function useImportJSON() {
  */
 export function useExportCSV() {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   
   const exportCSV = useCallback(async (
     query: string,
@@ -330,7 +344,7 @@ export function useExportCSV() {
  */
 export function useExportJSON<T = Record<string, unknown>>() {
   const context = useDuckDB();
-  const connection = context.connection;
+  const connection: Connection | null = context.connection;
   
   const exportJSON = useCallback(async (query: string): Promise<T[]> => {
     if (!connection) {

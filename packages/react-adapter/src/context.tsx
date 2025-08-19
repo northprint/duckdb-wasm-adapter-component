@@ -11,17 +11,17 @@ export function DuckDBProvider({
   events,
   debug 
 }: DuckDBProviderProps) {
-  const [connection, setConnection] = useState<Connection | null>(null);
-  const [status, setStatus] = useState<ConnectionStatus>('idle');
-  const [error, setError] = useState<Error | null>(null);
-  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(null);
+  const [connection, setConnection] = useState<Connection | null>(() => null);
+  const [status, setStatus] = useState<ConnectionStatus>(() => 'idle' as ConnectionStatus);
+  const [error, setError] = useState<Error | null>(() => null);
+  const [queryBuilder, setQueryBuilder] = useState<QueryBuilderFactory | null>(() => null);
 
   const connect = useCallback(async () => {
     try {
       setStatus('connecting');
       setError(null);
       
-      const conn = await createConnection({ ...config, debug }, {
+      const conn: Connection = await createConnection({ ...config, debug }, {
         onConnect: () => {
           setStatus('connected');
           events?.onConnect?.();
@@ -39,11 +39,12 @@ export function DuckDBProvider({
       });
       
       setConnection(conn);
-      setQueryBuilder(createQueryBuilder(conn));
+      const qb = createQueryBuilder(conn);
+      setQueryBuilder(qb);
       setStatus('connected');
     } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      setError(error);
+      const errorObj: Error = err instanceof Error ? err : new Error(String(err));
+      setError(errorObj);
       setStatus('error');
       throw error;
     }
@@ -58,8 +59,8 @@ export function DuckDBProvider({
         setStatus('disconnected');
         setError(null);
       } catch (err) {
-        const error = err instanceof Error ? err : new Error(String(err));
-        setError(error);
+        const errorObj: Error = err instanceof Error ? err : new Error(String(err));
+        setError(errorObj);
         throw error;
       }
     }
