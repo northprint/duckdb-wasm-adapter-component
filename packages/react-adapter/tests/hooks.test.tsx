@@ -31,11 +31,6 @@ describe('useQuery', () => {
       { wrapper }
     );
 
-    // Wait for auto-connect to complete
-    await waitFor(() => {
-      expect(result.current).toBeDefined();
-    });
-
     // Wait for query to execute
     await waitFor(() => {
       expect(result.current.data).toBeDefined();

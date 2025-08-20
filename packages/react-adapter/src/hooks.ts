@@ -27,7 +27,11 @@ export function useQuery<T = Record<string, unknown>>(
 ): QueryResult<T> {
   const context = useDuckDB();
   const connection: Connection | null = context.connection;
-  const [data, setData] = useState<T[] | undefined>(options.initialData);
+  
+  // Extract options to avoid dependency issues
+  const { enabled = true, refetchInterval, onSuccess, onError, initialData } = options;
+  
+  const [data, setData] = useState<T[] | undefined>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [metadata, setMetadata] = useState<ColumnMetadata[] | null>(null);
@@ -35,8 +39,17 @@ export function useQuery<T = Record<string, unknown>>(
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
   const mountedRef = useRef(true);
   
+  // Store callbacks in refs to avoid re-renders
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+  
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+    onErrorRef.current = onError;
+  }, [onSuccess, onError]);
+  
   const execute = useCallback(async () => {
-    if (options.enabled === false) {
+    if (!enabled) {
       await Promise.resolve();
       return;
     }
@@ -60,37 +73,37 @@ export function useQuery<T = Record<string, unknown>>(
       
       setData(resultData);
       setMetadata(resultMetadata);
-      options.onSuccess?.(resultData);
+      onSuccessRef.current?.(resultData);
     } catch (err) {
       if (!mountedRef.current) return;
       
       const error = err instanceof Error ? err : new Error(String(err));
       setError(error);
-      options.onError?.(error);
+      onErrorRef.current?.(error);
     } finally {
       if (mountedRef.current) {
         setLoading(false);
       }
     }
-  }, [connection, sql, params, options?.enabled]);
+  }, [connection, sql, params, enabled]);
   
   useEffect(() => {
     mountedRef.current = true;
     
-    if (options.enabled !== false) {
+    if (enabled) {
       void execute();
     }
     
     return () => {
       mountedRef.current = false;
     };
-  }, [execute, options?.enabled]);
+  }, [execute, enabled]);
   
   useEffect(() => {
-    if (options.refetchInterval && options.refetchInterval > 0) {
+    if (refetchInterval && refetchInterval > 0) {
       intervalRef.current = setInterval(() => {
         void execute();
-      }, options.refetchInterval);
+      }, refetchInterval);
       
       return () => {
         if (intervalRef.current) {
@@ -99,7 +112,7 @@ export function useQuery<T = Record<string, unknown>>(
       };
     }
     return undefined;
-  }, [execute, options?.refetchInterval]);
+  }, [execute, refetchInterval]);
   
   return {
     data,
@@ -124,6 +137,20 @@ export function useMutation<T = Record<string, unknown>>(
   
   const mountedRef = useRef(true);
   
+  // Extract options
+  const { onSuccess, onError, onSettled } = options;
+  
+  // Store callbacks in refs to avoid re-renders
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+  const onSettledRef = useRef(onSettled);
+  
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+    onErrorRef.current = onError;
+    onSettledRef.current = onSettled;
+  }, [onSuccess, onError, onSettled]);
+  
   useEffect(() => {
     mountedRef.current = true;
     return () => {
@@ -145,7 +172,7 @@ export function useMutation<T = Record<string, unknown>>(
       
       if (mountedRef.current) {
         setData(resultData);
-        options.onSuccess?.(resultData);
+        onSuccessRef.current?.(resultData);
       }
       
       return resultData;
@@ -154,17 +181,17 @@ export function useMutation<T = Record<string, unknown>>(
       
       if (mountedRef.current) {
         setError(error);
-        options.onError?.(error);
+        onErrorRef.current?.(error);
       }
       
       throw error;
     } finally {
       if (mountedRef.current) {
         setLoading(false);
-        options.onSettled?.();
+        onSettledRef.current?.();
       }
     }
-  }, [connection, options]);
+  }, [connection]);
   
   const mutate = useCallback(async (sql: string, params?: unknown[]): Promise<T[]> => {
     return mutateAsync(sql, params).catch((_error) => {
