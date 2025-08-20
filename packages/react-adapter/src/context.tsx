@@ -80,7 +80,8 @@ export function DuckDBProvider({
         });
       }
     };
-  }, [autoConnect]); // Only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount - intentionally ignore dependencies
 
   const value = useMemo(() => ({
     connection,

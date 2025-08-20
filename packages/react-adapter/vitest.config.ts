@@ -8,7 +8,7 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
-      '**/tests/hooks.test.tsx', // Temporarily exclude hooks test due to memory issues
+      '**/tests/hooks.test.tsx', // TODO: Fix infinite loop issue in hooks test
     ],
   },
 });
