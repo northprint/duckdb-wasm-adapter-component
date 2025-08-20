@@ -238,7 +238,7 @@ export class QueryCacheManager<T = unknown> implements CacheManager<T> {
         this.storage.size()
       );
     } catch (error) {
-      throw DataError.corruptedData('cache', `Failed to import: ${error}`);
+      throw DataError.corruptedData('cache', `Failed to import: ${String(error)}`);
     }
   }
 }

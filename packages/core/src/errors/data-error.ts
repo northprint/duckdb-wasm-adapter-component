@@ -93,9 +93,10 @@ export class DataError extends BaseError {
 
   getSuggestedAction(): string {
     switch (this.code) {
-      case 'DATA_INVALID_FORMAT':
+      case 'DATA_INVALID_FORMAT': {
         const formats = (this.context?.supportedFormats as string[])?.join(', ');
         return `Use one of the supported formats: ${formats}`;
+      }
       case 'DATA_CORRUPTED':
         return 'Verify data integrity and format';
       case 'DATA_SCHEMA_MISMATCH':

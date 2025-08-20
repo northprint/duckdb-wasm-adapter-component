@@ -2,8 +2,7 @@ import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ResultSet } from '../result-set.js';
 import type { CacheManager } from '../cache/types.js';
 import { QueryExecutor as QueryExec } from '../query.js';
-import { ResultSetImpl } from '../result-set.js';
-import { DebugLogger } from '../debug.js';
+import type { DebugLogger } from '../debug.js';
 import { QueryError } from '../errors/query-error.js';
 
 export interface QueryExecutorOptions {
@@ -96,8 +95,8 @@ export class QueryExecutor {
   }
 
   executeSync<T = Record<string, unknown>>(
-    query: string,
-    params?: unknown[]
+    _query: string,
+    _params?: unknown[]
   ): T[] {
     // Note: This is actually async under the hood but we block
     throw QueryError.unsupportedOperation('Synchronous execution in browser environment');

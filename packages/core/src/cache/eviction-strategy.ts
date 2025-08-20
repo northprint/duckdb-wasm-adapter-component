@@ -1,4 +1,4 @@
-import type { CacheEntry, CacheOptions } from './types.js';
+import type { CacheEntry } from './types.js';
 import type { CacheStorage } from './cache-storage.js';
 
 /**
@@ -26,8 +26,6 @@ export class EvictionStrategy<T = unknown> {
   }
 
   evictIfNeeded(newSize: number): void {
-    const options = this.storage.getOptions();
-    
     // First, remove expired entries
     for (const [key, entry] of this.storage.entries()) {
       if (this.isExpired(entry)) {

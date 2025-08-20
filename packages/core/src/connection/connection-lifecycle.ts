@@ -1,6 +1,6 @@
 import type { AsyncDuckDB, AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ConnectionConfig, ConnectionStatus } from '../types.js';
-import { DebugLogger } from '../debug.js';
+import type { DebugLogger } from '../debug.js';
 import { ConnectionError } from '../errors/connection-error.js';
 
 export interface ConnectionLifecycleOptions {

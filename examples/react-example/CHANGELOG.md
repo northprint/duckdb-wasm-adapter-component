@@ -1,5 +1,13 @@
 # react-duckdb-example
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @northprint/duckdb-wasm-adapter-core@0.3.0
+  - @northprint/duckdb-wasm-adapter-react@0.3.0
+
 ## 1.0.3
 
 ### Patch Changes

@@ -87,8 +87,8 @@ async function initializeDuckDB(config?: ConnectionConfig): Promise<AsyncDuckDB>
   };
   
   const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
-  const worker = config?.worker !== false 
-    ? new Worker(bundle.mainWorker!) 
+  const worker = config?.worker !== false && bundle.mainWorker
+    ? new Worker(bundle.mainWorker) 
     : undefined;
   const logger = new duckdb.ConsoleLogger();
   
@@ -100,7 +100,7 @@ async function initializeDuckDB(config?: ConnectionConfig): Promise<AsyncDuckDB>
 
 export async function createConnection(
   config?: ConnectionConfig,
-  events?: ConnectionEvents
+  _events?: ConnectionEvents
 ): Promise<Connection> {
   const manager = ConnectionManager.getInstance();
   const duckdb = await initializeDuckDB(config);

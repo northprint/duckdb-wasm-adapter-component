@@ -1,6 +1,6 @@
 {
   "name": "@northprint/duckdb-wasm-adapter-react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React hooks for DuckDB WASM adapter",
   "type": "module",
   "main": "./dist/index.js",

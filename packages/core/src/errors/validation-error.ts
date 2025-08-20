@@ -86,9 +86,9 @@ export class ValidationError extends BaseError {
   getSuggestedAction(): string {
     switch (this.code) {
       case 'VALIDATION_INVALID_PARAMETER':
-        return `Provide a valid value for '${this.context?.paramName}'`;
+        return `Provide a valid value for '${String(this.context?.paramName)}'`;
       case 'VALIDATION_MISSING_PARAMETER':
-        return `Supply the required parameter '${this.context?.paramName}'`;
+        return `Supply the required parameter '${String(this.context?.paramName)}'`;
       case 'VALIDATION_INVALID_TABLE_NAME':
         return 'Use alphanumeric characters and underscores for table names';
       case 'VALIDATION_INVALID_COLUMN_NAME':
@@ -96,7 +96,7 @@ export class ValidationError extends BaseError {
       case 'VALIDATION_OUT_OF_RANGE':
         return `Provide a value within the valid range`;
       case 'VALIDATION_INVALID_FORMAT':
-        return `Format the value according to: ${this.context?.expectedFormat}`;
+        return `Format the value according to: ${String(this.context?.expectedFormat)}`;
       default:
         return 'Check input parameters and try again';
     }

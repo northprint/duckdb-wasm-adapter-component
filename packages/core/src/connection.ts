@@ -97,7 +97,10 @@ export class ConnectionImpl implements Connection {
     if (!this.queryExecutor) {
       await this.initialize();
     }
-    return this.queryExecutor!.execute<T>(query, params);
+    if (!this.queryExecutor) {
+      throw ConnectionError.notInitialized();
+    }
+    return this.queryExecutor.execute<T>(query, params);
   }
 
   executeSync<T = Record<string, unknown>>(
@@ -124,7 +127,10 @@ export class ConnectionImpl implements Connection {
     if (!this.dataPorter) {
       await this.initialize();
     }
-    return this.dataPorter!.importCSV(file, tableName, options);
+    if (!this.dataPorter) {
+      throw ConnectionError.notInitialized();
+    }
+    return this.dataPorter.importCSV(file, tableName, options);
   }
 
   async importJSON(
@@ -134,7 +140,10 @@ export class ConnectionImpl implements Connection {
     if (!this.dataPorter) {
       await this.initialize();
     }
-    return this.dataPorter!.importJSON(data, tableName);
+    if (!this.dataPorter) {
+      throw ConnectionError.notInitialized();
+    }
+    return this.dataPorter.importJSON(data, tableName);
   }
 
   async importParquet(
@@ -144,7 +153,10 @@ export class ConnectionImpl implements Connection {
     if (!this.dataPorter) {
       await this.initialize();
     }
-    return this.dataPorter!.importParquet(file, tableName);
+    if (!this.dataPorter) {
+      throw ConnectionError.notInitialized();
+    }
+    return this.dataPorter.importParquet(file, tableName);
   }
 
   async exportCSV(
@@ -154,7 +166,10 @@ export class ConnectionImpl implements Connection {
     if (!this.dataPorter) {
       await this.initialize();
     }
-    return this.dataPorter!.exportCSV(query, options);
+    if (!this.dataPorter) {
+      throw ConnectionError.notInitialized();
+    }
+    return this.dataPorter.exportCSV(query, options);
   }
 
   async exportJSON<T = Record<string, unknown>>(
@@ -163,7 +178,10 @@ export class ConnectionImpl implements Connection {
     if (!this.dataPorter) {
       await this.initialize();
     }
-    return this.dataPorter!.exportJSON<T>(query);
+    if (!this.dataPorter) {
+      throw ConnectionError.notInitialized();
+    }
+    return this.dataPorter.exportJSON<T>(query);
   }
 
   clearCache(): void {
@@ -225,19 +243,17 @@ export class ConnectionManager {
       // Check if it's events (has onConnect, onDisconnect, etc.)
       if ('onConnect' in configOrEvents || 'onDisconnect' in configOrEvents || 
           'onError' in configOrEvents || 'onQuery' in configOrEvents) {
-        config = { events: configOrEvents as ConnectionEvents };
-      } else {
-        config = configOrEvents as ConnectionConfig;
+        config = { events: configOrEvents };
       }
     }
     
     // Use mock DuckDB for testing if not provided
     const duckdbInstance = duckdb || ({
-      connect: async () => ({
-        query: async () => ({ toArray: () => [] }),
-        close: async () => {},
+      connect: () => Promise.resolve({
+        query: () => Promise.resolve({ toArray: () => [] }),
+        close: () => Promise.resolve(),
       }),
-      close: async () => {},
+      close: () => Promise.resolve(),
     } as unknown as AsyncDuckDB);
     
     const connection = new ConnectionImpl(duckdbInstance, config);

@@ -1,6 +1,6 @@
 {
   "name": "@northprint/duckdb-wasm-adapter-svelte",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Svelte adapter for DuckDB WASM",
   "type": "module",
   "main": "./dist/index.js",

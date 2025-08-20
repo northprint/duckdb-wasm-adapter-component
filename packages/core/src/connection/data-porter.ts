@@ -2,7 +2,7 @@ import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ImportOptions, ExportOptions } from '../types.js';
 import { DataImporter } from '../data-import.js';
 import { DataExporter } from '../data-export.js';
-import { DebugLogger } from '../debug.js';
+import type { DebugLogger } from '../debug.js';
 
 export interface DataPorterOptions {
   connection: AsyncDuckDBConnection;

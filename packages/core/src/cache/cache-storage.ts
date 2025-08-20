@@ -17,7 +17,7 @@ export class CacheStorage<T = unknown> {
       strategy: options.strategy || 'lru',
       evictionStrategy: options.evictionStrategy || 'lru',
       enableStats: options.enableStats !== false,
-      keyGenerator: options.keyGenerator || this.defaultKeyGenerator,
+      keyGenerator: options.keyGenerator || this.defaultKeyGenerator.bind(this),
     };
   }
 
