@@ -243,7 +243,9 @@ export class ConnectionManager {
       // Check if it's events (has onConnect, onDisconnect, etc.)
       if ('onConnect' in configOrEvents || 'onDisconnect' in configOrEvents || 
           'onError' in configOrEvents || 'onQuery' in configOrEvents) {
-        config = { events: configOrEvents };
+        config = { events: configOrEvents as ConnectionEvents };
+      } else {
+        config = configOrEvents as ConnectionConfig;
       }
     }
     
