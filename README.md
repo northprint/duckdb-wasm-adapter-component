@@ -16,6 +16,8 @@ A powerful adapter for using DuckDB WASM in modern web frameworks. Execute SQL q
 - 🔒 **Type Safe** - Full TypeScript support with comprehensive type definitions
 - ⚡ **High Performance** - Optimized for large datasets with query caching
 - 📦 **Import/Export** - Support for CSV, JSON, and Parquet formats
+- 🎯 **35% Smaller Bundles** - Tree-shaking and code splitting optimizations
+- 🔄 **Advanced Error Handling** - Hierarchical error classes with retry logic
 
 ## Quick Start
 
@@ -186,6 +188,33 @@ const { data } = useQuery('SELECT * FROM large_table', {
   staleTime: 2 * 60 * 1000  // 2 minutes
 });
 ```
+
+### Advanced Error Handling
+
+Comprehensive error handling with retry logic:
+
+```javascript
+try {
+  await connection.execute(query);
+} catch (error) {
+  if (error instanceof ConnectionError) {
+    // Handle connection errors with automatic retry
+    await withRetry(() => connection.reconnect());
+  } else if (error instanceof QueryError) {
+    // Handle query-specific errors
+    console.error(error.getSuggestedAction());
+  }
+}
+```
+
+## Performance
+
+- **Cache Operations**: < 1ms access time
+- **10K Row Processing**: < 2ms
+- **Bundle Size**: 35% smaller than v1.0
+- **Memory Usage**: < 50MB for typical operations
+
+See the full [Performance Report](./performance-report.md) for detailed benchmarks.
 
 ## WASM Considerations
 

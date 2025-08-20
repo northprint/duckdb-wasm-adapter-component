@@ -4,11 +4,11 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm'],
   dts: false,
-  splitting: false,
+  splitting: true,
   sourcemap: true,
   clean: true,
   treeshake: true,
-  minify: false,
+  minify: process.env.NODE_ENV === 'production' ? 'terser' : false,
   external: ['@duckdb/duckdb-wasm'],
   skipNodeModulesBundle: true,
   esbuildOptions(options) {

@@ -1,5 +1,9 @@
 import type { Table } from 'apache-arrow';
-import type { ResultSet, ColumnMetadata, DuckDBType, QueryProfile } from './types.js';
+import type { ColumnMetadata, DuckDBType, QueryProfile } from './types.js';
+
+export type { ResultSet } from './types.js';
+
+import type { ResultSet } from './types.js';
 
 export class ResultSetImpl<T = Record<string, unknown>> implements ResultSet<T> {
   private _rows: T[];

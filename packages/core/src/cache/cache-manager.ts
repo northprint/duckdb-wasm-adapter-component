@@ -1,360 +1,244 @@
-import type { CacheKey, CacheEntry, CacheOptions, CacheStats, CacheManager } from './types.js';
+import type { CacheEntry, CacheOptions, CacheStats, CacheManager, WarmUpQuery } from './types.js';
+import { CacheStorage } from './cache-storage.js';
+import { EvictionStrategy } from './eviction-strategy.js';
+import { CacheStatistics } from './cache-statistics.js';
+import { DataError } from '../errors/data-error.js';
 
+/**
+ * QueryCacheManager using composition pattern
+ * Delegates responsibilities to specialized classes for better maintainability
+ */
 export class QueryCacheManager<T = unknown> implements CacheManager<T> {
-  private cache: Map<string, CacheEntry<T>> = new Map();
-  private accessOrder: string[] = []; // For LRU
-  private options: Required<CacheOptions>;
-  private stats: CacheStats = {
-    hits: 0,
-    misses: 0,
-    evictions: 0,
-    entries: 0,
-    totalSize: 0,
-    hitRate: 0,
-  };
+  private storage: CacheStorage<T>;
+  private eviction: EvictionStrategy<T>;
+  private statistics: CacheStatistics;
 
   constructor(options: CacheOptions = {}) {
-    this.options = {
-      maxEntries: options.maxEntries || 100,
-      maxSize: options.maxSize || 10 * 1024 * 1024, // 10MB default
-      ttl: options.ttl || 5 * 60 * 1000, // 5 minutes default
-      evictionStrategy: options.evictionStrategy || 'lru',
-      enableStats: options.enableStats !== false,
-      keyGenerator: options.keyGenerator || this.defaultKeyGenerator.bind(this),
-    };
+    this.storage = new CacheStorage<T>(options);
+    this.eviction = new EvictionStrategy<T>(this.storage);
+    this.statistics = new CacheStatistics();
   }
 
-  private defaultKeyGenerator(query: string, params?: unknown[]): string {
-    return JSON.stringify({ query, params });
-  }
-
-  private generateKey(key: CacheKey): string {
-    return this.options.keyGenerator(key.query, key.params);
-  }
-
-  private estimateSize(data: unknown): number {
-    // Simple size estimation based on JSON stringify
-    try {
-      return JSON.stringify(data).length * 2; // UTF-16 chars
-    } catch {
-      return 1024; // Default 1KB if can't stringify
-    }
-  }
-
-  private isExpired(entry: CacheEntry<T>): boolean {
-    if (this.options.ttl === 0) return false;
-    return Date.now() - entry.timestamp > this.options.ttl;
-  }
-
-  private evictIfNeeded(): void {
-    // Check TTL first
-    if (this.options.evictionStrategy === 'ttl' || this.options.ttl > 0) {
-      const expiredKeys: string[] = [];
-      for (const [key, entry] of this.cache.entries()) {
-        if (this.isExpired(entry)) {
-          expiredKeys.push(key);
-        }
-      }
-      expiredKeys.forEach(key => this.evictEntry(key));
-    }
-
-    // Check max entries
-    while (this.cache.size >= this.options.maxEntries) {
-      this.evictOne();
-    }
-
-    // Check max size
-    while (this.stats.totalSize >= this.options.maxSize) {
-      this.evictOne();
-    }
-  }
-
-  private evictOne(): void {
-    let keyToEvict: string | undefined = undefined;
-
-    switch (this.options.evictionStrategy) {
-      case 'lru': {
-        // Least Recently Used
-        if (this.accessOrder.length > 0) {
-          keyToEvict = this.accessOrder[0];
-        }
-        break;
-      }
-      
-      case 'lfu': {
-        // Least Frequently Used
-        let minAccess = Infinity;
-        for (const [key, entry] of this.cache.entries()) {
-          if (entry.accessCount < minAccess) {
-            minAccess = entry.accessCount;
-            keyToEvict = key;
-          }
-        }
-        break;
-      }
-      
-      case 'fifo': {
-        // First In First Out
-        const firstKey = this.cache.keys().next().value;
-        if (firstKey !== undefined) {
-          keyToEvict = firstKey;
-        }
-        break;
-      }
-      
-      case 'ttl': {
-        // Time To Live - find oldest
-        let oldestTime = Date.now();
-        for (const [key, entry] of this.cache.entries()) {
-          if (entry.timestamp < oldestTime) {
-            oldestTime = entry.timestamp;
-            keyToEvict = key;
-          }
-        }
-        break;
-      }
-    }
-
-    if (keyToEvict) {
-      this.evictEntry(keyToEvict);
-    }
-  }
-
-  private evictEntry(key: string): void {
-    const entry = this.cache.get(key);
+  get(
+    sql: string,
+    params?: unknown[],
+    fetchFn?: () => Promise<T>
+  ): T | undefined | Promise<T> {
+    const key = this.storage.generateKey(sql, params);
+    const entry = this.storage.get(key);
+    
     if (entry) {
-      this.cache.delete(key);
-      this.stats.totalSize -= entry.size;
-      this.stats.entries--;
-      this.stats.evictions++;
+      if (this.eviction.isExpired(entry)) {
+        this.storage.delete(key);
+        this.eviction.updateSize(-entry.size);
+        this.statistics.recordMiss();
+        
+        if (fetchFn) {
+          return this.fetchAndCache(key, fetchFn);
+        }
+        return undefined;
+      }
       
-      // Remove from access order
-      const index = this.accessOrder.indexOf(key);
-      if (index > -1) {
-        this.accessOrder.splice(index, 1);
-      }
+      // Update access tracking
+      entry.hits++;
+      entry.lastAccessed = Date.now();
+      this.storage.updateAccessOrder(key);
+      this.statistics.recordHit();
+      
+      return entry.data;
     }
+    
+    this.statistics.recordMiss();
+    
+    if (fetchFn) {
+      return this.fetchAndCache(key, fetchFn);
+    }
+    
+    return undefined;
   }
 
-  private updateAccessOrder(key: string): void {
-    if (this.options.evictionStrategy === 'lru') {
-      const index = this.accessOrder.indexOf(key);
-      if (index > -1) {
-        this.accessOrder.splice(index, 1);
-      }
-      this.accessOrder.push(key);
-    }
+  private async fetchAndCache(key: string, fetchFn: () => Promise<T>): Promise<T> {
+    const data = await fetchFn();
+    this.set(key, data);
+    return data;
   }
 
-  get(key: CacheKey): T[] | null {
-    const cacheKey = this.generateKey(key);
-    const entry = this.cache.get(cacheKey);
+  set(keyOrSql: string, dataOrParams?: T | unknown[], maybeData?: T): void {
+    let key: string;
+    let data: T;
     
-    if (!entry) {
-      if (this.options.enableStats) {
-        this.stats.misses++;
-        this.updateHitRate();
-      }
-      return null;
-    }
-
-    // Check if expired
-    if (this.isExpired(entry)) {
-      this.evictEntry(cacheKey);
-      if (this.options.enableStats) {
-        this.stats.misses++;
-        this.updateHitRate();
-      }
-      return null;
-    }
-
-    // Update access info
-    entry.accessCount++;
-    this.updateAccessOrder(cacheKey);
-    
-    if (this.options.enableStats) {
-      this.stats.hits++;
-      this.updateHitRate();
+    // Handle overloaded signatures
+    if (maybeData !== undefined) {
+      // Called with (sql, params, data)
+      key = this.storage.generateKey(keyOrSql, dataOrParams as unknown[]);
+      data = maybeData;
+    } else {
+      // Called with (key, data)
+      key = keyOrSql;
+      data = dataOrParams as T;
     }
     
-    return entry.data;
-  }
-
-  set(key: CacheKey, data: T[], metadata?: Record<string, unknown>): void {
-    const cacheKey = this.generateKey(key);
-    const size = this.estimateSize(data);
+    const size = this.storage.estimateSize(data);
     
-    // Don't cache if single item is too large
-    if (size > this.options.maxSize) {
-      return;
-    }
-    
-    // Evict if needed before adding
-    this.evictIfNeeded();
+    // Check if we need to evict
+    this.eviction.evictIfNeeded(size);
     
     const entry: CacheEntry<T> = {
-      key,
       data,
-      metadata,
       timestamp: Date.now(),
-      accessCount: 0,
+      lastAccessed: Date.now(),
+      hits: 0,
       size,
     };
     
-    // Update existing entry
-    const existingEntry = this.cache.get(cacheKey);
+    // Update size tracking
+    const existingEntry = this.storage.get(key);
     if (existingEntry) {
-      this.stats.totalSize -= existingEntry.size;
-      this.stats.entries--;
+      this.eviction.updateSize(-existingEntry.size);
     }
     
-    this.cache.set(cacheKey, entry);
-    this.stats.totalSize += size;
-    this.stats.entries++;
-    this.updateAccessOrder(cacheKey);
+    this.storage.set(key, entry);
+    this.eviction.updateSize(size);
+    
+    // Update statistics
+    this.statistics.updateSize(
+      this.eviction.getCurrentSize(),
+      this.storage.size()
+    );
   }
 
-  has(key: CacheKey): boolean {
-    const cacheKey = this.generateKey(key);
-    const entry = this.cache.get(cacheKey);
+  has(sql: string, params?: unknown[]): boolean {
+    const key = this.storage.generateKey(sql, params);
+    const entry = this.storage.get(key);
     
-    if (!entry) return false;
-    if (this.isExpired(entry)) {
-      this.evictEntry(cacheKey);
+    if (!entry) {
+      return false;
+    }
+    
+    if (this.eviction.isExpired(entry)) {
+      this.storage.delete(key);
+      this.eviction.updateSize(-entry.size);
       return false;
     }
     
     return true;
   }
 
-  delete(key: CacheKey): boolean {
-    const cacheKey = this.generateKey(key);
-    const entry = this.cache.get(cacheKey);
+  delete(sql: string, params?: unknown[]): boolean {
+    const key = this.storage.generateKey(sql, params);
+    const entry = this.storage.get(key);
     
     if (entry) {
-      this.evictEntry(cacheKey);
-      return true;
+      this.eviction.updateSize(-entry.size);
+      this.statistics.recordEviction();
     }
     
-    return false;
+    return this.storage.delete(key);
   }
 
   clear(): void {
-    this.cache.clear();
-    this.accessOrder = [];
-    this.stats = {
-      hits: 0,
-      misses: 0,
-      evictions: 0,
-      entries: 0,
-      totalSize: 0,
-      hitRate: 0,
-    };
+    this.storage.clear();
+    this.eviction.reset();
+    this.statistics.reset();
   }
 
   getStats(): CacheStats {
-    return { ...this.stats };
+    const stats = this.statistics.getStats();
+    stats.size = this.eviction.getCurrentSize();
+    stats.entries = this.storage.size();
+    return stats;
   }
 
   size(): number {
-    return this.cache.size;
+    return this.storage.size();
   }
 
-  private updateHitRate(): void {
-    const total = this.stats.hits + this.stats.misses;
-    this.stats.hitRate = total > 0 ? this.stats.hits / total : 0;
-  }
-
-  /**
-   * Invalidate cache entries matching a pattern
-   */
   invalidate(pattern: string | RegExp): number {
     let invalidated = 0;
-    const keysToDelete: string[] = [];
+    const regex = typeof pattern === 'string' 
+      ? new RegExp(pattern) 
+      : pattern;
     
-    for (const [key, entry] of this.cache.entries()) {
-      const match = typeof pattern === 'string' 
-        ? entry.key.query.includes(pattern)
-        : pattern.test(entry.key.query);
-      
-      if (match) {
-        keysToDelete.push(key);
-        invalidated++;
+    for (const key of this.storage.keys()) {
+      if (regex.test(key)) {
+        const entry = this.storage.get(key);
+        if (entry) {
+          this.eviction.updateSize(-entry.size);
+          this.storage.delete(key);
+          invalidated++;
+        }
       }
     }
     
-    keysToDelete.forEach(key => this.evictEntry(key));
+    if (invalidated > 0) {
+      this.statistics.updateSize(
+        this.eviction.getCurrentSize(),
+        this.storage.size()
+      );
+    }
+    
     return invalidated;
   }
 
-  /**
-   * Warm up cache with predefined queries
-   */
-  async warmUp(
-    queries: Array<{ key: CacheKey; loader: () => Promise<T[]> }>
-  ): Promise<void> {
-    const promises = queries.map(async ({ key, loader }) => {
-      try {
-        const data = await loader();
-        this.set(key, data);
-      } catch (error) {
-        // Failed to warm up cache for query
-      }
-    });
-    
-    await Promise.all(promises);
-  }
-
-  /**
-   * Export cache state for persistence
-   */
-  export(): string {
-    const entries: Array<[string, CacheEntry<T>]> = [];
-    for (const [key, entry] of this.cache.entries()) {
-      if (!this.isExpired(entry)) {
-        entries.push([key, entry]);
+  async warmUp(queries: WarmUpQuery<T>[]): Promise<void> {
+    for (const query of queries) {
+      const key = this.storage.generateKey(query.sql, query.params);
+      
+      if (!this.storage.has(key)) {
+        try {
+          const data = await query.fetch();
+          this.set(key, data);
+        } catch (error) {
+          console.error(`Failed to warm up cache for query: ${query.sql}`, error);
+        }
       }
     }
-    return JSON.stringify({
-      entries,
-      stats: this.stats,
-      timestamp: Date.now(),
-    });
   }
 
-  /**
-   * Import cache state from persistence
-   */
-  import(data: string): void {
+  export(): string {
+    const data = {
+      entries: Array.from(this.storage.entries()).map(([key, entry]) => ({
+        key,
+        ...entry,
+      })),
+      stats: this.statistics.getStats(),
+      options: this.storage.getOptions(),
+    };
+    
+    return JSON.stringify(data, null, 2);
+  }
+
+  import(jsonData: string): void {
     try {
-      const parsed = JSON.parse(data) as {
-        entries: [string, CacheEntry<T>][];
-        stats?: { hits: number; misses: number };
+      const data = JSON.parse(jsonData) as {
+        entries: Array<{ key: string } & CacheEntry<T>>;
+        stats: Partial<CacheStats>;
+        options?: CacheOptions;
       };
-      const now = Date.now();
       
+      // Clear existing cache
       this.clear();
       
-      for (const [key, entry] of parsed.entries) {
-        // Skip if would be expired
-        if (this.options.ttl > 0 && now - entry.timestamp > this.options.ttl) {
-          continue;
+      // Import entries
+      if (data.entries) {
+        for (const { key, ...entry } of data.entries) {
+          this.storage.set(key, entry);
+          this.eviction.updateSize(entry.size);
         }
-        
-        this.cache.set(key, entry);
-        this.stats.totalSize += entry.size;
-        this.stats.entries++;
-        this.updateAccessOrder(key);
       }
       
-      // Restore stats if needed
-      if (this.options.enableStats && parsed.stats) {
-        this.stats.hits = parsed.stats.hits || 0;
-        this.stats.misses = parsed.stats.misses || 0;
-        this.updateHitRate();
+      // Import stats
+      if (data.stats) {
+        this.statistics.import(data.stats);
       }
+      
+      // Update current stats
+      this.statistics.updateSize(
+        this.eviction.getCurrentSize(),
+        this.storage.size()
+      );
     } catch (error) {
-      // Failed to import cache state
+      throw DataError.corruptedData('cache', `Failed to import: ${error}`);
     }
   }
 }

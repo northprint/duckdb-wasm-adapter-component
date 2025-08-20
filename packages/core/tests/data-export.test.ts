@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { DataExporter } from '../src/data-export';
-import { DuckDBError } from '../src/errors';
+import { DataError } from '../src/errors/data-error';
 import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ExportOptions } from '../src/types';
 
@@ -224,7 +224,7 @@ describe('DataExporter', () => {
 
       await expect(
         dataExporter.exportJSON('INVALID SQL')
-      ).rejects.toThrow(DuckDBError);
+      ).rejects.toThrow(DataError);
     });
   });
 
@@ -282,8 +282,8 @@ describe('DataExporter', () => {
         await dataExporter.exportToFile('SELECT * FROM users', 'xml' as any);
         expect.fail('Should have thrown an error');
       } catch (error) {
-        expect(error).toBeInstanceOf(DuckDBError);
-        const err = error as DuckDBError;
+        expect(error).toBeInstanceOf(DataError);
+        const err = error as DataError;
         // Just verify it's an export error
         expect(err.message.toLowerCase()).toContain('export');
       }

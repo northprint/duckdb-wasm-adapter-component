@@ -1,6 +1,6 @@
 {
   "name": "@northprint/duckdb-wasm-adapter-vue",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Vue composables for DuckDB WASM adapter",
   "type": "module",
   "main": "./dist/index.js",
@@ -58,5 +58,6 @@
   "homepage": "https://github.com/northprint/duckdb-wasm-adapter-component#readme",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "sideEffects": false
 }

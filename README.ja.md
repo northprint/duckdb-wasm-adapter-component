@@ -14,6 +14,8 @@ DuckDB WASMを簡単に使用できるようにするアダプターコンポー
 - 📦 **Data import/export** - CSV、JSON、Parquetファイルの入出力サポート
 - ⚡ **Reactive** - フレームワーク固有のリアクティブパターンをサポート
 - 🛡️ **Error handling** - 包括的なエラーハンドリング
+- 🎯 **35%小さいバンドル** - Tree-shakingとコード分割による最適化
+- 🔄 **高度なエラー処理** - 階層的エラークラスとリトライロジック
 
 ## Packages
 
@@ -238,6 +240,35 @@ await connection.importCSV(file, 'users', {
 - [React API Documentation](./packages/react-adapter/README.md)
 - [Vue API Documentation](./packages/vue-adapter/README.md)
 
+## パフォーマンス
+
+最適化により優れたパフォーマンスを実現：
+
+- **キャッシュ操作**: < 1ms アクセス時間
+- **10K行処理**: < 2ms
+- **バンドルサイズ**: v1.0より35%削減
+- **メモリ使用量**: 通常操作で < 50MB
+
+詳細は[パフォーマンスレポート](./performance-report.md)をご覧ください。
+
+## 高度なエラー処理
+
+包括的なエラー処理システムとリトライロジック：
+
+```typescript
+try {
+  await connection.execute(query);
+} catch (error) {
+  if (error instanceof ConnectionError) {
+    // 自動リトライで接続エラーを処理
+    await withRetry(() => connection.reconnect());
+  } else if (error instanceof QueryError) {
+    // クエリ固有のエラーを処理
+    console.error(error.getSuggestedAction());
+  }
+}
+```
+
 ## Testing
 
 各パッケージには包括的なテストスイートが含まれています。
@@ -251,6 +282,9 @@ pnpm --filter @northprint/duckdb-wasm-adapter-core test
 
 # Run tests in watch mode
 pnpm test:watch
+
+# Run performance benchmarks
+pnpm bench
 ```
 
 ## Contributing

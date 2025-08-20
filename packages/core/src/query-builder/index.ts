@@ -1,6 +1,8 @@
 import { SelectQueryBuilder } from './select.js';
 import type { QueryBuilder, ComparisonOperator } from './types.js';
 import type { Connection } from '../types.js';
+import { ConnectionError } from '../errors/connection-error.js';
+import { ValidationError } from '../errors/validation-error.js';
 
 export * from './types.js';
 export { SelectQueryBuilder } from './select.js';
@@ -39,7 +41,7 @@ export function raw(sql: string, bindings?: unknown[]): { sql: string; bindings:
 export class QueryBuilderFactory {
   constructor(private connection: Connection) {
     if (!connection) {
-      throw new Error('Connection is required for QueryBuilderFactory');
+      throw ConnectionError.notInitialized();
     }
   }
 
@@ -82,7 +84,7 @@ export class QueryBuilderFactory {
   private insertInto(table: string, data: Record<string, unknown> | Record<string, unknown>[]): Promise<unknown> {
     const records = Array.isArray(data) ? data : [data];
     if (records.length === 0) {
-      throw new Error('No data to insert');
+      throw ValidationError.missingParameter('data');
     }
 
     const columns = Object.keys(records[0]);
@@ -96,7 +98,7 @@ export class QueryBuilderFactory {
     `;
 
     if (!this.connection) {
-      throw new Error('Connection is not available');
+      throw ConnectionError.notInitialized();
     }
     return this.connection.execute(sql).then(result => result.toArray());
   }
@@ -130,7 +132,7 @@ export class QueryBuilderFactory {
 
                 const sql = `UPDATE ${state.table} SET ${setClauses} ${whereClause}`;
                 if (!this.connection) {
-                  throw new Error('Connection is not available');
+                  throw ConnectionError.notInitialized();
                 }
                 return this.connection.execute(sql).then(result => result.toArray());
               },
@@ -143,7 +145,7 @@ export class QueryBuilderFactory {
 
             const sql = `UPDATE ${state.table} SET ${setClauses}`;
             if (!this.connection) {
-              throw new Error('Connection is not available');
+              throw ConnectionError.notInitialized();
             }
             return this.connection.execute(sql).then(result => result.toArray());
           },
@@ -171,7 +173,7 @@ export class QueryBuilderFactory {
 
             const sql = `DELETE FROM ${table} ${whereClause}`;
             if (!this.connection) {
-              throw new Error('Connection is not available');
+              throw ConnectionError.notInitialized();
             }
             return this.connection.execute(sql).then(result => result.toArray());
           },
@@ -180,7 +182,7 @@ export class QueryBuilderFactory {
       execute: () => {
         const sql = `DELETE FROM ${table}`;
         if (!this.connection) {
-          throw new Error('Connection is not available');
+          throw ConnectionError.notInitialized();
         }
         return this.connection.execute(sql).then(result => result.toArray());
       },
@@ -209,7 +211,7 @@ export class QueryBuilderFactory {
  */
 export function createQueryBuilder(connection: Connection): QueryBuilderFactory {
   if (!connection) {
-    throw new Error('Connection is required for createQueryBuilder');
+    throw ConnectionError.notInitialized();
   }
   return new QueryBuilderFactory(connection);
 }

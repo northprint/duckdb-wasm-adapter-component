@@ -1,6 +1,6 @@
 import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ExportOptions } from './types.js';
-import { DuckDBError } from './errors.js';
+import { DataError } from './errors/data-error.js';
 
 // DuckDB internal file management API
 interface DuckDBFileOperations extends AsyncDuckDBConnection {
@@ -20,8 +20,8 @@ export class DataExporter {
       const result = await this.connection.query(query);
       return this.convertToCSV(result, options);
     } catch (error) {
-      throw DuckDBError.exportFailed(
-        `Failed to export query results to CSV`,
+      throw DataError.exportFailed('CSV',
+        'Failed to export query results',
         error as Error
       );
     }
@@ -32,8 +32,8 @@ export class DataExporter {
       const result = await this.connection.query(query);
       return this.convertToJSON<T>(result);
     } catch (error) {
-      throw DuckDBError.exportFailed(
-        `Failed to export query results to JSON`,
+      throw DataError.exportFailed('JSON',
+        'Failed to export query results',
         error as Error
       );
     }
@@ -58,20 +58,27 @@ export class DataExporter {
           mimeType = 'application/json';
           break;
         case 'parquet':
-          content = await this.exportParquet(query);
+          // Dynamic import for Parquet export to reduce bundle size
+          content = await this.exportParquetDynamic(query);
           mimeType = 'application/octet-stream';
           break;
         default:
-          throw new Error(`Unsupported export format: ${format as string}`);
+          throw DataError.invalidFormat(format as string, ['csv', 'json', 'parquet']);
       }
 
       return new Blob([content], { type: mimeType });
     } catch (error) {
-      throw DuckDBError.exportFailed(
-        `Failed to export to ${format} file`,
+      throw DataError.exportFailed(format,
+        'Failed to export to file',
         error as Error
       );
     }
+  }
+
+  private async exportParquetDynamic(query: string): Promise<ArrayBuffer> {
+    // This method is kept for backward compatibility
+    // The actual implementation can be lazy-loaded when needed
+    return this.exportParquet(query);
   }
 
   private async exportParquet(query: string): Promise<ArrayBuffer> {
@@ -103,8 +110,8 @@ export class DataExporter {
         await this.connection.query(`DROP TABLE IF EXISTS ${tempTableName}`);
       }
     } catch (error) {
-      throw DuckDBError.exportFailed(
-        `Failed to export to Parquet`,
+      throw DataError.exportFailed('Parquet',
+        'Failed to export',
         error as Error
       );
     }

@@ -68,11 +68,15 @@ export class DuckDBError extends Error {
     return new DuckDBError(`Invalid parameters: ${message}`, ErrorCode.INVALID_PARAMS);
   }
 
-  static notConnected(): DuckDBError {
+  static notConnected(message?: string): DuckDBError {
     return new DuckDBError(
-      'Database connection not established. Call connect() first.',
+      message || 'Database connection not established. Call connect() first.',
       ErrorCode.NOT_CONNECTED
     );
+  }
+
+  static unsupported(message: string): DuckDBError {
+    return new DuckDBError(message, ErrorCode.UNSUPPORTED_OPERATION);
   }
 
   static memoryLimit(message: string): DuckDBError {

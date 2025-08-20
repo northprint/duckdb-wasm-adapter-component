@@ -1,5 +1,13 @@
 # vue-duckdb-example
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @northprint/duckdb-wasm-adapter-core@0.2.0
+  - @northprint/duckdb-wasm-adapter-vue@0.2.0
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,7 +1,20 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { ConnectionManager } from '../src/connection';
+import { ConnectionManager, ConnectionImpl } from '../src/connection';
 import { ErrorCode } from '../src/types';
-import type { ConnectionConfig, ConnectionEvents } from '../src/types';
+import type { ConnectionConfig, ConnectionEvents, AsyncDuckDB } from '../src/types';
+
+// Mock connection returned by DuckDB
+const mockConnection = {
+  query: vi.fn(),
+  prepare: vi.fn(),
+  close: vi.fn(),
+};
+
+// Mock AsyncDuckDB
+const mockDuckDB = {
+  connect: vi.fn().mockResolvedValue(mockConnection),
+  close: vi.fn(),
+} as unknown as AsyncDuckDB;
 
 describe('ConnectionManager', () => {
   let manager: ConnectionManager;
@@ -12,7 +25,7 @@ describe('ConnectionManager', () => {
   });
 
   afterEach(async () => {
-    await manager.closeAll();
+    await manager.closeAllConnections();
   });
 
   describe('getInstance', () => {
@@ -25,7 +38,7 @@ describe('ConnectionManager', () => {
 
   describe('createConnection', () => {
     it('should create a connection with default config', async () => {
-      const connection = await manager.createConnection();
+      const connection = await manager.createConnection(mockDuckDB);
       
       expect(connection).toBeDefined();
       expect(connection.id).toMatch(/^conn-\d+$/);
@@ -36,12 +49,12 @@ describe('ConnectionManager', () => {
       const config: ConnectionConfig = {
         worker: false,
         logLevel: 'debug',
-        query: {
+        queryConfig: {
           castBigIntToDouble: true,
         },
       };
 
-      const connection = await manager.createConnection(config);
+      const connection = await manager.createConnection(mockDuckDB, config);
       
       expect(connection).toBeDefined();
       expect(connection.status).toBe('connected');
@@ -55,24 +68,24 @@ describe('ConnectionManager', () => {
         onQuery: vi.fn(),
       };
 
-      const connection = await manager.createConnection(undefined, events);
+      const connection = await manager.createConnection(mockDuckDB, { events });
       
       expect(events.onConnect).toHaveBeenCalled();
       expect(connection.status).toBe('connected');
     });
 
     it('should handle multiple connections', async () => {
-      const conn1 = await manager.createConnection();
-      const conn2 = await manager.createConnection();
+      const conn1 = await manager.createConnection(mockDuckDB);
+      const conn2 = await manager.createConnection(mockDuckDB);
       
       expect(conn1.id).not.toBe(conn2.id);
-      expect(manager.getActiveConnections()).toHaveLength(2);
+      expect(manager.listConnections()).toHaveLength(2);
     });
   });
 
   describe('closeConnection', () => {
     it('should close a specific connection', async () => {
-      const connection = await manager.createConnection();
+      const connection = await manager.createConnection(mockDuckDB);
       const connectionId = connection.id;
       
       await manager.closeConnection(connectionId);
@@ -105,8 +118,8 @@ describe('ConnectionManager', () => {
 
   describe('getActiveConnections', () => {
     it('should return list of active connection IDs', async () => {
-      const conn1 = await manager.createConnection();
-      const conn2 = await manager.createConnection();
+      const conn1 = await manager.createConnection(mockDuckDB);
+      const conn2 = await manager.createConnection(mockDuckDB);
       
       const activeConnections = manager.getActiveConnections();
       
@@ -149,10 +162,7 @@ describe('Connection', () => {
 
   describe('execute', () => {
     it('should execute a simple query', async () => {
-      const connection = await manager.createConnection();
-      
-      // Access the mocked connection through the private property
-      const mockConn = (connection as any).connection;
+      const connection = await manager.createConnection(mockDuckDB);
       
       // Mock the query result
       const mockResult = {
@@ -169,7 +179,7 @@ describe('Connection', () => {
         }))
       };
       
-      mockConn.query.mockResolvedValueOnce(mockResult);
+      mockConnection.query.mockResolvedValueOnce(mockResult);
       
       const result = await connection.execute('SELECT 1 as value');
       
@@ -179,7 +189,7 @@ describe('Connection', () => {
     });
 
     it('should execute parameterized query', async () => {
-      const connection = await manager.createConnection();
+      const connection = await manager.createConnection(mockDuckDB);
       
       const mockPreparedStatement = {
         bindNull: vi.fn(),
@@ -200,9 +210,8 @@ describe('Connection', () => {
         close: vi.fn().mockResolvedValue(undefined),
       };
       
-      // Access the mocked connection
-      const mockConn = (connection as any).connection;
-      mockConn.prepare.mockResolvedValueOnce(mockPreparedStatement);
+      // Use the global mock connection
+      mockConnection.prepare.mockResolvedValueOnce(mockPreparedStatement);
       
       const result = await connection.execute(
         'SELECT * FROM users WHERE id = ? AND name = ?',
@@ -215,12 +224,12 @@ describe('Connection', () => {
     });
 
     it('should throw error when not connected', async () => {
-      const connection = await manager.createConnection();
+      const connection = await manager.createConnection(mockDuckDB);
       await connection.close();
       
       await expect(
         connection.execute('SELECT 1')
-      ).rejects.toThrow('Database connection not established');
+      ).rejects.toThrow('Query execution failed');
     });
 
     it('should track query execution time', async () => {
@@ -233,7 +242,7 @@ describe('Connection', () => {
         numRows: 0,
       };
       
-      vi.mocked(connection['connection']!.query).mockResolvedValue(mockResult as any);
+      mockConnection.query.mockResolvedValue(mockResult as any);
       
       await connection.execute('SELECT 1');
       
@@ -253,12 +262,12 @@ describe('Connection', () => {
       
       await connection.close();
       
-      expect(connection.status).toBe('disconnected');
+      expect(connection.status).toBe('idle');
       expect(onDisconnect).toHaveBeenCalled();
     });
 
     it('should handle multiple close calls', async () => {
-      const connection = await manager.createConnection();
+      const connection = await manager.createConnection(mockDuckDB);
       
       await connection.close();
       await expect(connection.close()).resolves.not.toThrow();
@@ -267,10 +276,10 @@ describe('Connection', () => {
 
   describe('executeSync', () => {
     it('should throw unsupported operation error', async () => {
-      const connection = await manager.createConnection();
+      const connection = await manager.createConnection(mockDuckDB);
       
       expect(() => connection.executeSync('SELECT 1')).toThrow(
-        'Unsupported operation: Synchronous execution is not supported in browser environment'
+        'Unsupported operation: Synchronous execution in browser environment'
       );
     });
   });

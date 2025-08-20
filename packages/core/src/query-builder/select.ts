@@ -1,3 +1,4 @@
+import { ConnectionError } from '../errors/connection-error.js';
 import type {
   QueryBuilder,
   QueryBuilderState,
@@ -500,7 +501,7 @@ export class SelectQueryBuilder implements QueryBuilder {
   // Execution
   async execute<T = Record<string, unknown>>(): Promise<T[]> {
     if (!this.connection) {
-      throw new Error('No connection available. Use query builder with a connection.');
+      throw new ConnectionError('No connection available. Use query builder with a connection.', 'CONNECTION_NOT_INITIALIZED');
     }
     const result = await this.connection.execute<T>(this.build());
     return result.toArray();

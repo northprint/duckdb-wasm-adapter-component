@@ -4,12 +4,14 @@ export interface CacheKey {
 }
 
 export interface CacheEntry<T = unknown> {
-  key: CacheKey;
-  data: T[];
-  metadata?: Record<string, unknown>;
+  data: T;
   timestamp: number;
-  accessCount: number;
+  lastAccessed: number;
+  hits: number;
   size: number;
+  key?: CacheKey;
+  metadata?: Record<string, unknown>;
+  accessCount?: number;
 }
 
 export interface CacheOptions {
@@ -31,6 +33,7 @@ export interface CacheOptions {
   /**
    * Cache eviction strategy
    */
+  strategy?: 'lru' | 'lfu' | 'fifo';
   evictionStrategy?: 'lru' | 'lfu' | 'fifo' | 'ttl';
   
   /**
@@ -49,16 +52,28 @@ export interface CacheStats {
   misses: number;
   evictions: number;
   entries: number;
-  totalSize: number;
+  size?: number;
+  totalSize?: number;
   hitRate: number;
+  totalQueries?: number;
+}
+
+export interface WarmUpQuery<T = unknown> {
+  sql: string;
+  params?: unknown[];
+  fetch: () => Promise<T>;
 }
 
 export interface CacheManager<T = unknown> {
-  get(key: CacheKey): T[] | null;
-  set(key: CacheKey, data: T[], metadata?: Record<string, unknown>): void;
-  has(key: CacheKey): boolean;
-  delete(key: CacheKey): boolean;
+  get(sql: string, params?: unknown[], fetchFn?: () => Promise<T>): T | undefined | Promise<T>;
+  set(keyOrSql: string, dataOrParams?: T | unknown[], maybeData?: T): void;
+  has(sql: string, params?: unknown[]): boolean;
+  delete(sql: string, params?: unknown[]): boolean;
   clear(): void;
   getStats(): CacheStats;
   size(): number;
+  invalidate(pattern: string | RegExp): number;
+  warmUp(queries: WarmUpQuery<T>[]): Promise<void>;
+  export(): string;
+  import(jsonData: string): void;
 }

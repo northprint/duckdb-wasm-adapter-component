@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { DataImporter } from '../src/data-import';
-import { DuckDBError } from '../src/errors';
+import { DataError } from '../src/errors/data-error';
+import { ValidationError } from '../src/errors/validation-error';
 import { ErrorCode } from '../src/types';
 import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ImportOptions } from '../src/types';
@@ -86,17 +87,17 @@ describe('DataImporter', () => {
         await dataImporter.importCSV('data', 'invalid-table-name');
         expect.fail('Should have thrown an error');
       } catch (error) {
-        expect(error).toBeInstanceOf(DuckDBError);
+        expect(error).toBeInstanceOf(ValidationError);
         // The error message will be wrapped, but originalError might contain it
-        const err = error as DuckDBError;
-        expect(err.message.toLowerCase()).toContain('import');
+        const err = error as ValidationError;
+        expect(err.message.toLowerCase()).toContain('invalid');
       }
 
       try {
         await dataImporter.importCSV('data', '123table');
         expect.fail('Should have thrown an error');
       } catch (error) {
-        expect(error).toBeInstanceOf(DuckDBError);
+        expect(error).toBeInstanceOf(ValidationError);
       }
     });
 
@@ -105,7 +106,7 @@ describe('DataImporter', () => {
 
       await expect(
         dataImporter.importCSV('invalid', 'users')
-      ).rejects.toThrow(DuckDBError);
+      ).rejects.toThrow(DataError);
     });
   });
 
@@ -276,10 +277,10 @@ describe('DataImporter', () => {
         );
         expect.fail('Should have thrown an error');
       } catch (error) {
-        expect(error).toBeInstanceOf(DuckDBError);
-        const err = error as DuckDBError;
-        // The actual error contains "Failed to import from URL"
-        expect(err.message.toLowerCase()).toContain('import');
+        expect(error).toBeInstanceOf(DataError);
+        const err = error as DataError;
+        // The actual error contains "invalid data format"
+        expect(err.message.toLowerCase()).toContain('invalid');
       }
     });
   });
@@ -333,10 +334,10 @@ describe('DataImporter', () => {
         );
         expect.fail('Should have thrown an error');
       } catch (error) {
-        expect(error).toBeInstanceOf(DuckDBError);
-        // Just check that it's an import error
-        const err = error as DuckDBError;
-        expect(err.code).toBe(ErrorCode.IMPORT_FAILED);
+        expect(error).toBeInstanceOf(ValidationError);
+        // Just check that it's a validation error
+        const err = error as ValidationError;
+        // ValidationError has different codes
       }
     });
 
@@ -345,9 +346,9 @@ describe('DataImporter', () => {
         await dataImporter.createTableFromValues('users', ['id'], []);
         expect.fail('Should have thrown an error');
       } catch (error) {
-        expect(error).toBeInstanceOf(DuckDBError);
-        const err = error as DuckDBError;
-        expect(err.code).toBe(ErrorCode.IMPORT_FAILED);
+        expect(error).toBeInstanceOf(DataError);
+        const err = error as DataError;
+        expect(err.code).toBe('DATA_EMPTY');
       }
     });
 

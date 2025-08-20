@@ -1,3 +1,7 @@
+export type ConnectionStatus = 'idle' | 'connecting' | 'connected' | 'disconnecting' | 'disconnected' | 'error';
+
+export type CacheStats = import('./cache/types.js').CacheStats; // eslint-disable-line @typescript-eslint/consistent-type-imports
+
 export interface ConnectionConfig {
   worker?: boolean;
   logLevel?: 'silent' | 'error' | 'warning' | 'info' | 'debug';
@@ -12,6 +16,15 @@ export interface ConnectionConfig {
     enabled?: boolean;
     options?: import('./cache/types.js').CacheOptions; // eslint-disable-line @typescript-eslint/consistent-type-imports
   };
+  schema?: string;
+  readOnly?: boolean;
+  queryConfig?: Record<string, unknown>;
+  events?: {
+    onConnect?: () => void;
+    onDisconnect?: () => void;
+    onError?: (error: Error) => void;
+    onQuery?: (query: string, duration: number) => void;
+  };
 }
 
 export interface DebugConfig {
@@ -25,18 +38,18 @@ export interface DebugConfig {
 
 export interface Connection {
   id: string;
-  status: 'connecting' | 'connected' | 'disconnected' | 'error';
+  status: ConnectionStatus;
   execute<T = Record<string, unknown>>(query: string, params?: unknown[]): Promise<ResultSet<T>>;
-  executeSync<T = Record<string, unknown>>(query: string, params?: unknown[]): ResultSet<T>;
+  executeSync<T = Record<string, unknown>>(query: string, params?: unknown[]): ResultSet<T> | T[];
   close(): Promise<void>;
   importCSV(file: File | string, tableName: string, options?: ImportOptions): Promise<void>;
-  importJSON(data: unknown[], tableName: string): Promise<void>;
+  importJSON(data: unknown[] | string, tableName: string): Promise<void>;
   importParquet(file: File | ArrayBuffer, tableName: string): Promise<void>;
   exportCSV(query: string, options?: ExportOptions): Promise<string>;
   exportJSON<T = Record<string, unknown>>(query: string): Promise<T[]>;
-  clearCache?(): void;
-  getCacheStats?(): import('./cache/types.js').CacheStats; // eslint-disable-line @typescript-eslint/consistent-type-imports
-  invalidateCache?(pattern: string | RegExp): number;
+  clearCache(): void;
+  getCacheStats(): CacheStats;
+  invalidateCache(pattern: string | RegExp): number;
 }
 
 export interface ResultSet<T = Record<string, unknown>> {

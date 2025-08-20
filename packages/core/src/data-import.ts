@@ -1,6 +1,7 @@
 import type { AsyncDuckDBConnection } from '@duckdb/duckdb-wasm';
 import type { ImportOptions } from './types.js';
-import { DuckDBError } from './errors.js';
+import { DataError } from './errors/data-error.js';
+import { ValidationError } from './errors/validation-error.js';
 
 // DuckDB internal file management API
 interface DuckDBFileManagement extends AsyncDuckDBConnection {
@@ -57,8 +58,13 @@ export class DataImporter {
         await this.connection.query(query);
       }
     } catch (error) {
-      throw DuckDBError.importFailed(
-        `Failed to import CSV to table ${tableName}`,
+      // Re-throw ValidationErrors as-is
+      if (error instanceof ValidationError) {
+        throw error;
+      }
+      throw DataError.importFailed(
+        'CSV',
+        `Failed to import to table ${tableName}`,
         error as Error
       );
     }
@@ -96,8 +102,13 @@ export class DataImporter {
         await this.connection.query(query);
       }
     } catch (error) {
-      throw DuckDBError.importFailed(
-        `Failed to import JSON to table ${tableName}`,
+      // Re-throw ValidationErrors as-is
+      if (error instanceof ValidationError) {
+        throw error;
+      }
+      throw DataError.importFailed(
+        'JSON',
+        `Failed to import to table ${tableName}`,
         error as Error
       );
     }
@@ -135,8 +146,13 @@ export class DataImporter {
         await (this.connection as DuckDBFileManagement).dropFile(fileName);
       }
     } catch (error) {
-      throw DuckDBError.importFailed(
-        `Failed to import Parquet to table ${tableName}`,
+      // Re-throw ValidationErrors as-is
+      if (error instanceof ValidationError) {
+        throw error;
+      }
+      throw DataError.importFailed(
+        'Parquet',
+        `Failed to import to table ${tableName}`,
         error as Error
       );
     }
@@ -176,12 +192,21 @@ export class DataImporter {
           `;
           break;
         default:
-          throw new Error(`Unsupported format: ${format as string}`);
+          throw DataError.invalidFormat(format as string, ['CSV', 'JSON', 'Parquet']);
       }
       
       await this.connection.query(query);
     } catch (error) {
-      throw DuckDBError.importFailed(
+      // Re-throw ValidationErrors as-is
+      if (error instanceof ValidationError) {
+        throw error;
+      }
+      // Re-throw DataErrors as-is (like invalidFormat)
+      if (error instanceof DataError) {
+        throw error;
+      }
+      throw DataError.importFailed(
+        format as string,
         `Failed to import from URL ${url} to table ${tableName}`,
         error as Error
       );
@@ -201,7 +226,7 @@ export class DataImporter {
       columns.forEach(col => this.validateColumnName(col));
       
       if (values.length === 0) {
-        throw new Error('Cannot create table from empty values');
+        throw DataError.emptyData('create table');
       }
       
       // Build VALUES clause
@@ -220,8 +245,17 @@ export class DataImporter {
       
       await this.connection.query(query);
     } catch (error) {
-      throw DuckDBError.importFailed(
-        `Failed to create table ${tableName} from values`,
+      // Re-throw ValidationErrors as-is
+      if (error instanceof ValidationError) {
+        throw error;
+      }
+      // Re-throw DataErrors as-is (like emptyData)
+      if (error instanceof DataError) {
+        throw error;
+      }
+      throw DataError.importFailed(
+        'values',
+        `Failed to create table ${tableName}`,
         error as Error
       );
     }
@@ -271,7 +305,7 @@ export class DataImporter {
 
   private validateTableName(name: string): void {
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
-      throw DuckDBError.invalidParams(
+      throw ValidationError.invalidTableName(
         `Invalid table name: ${name}. Table names must start with a letter or underscore and contain only letters, numbers, and underscores.`
       );
     }
@@ -279,8 +313,9 @@ export class DataImporter {
 
   private validateColumnName(name: string): void {
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
-      throw DuckDBError.invalidParams(
-        `Invalid column name: ${name}. Column names must start with a letter or underscore and contain only letters, numbers, and underscores.`
+      throw ValidationError.invalidColumnName(
+        name,
+        'Column names must start with a letter or underscore and contain only letters, numbers, and underscores.'
       );
     }
   }
