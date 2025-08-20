@@ -8,7 +8,7 @@ export default defineConfig({
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
-      '**/tests/hooks.test.tsx', // TODO: Fix infinite loop issue in hooks test
+      '**/tests/hooks.test.tsx', // TODO: Fix infinite loop - likely caused by useEffect dependencies
     ],
   },
 });

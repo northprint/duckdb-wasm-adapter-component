@@ -72,7 +72,7 @@ export function useQuery<T = Record<string, unknown>>(
         setLoading(false);
       }
     }
-  }, [connection, sql, params, options.enabled]);
+  }, [connection, sql, params, options?.enabled]);
   
   useEffect(() => {
     mountedRef.current = true;
@@ -84,7 +84,7 @@ export function useQuery<T = Record<string, unknown>>(
     return () => {
       mountedRef.current = false;
     };
-  }, [execute, options.enabled]);
+  }, [execute, options?.enabled]);
   
   useEffect(() => {
     if (options.refetchInterval && options.refetchInterval > 0) {
@@ -99,7 +99,7 @@ export function useQuery<T = Record<string, unknown>>(
       };
     }
     return undefined;
-  }, [execute, options.refetchInterval]);
+  }, [execute, options?.refetchInterval]);
   
   return {
     data,
