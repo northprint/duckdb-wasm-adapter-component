@@ -1,5 +1,16 @@
 # @northprint/duckdb-wasm-adapter-core
 
+## 0.3.1
+
+### Patch Changes
+
+- ### Bug Fix: Connection Events
+
+  Fixed ConnectionManager's createConnection method to properly handle both ConnectionConfig and ConnectionEvents parameters. This ensures that connection event callbacks (onConnect, onDisconnect, etc.) are triggered correctly.
+  - Fixed parameter handling in ConnectionManager.createConnection
+  - Ensures backward compatibility with both configuration signatures
+  - All tests now pass successfully (178/178)
+
 ## 0.3.0
 
 ### Minor Changes
