@@ -80,7 +80,6 @@ export function DuckDBProvider({
         });
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount - intentionally ignore dependencies
 
   const value = useMemo(() => ({
